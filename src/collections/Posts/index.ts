@@ -1,3 +1,5 @@
+import { codeSnippets } from '@/fields/codeSnippets'
+import { seoExtras } from '@/fields/seoExtras'
 import type { CollectionConfig } from 'payload'
 
 import {
@@ -157,7 +159,12 @@ export const Posts: CollectionConfig<'posts'> = {
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
+            ...seoExtras,
           ],
+        },
+        {
+          label: 'Custom code',
+          fields: [codeSnippets({ name: 'codeSnippets', label: 'Post code snippets' })],
         },
       ],
     },

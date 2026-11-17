@@ -3,6 +3,22 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
+import {
+  AreasBlock,
+  FaqBlock,
+  LeadFormBlock,
+  MarqueeBlock,
+  PackagesBlockConfig,
+  ProcessBlock,
+  ServicesBlock,
+  StatementBlock,
+  StatsBlock,
+  TestimonialsBlock,
+  WorkBlock,
+} from '../../blocks/configs'
+import { codeSnippets } from '@/fields/codeSnippets'
+import { seoExtras } from '@/fields/seoExtras'
+import { setPagePath } from './hooks/setPagePath'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
@@ -35,6 +51,7 @@ export const Pages: CollectionConfig<'pages'> = {
   defaultPopulate: {
     title: true,
     slug: true,
+    path: true,
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
@@ -72,7 +89,24 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [
+                MarqueeBlock,
+                ServicesBlock,
+                WorkBlock,
+                PackagesBlockConfig,
+                ProcessBlock,
+                StatsBlock,
+                TestimonialsBlock,
+                FaqBlock,
+                LeadFormBlock,
+                AreasBlock,
+                StatementBlock,
+                Content,
+                CallToAction,
+                MediaBlock,
+                Archive,
+                FormBlock,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,
@@ -106,7 +140,13 @@ export const Pages: CollectionConfig<'pages'> = {
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
+            ...seoExtras,
           ],
+        },
+        {
+          label: 'Custom code',
+          description: 'Code that only runs on this page (added after the site-wide snippets in Site Settings).',
+          fields: [codeSnippets({ name: 'codeSnippets', label: 'Page code snippets' })],
         },
       ],
     },
@@ -118,10 +158,23 @@ export const Pages: CollectionConfig<'pages'> = {
       },
     },
     slugField(),
+    {
+      name: 'parent',
+      type: 'relationship',
+      relationTo: 'pages',
+      admin: { position: 'sidebar', description: 'Nest this page, e.g. Brooklyn under Locations → /locations/brooklyn' },
+      filterOptions: ({ id }) => (id ? { id: { not_equals: id } } : true),
+    },
+    {
+      name: 'path',
+      type: 'text',
+      index: true,
+      admin: { position: 'sidebar', readOnly: true, description: 'Public URL, built from parent + slug.' },
+    },
   ],
   hooks: {
     afterChange: [revalidatePage],
-    beforeChange: [populatePublishedAt],
+    beforeChange: [populatePublishedAt, setPagePath],
     afterDelete: [revalidateDelete],
   },
   versions: {
