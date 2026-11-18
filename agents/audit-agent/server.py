@@ -314,7 +314,9 @@ class H(BaseHTTPRequestHandler):
             import importlib.util
             return self._send(200, {"ok": True, "queue": jobs.qsize(), "auto_send": AUTO_SEND,
                                     "engine": audit.ENGINE_VERSION,
-                                    "visual_ready": importlib.util.find_spec("playwright") is not None})
+                                    "visual_ready": importlib.util.find_spec("playwright") is not None,
+                                    # true only when a Railway volume is mounted at /data (otherwise every deploy wipes it)
+                                    "storage_persistent": os.path.ismount("/data")})
         if len(parts) in (2, 3) and parts[0] == "r":
             if len(parts) == 3 and not re.fullmatch(r"[a-z0-9-]+\.jpg", parts[2]):  # only screenshots, never state/json
                 return self._send(404, {"error": "not found"})
