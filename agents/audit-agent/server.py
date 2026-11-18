@@ -312,10 +312,15 @@ class H(BaseHTTPRequestHandler):
         parts = [p for p in u.path.split("/") if p]
         if u.path == "/healthz":
             return self._send(200, {"ok": True, "queue": jobs.qsize(), "auto_send": AUTO_SEND})
-        if len(parts) == 2 and parts[0] == "r":
+        if len(parts) in (2, 3) and parts[0] == "r":
+            if len(parts) == 3 and not re.fullmatch(r"[a-z0-9-]+\.jpg", parts[2]):  # only screenshots, never state/json
+                return self._send(404, {"error": "not found"})
             for d in OUTBOX.glob("*/state.json"):
                 st = json.loads(d.read_text())
                 if hmac.compare_digest(st.get("token", ""), parts[1]):
+                    if len(parts) == 3:
+                        f = d.parent / parts[2]
+                        return self._send(200, f.read_bytes(), "image/jpeg") if f.exists() else self._send(404, {})
                     return self._send(200, (d.parent / "report.html").read_bytes(), "text/html; charset=utf-8")
             return self._send(404, {"error": "not found"})
         if parts == ["admin"]:

@@ -14,7 +14,7 @@
 
 <tr><td style="padding:32px 32px 8px;">
   <p style="margin:0 0 16px;font-size:16px;line-height:1.55;">Hi {{ first }},</p>
-  <p style="margin:0 0 16px;font-size:16px;line-height:1.55;">Thanks for requesting a website audit. We ran a deep review of <strong>{{ r.site_host }}</strong>: {{ r.pages_crawled }} pages and more than 60 checks covering security, speed, how well it turns visitors into customers, design age, accessibility (ADA) and search visibility.</p>
+  <p style="margin:0 0 16px;font-size:16px;line-height:1.55;">Thanks for requesting a website audit. We ran a deep review of <strong>{{ r.site_host }}</strong>: {{ r.pages_crawled }} pages and more than 100 checks covering how it looks and works on a real phone, speed, security, how well it turns visitors into customers, design, accessibility (ADA) and how well it is set up to rank on Google.</p>
   <p style="margin:0 0 8px;font-size:16px;line-height:1.55;">Here's what we found.</p>
 </td></tr>
 
@@ -38,6 +38,13 @@
   </table>
 </td></tr>
 
+{% if report_url and r.visual and r.visual.mobile %}
+<tr><td align="center" style="padding:0 32px 24px;">
+  <h2 style="font-size:18px;margin:0 0 6px;text-align:left;">How your homepage looks on a phone</h2>
+  <p style="margin:0 0 12px;font-size:14px;color:#6b7280;text-align:left;">The numbers mark problems we found. Each one is explained in the full report.</p>
+  <a href="{{ report_url }}"><img src="{{ report_url }}/{{ r.visual.mobile }}" width="240" alt="Your homepage on a phone, with problems marked" style="width:240px;max-width:100%;border:1px solid #e5e7eb;border-radius:12px;display:block;"></a>
+</td></tr>
+{% endif %}
 <tr><td style="padding:0 32px;">
   <h2 style="font-size:18px;margin:0 0 12px;">The {{ r.top_issues|length }} biggest problems</h2>
   {% for f in r.top_issues %}

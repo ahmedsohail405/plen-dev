@@ -40,18 +40,22 @@ HERE = Path(__file__).resolve().parent
 # Category weights for the overall score (sum = 100)
 WEIGHTS = {
     "conversion": 15,
-    "performance": 15,
-    "security": 15,
-    "technical": 12,
-    "design": 10,
-    "accessibility": 10,
-    "on_page": 10,
-    "local_seo": 8,
-    "ai_readiness": 5,
+    "performance": 12,
+    "mobile": 12,
+    "security": 10,
+    "seo_structure": 10,
+    "technical": 9,
+    "design": 9,
+    "on_page": 8,
+    "accessibility": 7,
+    "local_seo": 5,
+    "ai_readiness": 3,
 }
 CATEGORY_LABELS = {
     "conversion": "Conversion & trust",
     "performance": "Speed & Core Web Vitals",
+    "mobile": "Mobile experience",
+    "seo_structure": "SEO structure & keywords",
     "security": "Security & privacy",
     "technical": "Technical SEO",
     "design": "Design & technology age",
@@ -60,7 +64,11 @@ CATEGORY_LABELS = {
     "local_seo": "Local SEO",
     "ai_readiness": "AI search readiness",
 }
-SEVERITY_POINTS = {"critical": 10, "high": 6, "medium": 3, "low": 1}
+# Points a category loses per finding. One critical problem alone takes a category to 65,
+# two high problems to 64, so a category only scores well when it has little wrong.
+SEVERITY_POINTS = {"critical": 35, "high": 18, "medium": 8, "low": 3}
+# The overall score can't hide serious problems behind good averages:
+CAPS = [("critical", 1, 64, "a critical problem"), ("high", 4, 74, "4 or more serious problems")]
 
 
 @dataclass
@@ -73,6 +81,7 @@ class Finding:
     fix: str  # internal note for Plen Dev; client-facing copy uses detail + impact
     pages: list[str] = field(default_factory=list)
     impact: str = ""  # business impact, shown to clients
+    evidence: dict | None = None  # {"marker": n, "where": "phone"|"desktop"|"close-up"} for annotated screenshots
 
 
 @dataclass
@@ -160,9 +169,16 @@ def crawl(start: str, max_pages: int) -> tuple[list[Page], dict]:
                 extras["sitemap"] = alt
                 break
     sm = extras["sitemap"]
+    sitemap_urls: list[str] = []
     if sm.status == 200 and sm.bytes:
         try:
             locs = re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", sess.get(sm.final_url, timeout=TIMEOUT).text)
+            for child in [u for u in locs if u.endswith(".xml")][:4]:  # sitemap index: read the page/post sitemaps
+                try:
+                    locs += re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", sess.get(child, timeout=TIMEOUT).text)
+                except requests.RequestException:
+                    pass
+            sitemap_urls[:] = [u for u in locs if not u.endswith(".xml")][:500]
             for loc in locs[:200]:
                 n = normalize(loc)
                 if urlparse(n).netloc.lower() == base_host and n not in seen and not n.endswith(".xml"):
@@ -180,6 +196,7 @@ def crawl(start: str, max_pages: int) -> tuple[list[Page], dict]:
         pg = fetch(sess, nxt)
         pages.append(pg)
         enqueue_links(pg)
+    extras["sitemap_urls"] = sitemap_urls
     return pages, extras
 
 
@@ -281,14 +298,15 @@ def page_facts(pg: Page) -> dict:
     }
 
 
-def run_checks(pages: list[Page], extras: dict, psi: dict) -> tuple[list[Finding], list[dict]]:
+def run_checks(pages: list[Page], extras: dict, psi: dict, lead: dict | None = None, vis: dict | None = None,
+               out: Path | None = None, more: dict | None = None) -> tuple[list[Finding], list[dict]]:
     F: list[Finding] = []
     html_pages = [p for p in pages if p.html and p.status == 200]
     facts = [page_facts(p) for p in html_pages]
     home = facts[0] if facts else None
 
-    def add(cat, fid, sev, title, detail, fix, pgs=None, impact=""):
-        F.append(Finding(cat, fid, sev, title, detail, fix, (pgs or [])[:10], impact))
+    def add(cat, fid, sev, title, detail, fix, pgs=None, impact="", evidence=None):
+        F.append(Finding(cat, fid, sev, title, detail, fix, (pgs or [])[:10], impact, evidence))
 
     # ---- Technical
     if not pages[0].html or pages[0].status >= 400 or pages[0].status == 0:
@@ -479,7 +497,83 @@ def run_checks(pages: list[Page], extras: dict, psi: dict) -> tuple[list[Finding
 
     import deep_checks
     deep_checks.run(pages, facts, psi, add)
+    more = more if more is not None else {}
+    if facts:
+        import seo_deep
+        more["seo"] = seo_deep.run(pages, facts, extras, lead or {}, add)
+    if vis and vis.get("ok") and out is not None:
+        import visual
+        more["visual"] = visual.findings(vis, out, add)
+    F[:] = dedupe(F, psi, bool(vis and vis.get("ok")))
     return F, facts
+
+
+def dedupe(F: list[Finding], psi: dict, measured_cta: bool = False) -> list[Finding]:
+    """Measured checks replace heuristic guesses of the same thing, so nothing is counted twice."""
+    ids = {f.id for f in F}
+    drop = set()
+    if ids & {"no_cta_first_screen_mobile", "no_cta_first_screen_desktop"} or measured_cta:
+        drop.add("contact_not_above_fold")
+    if "no_cta" in ids:
+        drop |= {"no_cta_first_screen_mobile", "no_cta_first_screen_desktop"}
+    if "performance" in ((psi.get("mobile") or {}).get("scores") or {}):
+        drop |= {"lcp_measured", "cls_measured"}  # Google's numbers take precedence
+    if "no_modern_images" in ids:
+        drop.add("old_image_formats")
+    return [f for f in F if f.id not in drop]
+
+
+# Checks that run on every audit, shown as a pass/fail checklist. "needs" = only listed when that data exists.
+CHECKLIST = [
+    ("no_https", "Secure HTTPS connection", None), ("no_http_redirect", "Redirects http to https", None),
+    ("no_hsts", "Forces HTTPS (HSTS)", None), ("no_csp", "Content Security Policy", None),
+    ("no_clickjack_protection", "Clickjacking protection", None), ("outdated_cms", "Up-to-date CMS", None),
+    ("outdated_js_libs", "No outdated JavaScript libraries", None), ("no_privacy_policy", "Privacy policy", None),
+    ("no_viewport", "Mobile viewport set", None), ("mobile_overflow", "No sideways scrolling on phones", "visual"),
+    ("small_text_mobile", "Readable text size on phones", "visual"), ("tap_targets_small", "Tap targets big enough", "visual"),
+    ("mobile_overlay", "No pop-up covering the phone screen", "visual"),
+    ("no_cta_first_screen_mobile", "Call/book button on the first phone screen", "visual"),
+    ("no_cta_first_screen_desktop", "Call/book button on the first desktop screen", "visual"),
+    ("lcp_measured", "Main content shows within 2.5s on a phone", "speed"),
+    ("cls_measured", "Page doesn't jump while loading", "speed"), ("page_weight", "Homepage under 2.5 MB", "visual"),
+    ("heavy_images", "No oversized image files", "visual"), ("broken_images", "No broken images", "visual"),
+    ("stretched_images", "No stretched images", "visual"), ("blurry_images", "No blurry images", "visual"),
+    ("stock_photos", "Real photos, not stock", "visual"), ("js_errors", "No JavaScript errors", "visual"),
+    ("no_robots", "robots.txt present", None), ("no_sitemap", "XML sitemap", None),
+    ("broken_pages", "No broken internal links", None), ("noindex", "No pages accidentally hidden from Google", None),
+    ("no_canonical", "Canonical tags", None), ("mixed_content", "No insecure resources", None),
+    ("no_analytics", "Analytics installed", None), ("dup_titles", "Unique page titles", None),
+    ("no_og", "Social sharing tags", None), ("no_location_pages", "Pages for each area served", None),
+    ("keyword_gaps", "Pages for what customers search", "service"), ("home_no_location", "Area named in homepage title", None),
+    ("too_few_pages", "Enough pages to rank", None), ("heading_hierarchy", "Headings in order", None),
+    ("near_duplicate_pages", "No duplicate pages", None), ("cannibalization", "No pages competing for one keyword", None),
+    ("orphan_pages", "All pages linked internally", None), ("ugly_urls", "Search-friendly page addresses", None),
+    ("no_localbusiness_schema", "LocalBusiness schema", None), ("no_phone", "Phone number on homepage", None),
+    ("no_address", "Street address on site", None), ("no_map", "Google Map", None),
+    ("no_cta", "Clear call to action", None), ("no_form", "Contact or quote form", None),
+    ("no_reviews", "Reviews or testimonials", None), ("no_verified_reviews", "Verifiable reviews (Google, Yelp)", None),
+    ("no_online_booking", "Online booking", None), ("no_trust_badges", "Trust signals", None),
+    ("inputs_no_labels", "Form fields labeled", None), ("links_no_text", "Links have readable names", None),
+    ("zoom_disabled", "Zoom allowed on phones", None), ("old_copyright_year", "Content kept up to date", None),
+    ("legacy_tech", "Modern code", None), ("no_llms_txt", "llms.txt for AI search", None),
+    ("ai_bots_blocked", "AI search engines allowed", None), ("no_structured_data", "Structured data", None),
+]
+
+
+def checklist(findings: list[dict], have: set) -> list[dict]:
+    failed = {f["id"]: f["severity"] for f in findings}
+    alias = {"no_cta_first_screen_mobile": "no_cta", "no_cta_first_screen_desktop": "no_cta"}
+    # checks that can't run when another one failed (no HTTPS -> no redirect/HSTS to test)
+    blocked = {"no_http_redirect", "no_hsts", "mixed_content"} if "no_https" in failed else set()
+    if "home_unreachable" in failed:
+        return []
+    rows = []
+    for fid, label, needs in CHECKLIST:
+        if (needs and needs not in have) or fid in blocked:
+            continue
+        sev = failed.get(fid) or (failed.get(alias[fid]) if fid in alias else None)
+        rows.append({"id": fid, "label": label, "ok": sev is None, "severity": sev})
+    return rows
 
 
 def rebuild_case(findings: list[dict], cats: dict) -> list[str]:
@@ -514,18 +608,27 @@ def rebuild_case(findings: list[dict], cats: dict) -> list[str]:
     return out
 
 
-def score(findings: list[Finding], psi: dict) -> dict:
+def score(findings: list[Finding], psi: dict, measured: set | None = None) -> dict:
+    """measured: categories that were actually tested this run ("performance", "mobile").
+    A category we couldn't test is left out rather than given a free 100."""
+    measured = measured or set()
     cats = {}
     for cat in WEIGHTS:
-        lost = sum(SEVERITY_POINTS[f.severity] * 2 for f in findings if f.category == cat)
+        lost = sum(SEVERITY_POINTS[f.severity] for f in findings if f.category == cat)
         cats[cat] = max(0, 100 - lost)
     m = (psi.get("mobile") or {}).get("scores", {})
     if "performance" in m:  # blend in real Lighthouse score when available
         cats["performance"] = round(0.6 * m["performance"] + 0.4 * cats["performance"])
-    elif not any(f.category == "performance" for f in findings):
-        cats.pop("performance")  # PageSpeed unavailable and no heuristic hits: don't claim 100
-    overall = round(sum(cats[c] * WEIGHTS[c] for c in cats) / sum(WEIGHTS[c] for c in cats))
-    return {"overall": overall, "categories": cats}
+    elif "performance" not in measured and not any(f.category == "performance" for f in findings):
+        cats.pop("performance")
+    if "mobile" not in measured and not any(f.category == "mobile" for f in findings):
+        cats.pop("mobile")
+    avg = round(sum(cats[c] * WEIGHTS[c] for c in cats) / sum(WEIGHTS[c] for c in cats))
+    overall, cap_reason = avg, ""
+    for sev, count, cap, why in CAPS:
+        if sum(1 for f in findings if f.severity == sev) >= count and overall > cap:
+            overall, cap_reason = cap, f"Capped at {cap} because the site has {why}."
+    return {"overall": overall, "average": avg, "cap_reason": cap_reason, "categories": cats}
 
 
 def grade(n: int) -> str:
@@ -551,7 +654,11 @@ def render(report: dict, out: Path, lead: dict, brand: dict, report_url: str = "
 
 
 def run_audit(url: str, lead: dict, out: Path, max_pages: int = 15, psi_key: str | None = None,
-              brand: dict | None = None, report_url: str = "") -> dict:
+              brand: dict | None = None, report_url: str = "", visual: bool | None = None) -> dict:
+    """visual: render the homepage in headless Chromium for screenshots, layout, image and measured-speed
+    checks (adds ~20-40 s). Defaults to the VISUAL_AUDIT env var (on unless set to 0)."""
+    if visual is None:
+        visual = os.environ.get("VISUAL_AUDIT", "1") != "0"
     if not url.startswith("http"):
         url = "https://" + url
     out.mkdir(parents=True, exist_ok=True)
@@ -560,10 +667,18 @@ def run_audit(url: str, lead: dict, out: Path, max_pages: int = 15, psi_key: str
     if pages[0].html:
         psi = {"mobile": pagespeed(pages[0].final_url, psi_key, "mobile"),
                "desktop": pagespeed(pages[0].final_url, psi_key, "desktop")}
-    findings, facts = run_checks(pages, extras, psi)
+    vis = {}
+    if visual and pages[0].html:
+        import visual as visual_mod
+        vis = visual_mod.run(pages[0].final_url, out)
+    more: dict = {}
+    findings, facts = run_checks(pages, extras, psi, lead, vis, out, more)
     order = {"critical": 0, "high": 1, "medium": 2, "low": 3}
     findings.sort(key=lambda f: (order[f.severity], -WEIGHTS[f.category]))
-    sc = score(findings, psi)
+    vm = (more.get("visual") or {}).get("measured") or {}
+    speed_measured = "performance" in ((psi.get("mobile") or {}).get("scores") or {}) or bool(vm.get("lcp_s") or vm.get("timed_out"))
+    measured = ({"performance"} if speed_measured else set()) | ({"mobile"} if vis.get("ok") else set())
+    sc = score(findings, psi, measured)
     fd = [asdict(f) for f in findings]
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -572,7 +687,11 @@ def run_audit(url: str, lead: dict, out: Path, max_pages: int = 15, psi_key: str
         "pages_crawled": len(pages),
         "score": sc,
         "pagespeed": psi,
-        "speed_measured": "performance" in ((psi.get("mobile") or {}).get("scores") or {}),
+        "speed_measured": speed_measured,
+        "visual": more.get("visual") or ({"error": vis.get("error")} if vis else {}),
+        "seo": more.get("seo") or {},
+        "checklist": checklist(fd, ({"visual"} if vis.get("ok") else set()) | ({"speed"} if speed_measured else set())
+                               | ({"service"} if (more.get("seo") or {}).get("searches") else set())),
         "counts": {s: sum(1 for f in findings if f.severity == s) for s in order},
         "findings": fd,
         "top_issues": fd[:5],

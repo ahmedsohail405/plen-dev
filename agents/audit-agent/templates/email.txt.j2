@@ -1,6 +1,6 @@
 Hi {{ (lead.name or 'there').split(' ')[0] }},
 
-Thanks for requesting a website audit. We ran a deep review of {{ r.site_host }}: {{ r.pages_crawled }} pages and more than 60 checks covering security, speed, how well it turns visitors into customers, design age, accessibility (ADA) and search visibility.
+Thanks for requesting a website audit. We ran a deep review of {{ r.site_host }}: {{ r.pages_crawled }} pages and more than 100 checks covering how it looks and works on a real phone, speed, security, how well it turns visitors into customers, design, accessibility (ADA) and how well it is set up to rank on Google.
 
 OVERALL SCORE: {{ r.score.overall }}/100 (grade {{ r.score.overall | grade }}) · {{ r.total_issues }} issues, {{ r.counts.critical }} critical, {{ r.counts.high }} high
 

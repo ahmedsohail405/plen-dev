@@ -18,6 +18,15 @@ h1{margin:0;font-size:26px}h2{font-size:20px;margin:36px 0 12px}.mute{color:var(
 details{margin-top:6px;font-size:13px}code{font-size:12px;word-break:break-all}
 table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
 .cta{background:var(--soft);border-radius:10px;padding:20px;margin-top:36px}
+.shots{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
+.shots figure{margin:0}.shots img,.clips img{width:100%;border:1px solid var(--line);border-radius:10px;display:block}
+figcaption{font-size:12px;color:var(--mute);margin-top:6px;text-align:center}
+.legend{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:6px}.legend li{display:flex;gap:10px;align-items:baseline;font-size:14px}
+.dot{flex:0 0 22px;height:22px;border-radius:50%;color:#fff;font-weight:700;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
+.clips{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:14px}
+.ck{columns:2;column-gap:28px;font-size:14px}.ck div{break-inside:avoid;padding:3px 0}.ck .x{color:#d93025}.ck .v{color:#188038}
+.note{background:var(--soft);border-radius:8px;padding:10px 14px;font-size:14px;margin-top:10px}
+@media(max-width:600px){.shots{grid-template-columns:1fr}.ck{columns:1}}
 @media(max-width:600px){.score{grid-template-columns:1fr}.row{grid-template-columns:1fr 1fr 34px}}
 @media print{.wrap{padding:0}}
 </style></head><body><div class="wrap">
@@ -32,6 +41,20 @@ table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px
     <div class="row"><span>{{ labels[cat] }}</span><div class="bar"><i style="width:{{ val }}%;background:{{ c }}"></i></div><b style="color:{{ c }}">{{ val }}</b></div>{% endfor %}
   </div>
 </section>
+{% if r.score.cap_reason %}<p class="note">{{ r.score.cap_reason }} The average across all areas is {{ r.score.average }}.</p>{% endif %}
+
+{%- set base = (report_url ~ '/') if report_url else '' -%}
+{%- set colors = ['#e11d48','#f59e0b','#7c3aed','#0891b2','#16a34a','#db2777','#ea580c','#2563eb'] -%}
+{% if r.visual and r.visual.mobile %}
+<h2>What your visitors see</h2>
+<p class="mute">Your homepage the moment it opens on a phone and on a laptop. Numbered markers point to the problems we found.</p>
+<div class="shots">
+  <figure><img src="{{ base }}{{ r.visual.mobile }}" alt="Homepage on a phone"><figcaption>On a phone (390px wide)</figcaption></figure>
+  <figure><img src="{{ base }}{{ r.visual.desktop }}" alt="Homepage on a laptop"><figcaption>On a laptop (1366px wide)</figcaption></figure>
+</div>
+{% if r.visual.clips %}<div class="clips">{% for c in r.visual.clips %}<figure style="margin:0"><img src="{{ base }}{{ c.file }}" alt="Close-up further down the page"><figcaption>Further down on a phone</figcaption></figure>{% endfor %}</div>{% endif %}
+{% if r.visual.legend %}<ul class="legend">{% for l in r.visual.legend %}<li><span class="dot" style="background:{{ colors[(l.n - 1) % 8] }}">{{ l.n }}</span><span>{{ l.text }} <span class="mute">({{ l.where }})</span></span></li>{% endfor %}</ul>{% endif %}
+{% endif %}
 
 {% if r.pagespeed.mobile and r.pagespeed.mobile.scores %}
 <h2>Google PageSpeed (mobile / desktop)</h2>
@@ -40,8 +63,33 @@ table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px
 <tr><td>Largest Contentful Paint</td><td>{{ '%.1fs'|format(r.pagespeed.mobile.lcp_ms/1000) if r.pagespeed.mobile.lcp_ms else '–' }}</td><td>{{ '%.1fs'|format(r.pagespeed.desktop.lcp_ms/1000) if r.pagespeed.desktop and r.pagespeed.desktop.lcp_ms else '–' }}</td></tr>
 <tr><td>Cumulative Layout Shift</td><td>{{ '%.2f'|format(r.pagespeed.mobile.cls) if r.pagespeed.mobile.cls is not none else '–' }}</td><td>{{ '%.2f'|format(r.pagespeed.desktop.cls) if r.pagespeed.desktop and r.pagespeed.desktop.cls is not none else '–' }}</td></tr>
 </table>
+{% elif r.visual and r.visual.measured %}{% set vm = r.visual.measured %}
+<h2>Speed on a phone</h2>
+<table><tr><th>Measured on a mid-range phone with a slow 4G connection</th><th>Your site</th><th>Good</th></tr>
+<tr><td>Main content visible (Largest Contentful Paint)</td><td>{{ 'over 45s' if vm.timed_out else ('%.1fs'|format(vm.lcp_s) if vm.lcp_s else '–') }}</td><td>under 2.5s</td></tr>
+<tr><td>Layout shift while loading</td><td>{{ vm.cls }}</td><td>under 0.1</td></tr>
+<tr><td>Homepage download size</td><td>{{ '%.1f MB'|format(vm.bytes / 1000000) }}</td><td>under 1.5 MB</td></tr>
+<tr><td>Files requested</td><td>{{ vm.requests }}</td><td>under 80</td></tr>
+</table>
 {% else %}
 <p><em>Page speed was not measured in this audit, so it is not part of the score.</em></p>
+{% endif %}
+
+{% if r.seo and r.seo.searches %}
+<h2>What your customers search for</h2>
+<p class="mute">Real searches Google suggests for {{ r.seo.service }}{% if r.seo.areas %} in your area{% endif %}, and whether your site has a page built for each. (Google doesn't publish exact monthly volumes here.)</p>
+<table><tr><th>Search</th><th>Page on your site</th></tr>
+{% for q in r.seo.searches %}<tr><td>{{ q.query }}</td><td>{% if q.page %}<span style="color:#188038">✓</span> <code>{{ q.page }}</code>{% else %}<span style="color:#d93025">✗ none</span>{% endif %}</td></tr>{% endfor %}
+</table>
+{% endif %}
+{% if r.seo and r.seo.area_pages %}
+<h2>Areas you mention vs. pages built to rank there</h2>
+<table><tr><th>Area</th><th>Page</th></tr>{% for a, pg in r.seo.area_pages.items() %}<tr><td>{{ a|title }}</td><td>{% if pg %}<span style="color:#188038">✓</span> <code>{{ pg[0] }}</code>{% else %}<span style="color:#d93025">✗ none</span>{% endif %}</td></tr>{% endfor %}</table>
+{% endif %}
+
+{% if r.checklist %}{% set passed = r.checklist|selectattr('ok')|list|length %}
+<h2>Best-practice checklist: {{ passed }} of {{ r.checklist|length }} passed</h2>
+<div class="ck">{% for c in r.checklist %}<div class="{{ 'v' if c.ok else 'x' }}">{{ '✓' if c.ok else '✗' }} <span style="color:var(--ink)">{{ c.label }}</span></div>{% endfor %}</div>
 {% endif %}
 
 {% if r.rebuild_case %}<h2>Why a new site beats patching this one</h2>
@@ -51,7 +99,7 @@ table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px
 {% for cat in labels %}{% set items = r.findings|selectattr('category','equalto',cat)|list %}{% if items %}
 <h3 class="mute" style="margin-top:24px">{{ labels[cat] }} · {{ r.score.categories[cat] }}/100</h3>
 {% for f in items %}<div class="f" style="border-left-color:{{ sev_color[f.severity] }}">
-<div class="tag" style="color:{{ sev_color[f.severity] }}">{{ f.severity }}</div><h3>{{ f.title }}</h3>
+<div class="tag" style="color:{{ sev_color[f.severity] }}">{{ f.severity }}{% if f.evidence %} · <span class="dot" style="background:{{ colors[(f.evidence.marker - 1) % 8] }};width:18px;height:18px;font-size:11px;vertical-align:middle">{{ f.evidence.marker }}</span> see {{ f.evidence.where }} screenshot{% endif %}</div><h3>{{ f.title }}</h3>
 <p>{{ f.detail }}</p>{% if f.impact %}<p><b>What it costs you:</b> {{ f.impact }}</p>{% endif %}{% if brand.pitch != "rebuild" %}<p><b>Fix:</b> {{ f.fix }}</p>{% endif %}
 {% if f.pages %}<details><summary>Affected pages ({{ f.pages|length }})</summary>{% for p in f.pages %}<div><code>{{ p }}</code></div>{% endfor %}</details>{% endif %}
 </div>{% endfor %}{% endif %}{% endfor %}
