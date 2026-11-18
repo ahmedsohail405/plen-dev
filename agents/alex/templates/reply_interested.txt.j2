@@ -1,0 +1,20 @@
+Hi{% if p.contact_name %} {{ p.contact_name.split(' ')[0] }}{% else %} there{% endif %},
+
+Thanks for getting back to me!{% if asks_price %} New websites start at {{ price_from }} ({{ site }}/packages), and Ahmed gives you a fixed price on the call once he knows what you need.{% endif %}
+
+
+{% if demos %}
+To give you a feel for it, I put together {{ demos|length }} homepage concepts for {{ p.business_name }}:
+
+{% for d in demos %}
+- {{ d.name }}: {{ d.url }}
+{% endfor %}
+
+They're quick first drafts, so colors, photos and wording can all change.
+
+{% endif %}
+{% if booking_url %}The easiest next step is a 15-minute call with Ahmed, our founder. Pick any time here: {{ booking_url }}{% else %}The easiest next step is a 15-minute call with Ahmed, our founder. What day and time works for you?{% endif %}
+
+
+{% include "_sig.txt.j2" %}
+

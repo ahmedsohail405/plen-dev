@@ -1,0 +1,16 @@
+Hi{% if p.contact_name %} {{ p.contact_name.split(' ')[0] }}{% else %} there{% endif %},
+
+Thanks for the reply. [Ahmed: answer their question here.]
+
+{% if demos %}
+In the meantime, here are {{ demos|length }} homepage concepts I put together for {{ p.business_name }}:
+
+{% for d in demos %}
+- {{ d.name }}: {{ d.url }}
+{% endfor %}
+
+{% endif %}
+If it's easier to talk it through, {% if booking_url %}you can grab 15 minutes with Ahmed here: {{ booking_url }}{% else %}just send a day and time that works for a quick call with Ahmed{% endif %}.
+
+{% include "_sig.txt.j2" %}
+

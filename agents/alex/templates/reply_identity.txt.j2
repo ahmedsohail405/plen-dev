@@ -1,0 +1,8 @@
+Hi{% if p.contact_name %} {{ p.contact_name.split(' ')[0] }}{% else %} there{% endif %},
+
+Fair question! I'm Alex, an AI assistant on {{ company }}'s sales team. I run the website checks and handle first emails, and Ahmed, our founder, reviews everything I send. He's also the person you'd talk to on a call and who runs your project.
+
+Happy to keep going here or set up a quick call with him, whichever you prefer.
+
+{% include "_sig.txt.j2" %}
+

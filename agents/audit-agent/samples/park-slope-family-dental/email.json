@@ -1,0 +1,7 @@
+{
+  "to": "maria@example.com",
+  "subject": "Your website audit: parkslopefamilydental.com scored 61/100 (12 serious issues)",
+  "html_file": "email.html",
+  "text_file": "email.txt",
+  "status": "awaiting_approval"
+}
