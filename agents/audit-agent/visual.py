@@ -33,7 +33,8 @@ LOAD_TIMEOUT_MS = int(os.environ.get("VISUAL_TIMEOUT_MS", "45000"))
 STOCK_RE = re.compile(r"(shutterstock|istockphoto|istock[-_]|gettyimages|adobestock|stock\.adobe|depositphotos|"
                       r"dreamstime|123rf|bigstock|pexels|unsplash|pixabay|freepik|stocksy|envato)", re.I)
 CTA_RE = r"\b(book|schedule|call|get (a |your )?(free )?(quote|estimate|started|consultation|appointment)|contact|request|" \
-         r"appointment|consult|buy|shop|order|reserve|sign up|start|enroll|apply|donate|free (quote|estimate|consultation))\b"
+         r"appointment|consult|buy|shop|order|reserve|sign up|start|enroll|apply|donate|free (quote|estimate|consultation)|" \
+         r"assessment|evaluation|(get|request|find) care|tour|join|free trial|get started|search homes|home value)\b"
 
 MEASURE_JS = r"""
 ([ctaPattern, deviceW]) => {
@@ -390,7 +391,7 @@ def _kb(n: int) -> str:
     return f"{n / 1_000_000:.1f} MB" if n >= 1_000_000 else f"{round(n / 1000)} KB"
 
 
-def findings(v: dict, out: Path, add) -> dict:
+def findings(v: dict, out: Path, add, ind: dict | None = None) -> dict:
     """Turn measurements into findings. Each visual finding gets a numbered marker on a screenshot.
     Returns {"mobile": marked-shot, "desktop": marked-shot, "clips": [...], "legend": [...]} for the report."""
     if not v.get("ok"):
@@ -467,8 +468,10 @@ def findings(v: dict, out: Path, add) -> dict:
             impact="Google demotes pages with intrusive pop-ups on mobile, and visitors close the tab.")
     if not mob["cta_first_screen"]:
         ev = None
-        add("conversion", "no_cta_first_screen_mobile", "high", "No call or booking button on the first phone screen",
-            "When the page opens on a phone, there's no tap-to-call, 'book' or 'get a quote' button in view"
+        import industry
+        words = industry.action_words((ind or {}).get("key", ""))
+        add("conversion", "no_cta_first_screen_mobile", "high", "No call or next-step button on the first phone screen",
+            f"When the page opens on a phone, there's no tap-to-call or {words} button in view"
             + (f"; the first one is {round(mob['cta_any']['box'][1] / mob['vh'], 1)} screens down." if mob["cta_any"] else "."),
             "Put a sticky call/book button in the mobile header.", evidence=ev,
             impact="Most local searches happen on phones; if the next step isn't visible, visitors bounce.")
@@ -478,8 +481,9 @@ def findings(v: dict, out: Path, add) -> dict:
             "Lead with the headline and value proposition.",
             impact="Visitors decide in a few seconds; if they can't see what you do, they leave.")
     if not desk["cta_first_screen"]:
-        add("conversion", "no_cta_first_screen_desktop", "medium", "No call or booking button on the first desktop screen",
-            "Nothing like 'call', 'book' or 'get a quote' is visible before scrolling on a laptop screen.",
+        import industry
+        add("conversion", "no_cta_first_screen_desktop", "medium", "No call or next-step button on the first desktop screen",
+            f"No call or {industry.action_words((ind or {}).get('key', ''))} button is visible before scrolling on a laptop screen.",
             "Add a primary call-to-action button in the hero.")
     if desk["doc_w"] > desk["vw"] + 4:
         add("design", "desktop_overflow", "medium", "Page scrolls sideways on a laptop",

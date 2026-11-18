@@ -1,0 +1,29 @@
+# Temporary: checks the Railway Dockerfile builds (new base) and whether the old base fails. Remove before merging.
+name: docker-check
+on:
+  push:
+    branches: [audit-industry]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with old base (python:3.12-slim)
+        id: old
+        continue-on-error: true
+        run: |
+          sed 's/^FROM python:3.12-slim-bookworm$/FROM python:3.12-slim/' agents/Dockerfile > /tmp/Dockerfile.old
+          docker build -f /tmp/Dockerfile.old -t old agents 2>&1 | tail -40
+          exit ${PIPESTATUS[0]}
+      - name: Build with new base (bookworm)
+        run: docker build -t new agents 2>&1 | tail -15; exit ${PIPESTATUS[0]}
+      - name: Smoke test visual audit inside the new image
+        run: |
+          docker run --rm -e ALLOW_PRIVATE_TARGETS=1 -w /app/audit-agent new python -c "
+          import visual, pathlib
+          r = visual.run('https://example.com/', pathlib.Path('/tmp/o'))
+          print('visual ok:', r.get('ok'), r.get('error'), r.get('mobile', {}).get('shot'))
+          assert r.get('ok')"
+      - name: Result
+        run: echo "old base build outcome = ${{ steps.old.outcome }}"
