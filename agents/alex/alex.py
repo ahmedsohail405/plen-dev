@@ -55,6 +55,12 @@ import store
 from store import event, now
 
 SALES_IDS = compose.PITCHABLE
+# Alex's prospect categories as plain words the audit's industry detector and keyword research understand.
+# Broad categories are left out so the audit works the industry out from the site itself.
+AUDIT_INDUSTRY = {"dental": "dentist", "real_estate": "real estate", "home_healthcare": "home care",
+                  "medical": "clinic", "legal": "law firm", "accounting": "accounting", "beauty": "salon",
+                  "fitness": "gym", "contractor": "contractor", "trades": "contractor", "restaurant": "restaurant",
+                  "auto": "auto repair"}
 
 
 def log(*a):
@@ -153,7 +159,7 @@ def process_one(p: dict) -> dict:
     out = store.path(p["id"]).parent / "audit"
     log(f"auditing {site} ...")
     report = audit.run_audit(site, {"name": "", "company": p["business_name"], "website_url": site,
-                                    "industry": p.get("category") or "", "category": p.get("category") or ""}, out,
+                                    "industry": AUDIT_INDUSTRY.get(p.get("category") or "", ""), "category": ""}, out,
                              C.AUDIT_PAGES, C.PSI_KEY,
                              brand=audit.BRAND | {"booking_url": C.BOOKING_URL or C.SITE}, report_url="", visual=C.VISUAL)
     for f in ("email.html", "email.txt", "email.json"):  # inbound-audit email, not used for cold outreach
