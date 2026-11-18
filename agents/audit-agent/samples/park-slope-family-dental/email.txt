@@ -1,0 +1,68 @@
+Hi Maria,
+
+Thanks for requesting a website audit. We ran a deep review of parkslopefamilydental.com: 12 pages and more than 60 checks covering security, speed, how well it turns visitors into customers, design age, accessibility (ADA) and search visibility.
+
+OVERALL SCORE: 61/100 (grade D) · 41 issues, 2 critical, 10 high
+
+- Conversion & trust: 52/100
+- Security & privacy: 32/100
+- Technical SEO: 60/100
+- Design & technology age: 62/100
+- Accessibility (ADA): 74/100
+- On-page SEO: 80/100
+- Local SEO: 78/100
+- AI search readiness: 80/100
+
+THE 5 BIGGEST PROBLEMS
+
+1. Forms send customer data without encryption
+   Contact or login forms submit over plain http://.
+   What it costs you: Names, phone numbers and messages your customers type can be read by anyone on the network.
+
+2. Site is not served over HTTPS
+   Browsers mark the site 'Not secure' and Google uses HTTPS as a ranking signal.
+
+3. No clear call to action on the homepage
+   Visitors don't know the next step, so traffic doesn't become leads.
+
+4. Outdated, publicly visible CMS version (WordPress 5.8.2)
+   The site runs an old content-management system version and advertises it in the page code.
+   What it costs you: Old CMS versions are the #1 way small-business sites get hacked and blacklisted by Google.
+
+5. Outdated JavaScript libraries: jQuery 1.12.4
+   These versions have publicly known security vulnerabilities.
+   What it costs you: Known vulnerabilities in old libraries let attackers run code in your visitors' browsers.
+
+Full report with all 41 issues: https://audit.plendev.com/r/sample
+
+WHY WE'D BUILD YOU A NEW SITE INSTEAD OF PATCHING THIS ONE
+
+- The problems aren't in one place: 4 of 8 areas score below 70 (Conversion & trust, Security & privacy, Technical SEO, Design & technology age). Fixing them one by one means touching almost every page and template.
+- The site is built on outdated foundations (retired HTML, a table-based layout, an outdated CMS, old JavaScript libraries). Patching old code usually costs more than building new, and the result still looks dated.
+- We found 6 security and privacy gaps. A modern build closes them by default instead of one at a time.
+- 8 conversion problems mean visitors who find you are leaving without calling or booking. A new site can be designed around turning visitors into customers.
+- It's slow or awkward on phones, which is where most local customers search.
+- Accessibility gaps create ADA lawsuit risk. A new build can meet WCAG 2.1 AA from day one.
+
+
+WHAT YOUR NEW SITE WOULD INCLUDE
+- Designed mobile-first and built to load fast
+- Secure by default: HTTPS, security headers and up-to-date code
+- Built to convert: click-to-call, online booking, reviews and clear calls to action
+- Accessible (WCAG 2.1 AA) to reduce ADA risk
+- Ready for Google and AI search tools from day one
+- An easy editor so you can change text and photos yourself
+
+SEE YOUR NEW SITE BEFORE YOU DECIDE
+Reply to this email and we'll design 2-3 free homepage concepts for Park Slope Family Dental, no strings attached.
+Or book a 15-minute call: https://plendev.com/book
+
+Questions? Reply here or write to info@plendev.com.
+
+Alex H
+Sales, Plen Dev
+https://plendev.com
+
+--
+You received this because you requested a website audit at https://plendev.com. Reply "unsubscribe" and we won't email you again.
+Plen Dev · info@plendev.com

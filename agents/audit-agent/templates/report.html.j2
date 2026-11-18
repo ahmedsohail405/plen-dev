@@ -1,0 +1,63 @@
+{%- set sev_color = {'critical':'#d93025','high':'#e8710a','medium':'#c98a00','low':'#5f6368'} -%}
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Website audit: {{ r.site_host }}</title>
+<style>
+:root{--ink:#1f2330;--mute:#6b7280;--line:#e5e7eb;--bg:#fff;--soft:#f7f7fa;--accent:#4f46e5}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:900px;margin:0 auto;padding:32px 16px}
+header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:28px;gap:16px;flex-wrap:wrap}
+h1{margin:0;font-size:26px}h2{font-size:20px;margin:36px 0 12px}.mute{color:var(--mute)}
+.score{display:grid;grid-template-columns:180px 1fr;gap:24px;align-items:center}
+.big{font-size:72px;font-weight:800;line-height:1}.big small{font-size:24px;color:var(--mute)}
+.bar{background:#eef0f3;border-radius:4px;height:10px}.bar>i{display:block;height:10px;border-radius:4px}
+.row{display:grid;grid-template-columns:200px 1fr 40px;gap:12px;align-items:center;margin:6px 0}
+.f{border:1px solid var(--line);border-left:4px solid;border-radius:6px;padding:12px 16px;margin:10px 0;break-inside:avoid}
+.tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+.f h3{margin:2px 0 4px;font-size:16px}.f p{margin:2px 0}
+details{margin-top:6px;font-size:13px}code{font-size:12px;word-break:break-all}
+table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.cta{background:var(--soft);border-radius:10px;padding:20px;margin-top:36px}
+@media(max-width:600px){.score{grid-template-columns:1fr}.row{grid-template-columns:1fr 1fr 34px}}
+@media print{.wrap{padding:0}}
+</style></head><body><div class="wrap">
+<header><div><div class="mute">{{ brand.name }} · Website audit</div><h1>{{ r.site_host }}</h1></div>
+<div class="mute">{{ r.generated_at[:10] }} · {{ r.pages_crawled }} pages crawled</div></header>
+
+{%- set ov = r.score.overall -%}
+<section class="score">
+  <div><div class="big" style="color:{{ '#188038' if ov>=80 else ('#c98a00' if ov>=55 else '#d93025') }}">{{ ov }}<small>/100</small></div>
+  <div>Grade <b>{{ ov|grade }}</b></div></div>
+  <div>{% for cat, val in r.score.categories.items() %}{% set c = '#188038' if val>=80 else ('#c98a00' if val>=55 else '#d93025') %}
+    <div class="row"><span>{{ labels[cat] }}</span><div class="bar"><i style="width:{{ val }}%;background:{{ c }}"></i></div><b style="color:{{ c }}">{{ val }}</b></div>{% endfor %}
+  </div>
+</section>
+
+{% if r.pagespeed.mobile and r.pagespeed.mobile.scores %}
+<h2>Google PageSpeed (mobile / desktop)</h2>
+<table><tr><th></th><th>Mobile</th><th>Desktop</th></tr>
+{% for k in ['performance','seo','accessibility','best-practices'] %}<tr><td>{{ k|title }}</td><td>{{ r.pagespeed.mobile.scores.get(k,'–') }}</td><td>{{ (r.pagespeed.desktop or {}).get('scores',{}).get(k,'–') }}</td></tr>{% endfor %}
+<tr><td>Largest Contentful Paint</td><td>{{ '%.1fs'|format(r.pagespeed.mobile.lcp_ms/1000) if r.pagespeed.mobile.lcp_ms else '–' }}</td><td>{{ '%.1fs'|format(r.pagespeed.desktop.lcp_ms/1000) if r.pagespeed.desktop and r.pagespeed.desktop.lcp_ms else '–' }}</td></tr>
+<tr><td>Cumulative Layout Shift</td><td>{{ '%.2f'|format(r.pagespeed.mobile.cls) if r.pagespeed.mobile.cls is not none else '–' }}</td><td>{{ '%.2f'|format(r.pagespeed.desktop.cls) if r.pagespeed.desktop and r.pagespeed.desktop.cls is not none else '–' }}</td></tr>
+</table>
+{% endif %}
+
+{% if r.rebuild_case %}<h2>Why a new site beats patching this one</h2>
+<ul>{% for line in r.rebuild_case %}<li>{{ line }}</li>{% endfor %}</ul>{% endif %}
+
+<h2>All findings ({{ r.findings|length }})</h2>
+{% for cat in labels %}{% set items = r.findings|selectattr('category','equalto',cat)|list %}{% if items %}
+<h3 class="mute" style="margin-top:24px">{{ labels[cat] }} · {{ r.score.categories[cat] }}/100</h3>
+{% for f in items %}<div class="f" style="border-left-color:{{ sev_color[f.severity] }}">
+<div class="tag" style="color:{{ sev_color[f.severity] }}">{{ f.severity }}</div><h3>{{ f.title }}</h3>
+<p>{{ f.detail }}</p>{% if f.impact %}<p><b>What it costs you:</b> {{ f.impact }}</p>{% endif %}{% if brand.pitch != "rebuild" %}<p><b>Fix:</b> {{ f.fix }}</p>{% endif %}
+{% if f.pages %}<details><summary>Affected pages ({{ f.pages|length }})</summary>{% for p in f.pages %}<div><code>{{ p }}</code></div>{% endfor %}</details>{% endif %}
+</div>{% endfor %}{% endif %}{% endfor %}
+
+<h2>Pages checked</h2>
+<table><tr><th>URL</th><th>Title</th><th>H1</th><th>Words</th></tr>
+{% for p in r.pages %}<tr><td><code>{{ p.url }}</code></td><td>{{ p.title or '—' }}</td><td>{{ p.h1|length }}</td><td>{{ p.word_count }}</td></tr>{% endfor %}
+</table>
+
+<div class="cta">{% if brand.pitch == "rebuild" %}<b>Want a new site that fixes all of this?</b> Reply to our email for 2-3 free homepage concepts, or book a 15-minute call at{% else %}<b>Want {{ brand.name }} to fix this?</b> Book a free 20-minute strategy call at{% endif %} <a href="{{ brand.booking_url }}">{{ brand.booking_url }}</a> or email {{ brand.email }}{% if brand.phone %} / call {{ brand.phone }}{% endif %}.</div>
+</div></body></html>

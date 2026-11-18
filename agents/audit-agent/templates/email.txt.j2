@@ -1,0 +1,43 @@
+Hi {{ (lead.name or 'there').split(' ')[0] }},
+
+Thanks for requesting a website audit. We ran a deep review of {{ r.site_host }}: {{ r.pages_crawled }} pages and more than 60 checks covering security, speed, how well it turns visitors into customers, design age, accessibility (ADA) and search visibility.
+
+OVERALL SCORE: {{ r.score.overall }}/100 (grade {{ r.score.overall | grade }}) · {{ r.total_issues }} issues, {{ r.counts.critical }} critical, {{ r.counts.high }} high
+
+{% for cat, val in r.score.categories.items() -%}
+- {{ labels[cat] }}: {{ val }}/100
+{% endfor %}
+THE {{ r.top_issues|length }} BIGGEST PROBLEMS
+{% for f in r.top_issues %}
+{{ loop.index }}. {{ f.title }}
+   {{ f.detail }}{% if f.impact %}
+   What it costs you: {{ f.impact }}{% endif %}
+{% endfor %}
+Full report with all {{ r.total_issues }} issues: {{ report_url }}
+{% if r.rebuild_case %}
+WHY WE'D BUILD YOU A NEW SITE INSTEAD OF PATCHING THIS ONE
+{% for line in r.rebuild_case %}
+- {{ line }}{% endfor %}
+{% endif %}
+
+WHAT YOUR NEW SITE WOULD INCLUDE
+- Designed mobile-first and built to load fast
+- Secure by default: HTTPS, security headers and up-to-date code
+- Built to convert: click-to-call, online booking, reviews and clear calls to action
+- Accessible (WCAG 2.1 AA) to reduce ADA risk
+- Ready for Google and AI search tools from day one
+- An easy editor so you can change text and photos yourself
+
+SEE YOUR NEW SITE BEFORE YOU DECIDE
+Reply to this email and we'll design 2-3 free homepage concepts for {{ lead.company or r.site_host }}, no strings attached.
+Or book a 15-minute call: {{ brand.booking_url }}
+
+Questions? Reply here or write to {{ brand.email }}{% if brand.phone %}, or call {{ brand.phone }}{% endif %}.
+
+{{ brand.sender_name }}
+{{ brand.sender_title }}
+{{ brand.site }}
+
+--
+You received this because you requested a website audit at {{ brand.site }}. Reply "unsubscribe" and we won't email you again.
+{{ brand.name }}{% if brand.address %} · {{ brand.address }}{% endif %} · {{ brand.email }}

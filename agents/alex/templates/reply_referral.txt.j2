@@ -1,0 +1,10 @@
+{% set fn = (p.referral.email.split("@")[0].split(".")[0] if p.referral and "." in p.referral.email.split("@")[0] else "") %}Hi {{ fn.title() if fn and fn.isalpha() and fn|length > 1 else "there" }},
+
+{{ p.referred_by or "Someone on your team" }} suggested I reach out to you about the {{ p.business_name }} website.
+
+We ran a full check on {{ p.domain }}. It scored {{ a.score }}/100, with a few problems that are likely costing you {{ customers }}. The full report is here: {{ report_url }}
+
+We build new, fast websites for businesses like yours. Would a quick 15-minute call with Ahmed, our founder, be worth it? He can show you what a new site could look like.
+
+{% include "_footer.txt.j2" %}
+

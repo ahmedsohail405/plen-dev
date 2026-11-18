@@ -1,0 +1,621 @@
+{
+  "generated_at": "2026-11-17T23:17:28+00:00",
+  "url": "https://parkslopefamilydental.com/",
+  "site_host": "parkslopefamilydental.com",
+  "pages_crawled": 12,
+  "score": {
+    "overall": 61,
+    "categories": {
+      "conversion": 52,
+      "security": 32,
+      "technical": 60,
+      "design": 62,
+      "accessibility": 74,
+      "on_page": 80,
+      "local_seo": 78,
+      "ai_readiness": 80
+    }
+  },
+  "pagespeed": {
+    "mobile": {
+      "error": "HTTP 429"
+    },
+    "desktop": {
+      "error": "HTTP 429"
+    }
+  },
+  "counts": {
+    "critical": 2,
+    "high": 10,
+    "medium": 16,
+    "low": 13
+  },
+  "findings": [
+    {
+      "category": "security",
+      "id": "form_posts_insecure",
+      "severity": "critical",
+      "title": "Forms send customer data without encryption",
+      "detail": "Contact or login forms submit over plain http://.",
+      "fix": "Serve and submit every form over HTTPS.",
+      "pages": [
+        "https://parkslopefamilydental.com/contact.html"
+      ],
+      "impact": "Names, phone numbers and messages your customers type can be read by anyone on the network."
+    },
+    {
+      "category": "technical",
+      "id": "no_https",
+      "severity": "critical",
+      "title": "Site is not served over HTTPS",
+      "detail": "Browsers mark the site 'Not secure' and Google uses HTTPS as a ranking signal.",
+      "fix": "Install an SSL certificate and 301-redirect all http:// URLs to https://.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "conversion",
+      "id": "no_cta",
+      "severity": "high",
+      "title": "No clear call to action on the homepage",
+      "detail": "Visitors don't know the next step, so traffic doesn't become leads.",
+      "fix": "Add a prominent 'Book a consultation' / 'Get a free quote' button above the fold.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "security",
+      "id": "outdated_cms",
+      "severity": "high",
+      "title": "Outdated, publicly visible CMS version (WordPress 5.8.2)",
+      "detail": "The site runs an old content-management system version and advertises it in the page code.",
+      "fix": "Upgrade core and plugins, remove the generator tag.",
+      "pages": [],
+      "impact": "Old CMS versions are the #1 way small-business sites get hacked and blacklisted by Google."
+    },
+    {
+      "category": "security",
+      "id": "outdated_js_libs",
+      "severity": "high",
+      "title": "Outdated JavaScript libraries: jQuery 1.12.4",
+      "detail": "These versions have publicly known security vulnerabilities.",
+      "fix": "Upgrade or remove the libraries.",
+      "pages": [],
+      "impact": "Known vulnerabilities in old libraries let attackers run code in your visitors' browsers."
+    },
+    {
+      "category": "conversion",
+      "id": "no_reviews",
+      "severity": "high",
+      "title": "No reviews or testimonials on the site",
+      "detail": "We found no customer reviews, testimonials or review widgets on any page we checked.",
+      "fix": "Embed Google reviews and add testimonials near every call to action.",
+      "pages": [],
+      "impact": "Most people read reviews before contacting a local business. Without them, many leave to check a competitor."
+    },
+    {
+      "category": "technical",
+      "id": "no_sitemap",
+      "severity": "high",
+      "title": "No XML sitemap at /sitemap.xml",
+      "detail": "Google discovers new and updated pages more slowly without a sitemap.",
+      "fix": "Generate an XML sitemap and submit it in Google Search Console.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "design",
+      "id": "legacy_tech",
+      "severity": "high",
+      "title": "Built with outdated web technology (<font> tags, <center> tags, 1990s-style HTML attributes)",
+      "detail": "The page uses HTML features that were retired over a decade ago.",
+      "fix": "Rebuild on modern HTML/CSS.",
+      "pages": [],
+      "impact": "The site looks dated, renders inconsistently on new devices, and can't be patched into a modern design."
+    },
+    {
+      "category": "design",
+      "id": "table_layout",
+      "severity": "high",
+      "title": "Page layout is built with tables",
+      "detail": "The design uses HTML tables for layout, a technique from the early 2000s.",
+      "fix": "Rebuild with CSS grid/flexbox.",
+      "pages": [],
+      "impact": "Table layouts can't adapt to phones, so the site can't be made mobile-friendly without a rebuild."
+    },
+    {
+      "category": "accessibility",
+      "id": "inputs_no_labels",
+      "severity": "high",
+      "title": "Form fields without labels",
+      "detail": "Screen readers can't tell blind visitors what to type in some form fields.",
+      "fix": "Add <label> elements to every field.",
+      "pages": [
+        "https://parkslopefamilydental.com/contact.html"
+      ],
+      "impact": "Missing form labels are one of the most cited problems in ADA website lawsuits."
+    },
+    {
+      "category": "local_seo",
+      "id": "no_localbusiness_schema",
+      "severity": "high",
+      "title": "No LocalBusiness / Organization schema",
+      "detail": "Structured data helps Google show your hours, reviews and location in the map pack.",
+      "fix": "Add LocalBusiness JSON-LD with name, address, phone, hours, geo and sameAs links.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "ai_readiness",
+      "id": "js_only_content",
+      "severity": "high",
+      "title": "Very little readable text in the page HTML",
+      "detail": "If content only appears after JavaScript runs, many crawlers and AI tools see a blank page.",
+      "fix": "Server-render or pre-render the main content.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "security",
+      "id": "no_csp",
+      "severity": "medium",
+      "title": "No Content Security Policy",
+      "detail": "Nothing limits which scripts can run on the site.",
+      "fix": "Add a Content-Security-Policy header.",
+      "pages": [],
+      "impact": "If a plugin or ad script is compromised, it can inject spam, redirects or card skimmers."
+    },
+    {
+      "category": "security",
+      "id": "no_clickjack_protection",
+      "severity": "medium",
+      "title": "No clickjacking protection",
+      "detail": "Any other website can load this site inside a hidden frame.",
+      "fix": "Add X-Frame-Options: SAMEORIGIN or CSP frame-ancestors.",
+      "pages": [],
+      "impact": "Attackers can trick visitors into clicking buttons on your site without knowing it."
+    },
+    {
+      "category": "security",
+      "id": "no_privacy_policy",
+      "severity": "medium",
+      "title": "No privacy policy",
+      "detail": "The site collects visitor data (forms or tracking) without a privacy policy.",
+      "fix": "Publish a privacy policy and link it in the footer and next to forms.",
+      "pages": [],
+      "impact": "Required by Google Ads, Meta ads and privacy laws, and its absence reduces trust."
+    },
+    {
+      "category": "conversion",
+      "id": "no_online_booking",
+      "severity": "medium",
+      "title": "No way to book online",
+      "detail": "Visitors can't pick a time or request an appointment directly on the site.",
+      "fix": "Add an online booking or appointment-request flow.",
+      "pages": [],
+      "impact": "People searching at night or on weekends can't book, so they book with whoever lets them."
+    },
+    {
+      "category": "conversion",
+      "id": "form_too_long",
+      "severity": "medium",
+      "title": "Lead forms ask for too much",
+      "detail": "Some forms have more than 6 fields.",
+      "fix": "Cut forms to name, phone/email and one question.",
+      "pages": [
+        "https://parkslopefamilydental.com/contact.html"
+      ],
+      "impact": "Every extra field lowers the number of people who finish the form."
+    },
+    {
+      "category": "conversion",
+      "id": "generic_headline",
+      "severity": "medium",
+      "title": "Homepage headline doesn't say what you do (\"Welcome\")",
+      "detail": "The main headline is generic and doesn't name the service, the area or the benefit.",
+      "fix": "Rewrite the hero headline: service + area + benefit.",
+      "pages": [],
+      "impact": "Visitors decide in about 5 seconds whether they're in the right place."
+    },
+    {
+      "category": "technical",
+      "id": "no_robots",
+      "severity": "medium",
+      "title": "No robots.txt file",
+      "detail": "Search engines and AI crawlers have no crawl guidance.",
+      "fix": "Publish /robots.txt that allows crawling and points to the XML sitemap.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "on_page",
+      "id": "missing_meta_desc",
+      "severity": "medium",
+      "title": "Pages missing a meta description (2)",
+      "detail": "Google writes its own snippet, usually lowering click-through.",
+      "fix": "Write a 140-160 character description with a call to action.",
+      "pages": [
+        "https://parkslopefamilydental.com/about.html",
+        "https://parkslopefamilydental.com/contact.html"
+      ],
+      "impact": ""
+    },
+    {
+      "category": "on_page",
+      "id": "thin_content",
+      "severity": "medium",
+      "title": "Thin content (under 300 words) (3)",
+      "detail": "Short pages rarely rank for competitive terms.",
+      "fix": "Expand key service pages to 600+ useful words, with FAQs.",
+      "pages": [
+        "https://parkslopefamilydental.com/",
+        "https://parkslopefamilydental.com/about.html",
+        "https://parkslopefamilydental.com/contact.html"
+      ],
+      "impact": ""
+    },
+    {
+      "category": "on_page",
+      "id": "img_alt",
+      "severity": "medium",
+      "title": "Images missing alt text (1)",
+      "detail": "Hurts accessibility and image search visibility.",
+      "fix": "Add short descriptive alt text to every meaningful image.",
+      "pages": [
+        "https://parkslopefamilydental.com/"
+      ],
+      "impact": ""
+    },
+    {
+      "category": "design",
+      "id": "old_copyright_year",
+      "severity": "medium",
+      "title": "Footer still says \u00a9 2018",
+      "detail": "The copyright year hasn't been updated in years.",
+      "fix": "Update the year (or render it dynamically).",
+      "pages": [],
+      "impact": "Visitors read an old date as a sign the business may be closed or the site is neglected."
+    },
+    {
+      "category": "design",
+      "id": "no_responsive_images",
+      "severity": "medium",
+      "title": "Images aren't sized for phones",
+      "detail": "Every device downloads the same full-size images.",
+      "fix": "Use srcset/sizes and responsive image components.",
+      "pages": [],
+      "impact": "Phones download far more data than they need, which makes the site slow on mobile."
+    },
+    {
+      "category": "accessibility",
+      "id": "links_no_text",
+      "severity": "medium",
+      "title": "Links and buttons with no readable name",
+      "detail": "Icon-only links/buttons have no text a screen reader can announce.",
+      "fix": "Add aria-labels to icon links and buttons.",
+      "pages": [
+        "https://parkslopefamilydental.com/"
+      ],
+      "impact": "Blind visitors hear 'link, link, button' and can't navigate, which is a common ADA complaint."
+    },
+    {
+      "category": "accessibility",
+      "id": "zoom_disabled",
+      "severity": "medium",
+      "title": "Zooming is disabled on phones",
+      "detail": "The site blocks pinch-to-zoom.",
+      "fix": "Remove user-scalable=no / maximum-scale=1.",
+      "pages": [],
+      "impact": "Visitors with low vision can't enlarge text. This fails accessibility guidelines."
+    },
+    {
+      "category": "local_seo",
+      "id": "no_tel_link",
+      "severity": "medium",
+      "title": "Phone number is not click-to-call",
+      "detail": "Most local searches happen on mobile.",
+      "fix": "Wrap the number in a tel: link.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "ai_readiness",
+      "id": "no_structured_data",
+      "severity": "medium",
+      "title": "No structured data at all",
+      "detail": "AI tools and Google rely on schema to understand services, FAQs and reviews.",
+      "fix": "Add Organization, Service and FAQPage schema.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "conversion",
+      "id": "no_favicon",
+      "severity": "low",
+      "title": "No favicon",
+      "detail": "Looks unfinished in browser tabs and Google results.",
+      "fix": "Add a favicon and apple-touch-icon.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "security",
+      "id": "no_xcto",
+      "severity": "low",
+      "title": "Missing X-Content-Type-Options header",
+      "detail": "Browsers may guess file types, which opens the door to some script attacks.",
+      "fix": "Add X-Content-Type-Options: nosniff.",
+      "pages": [],
+      "impact": "A small but easy-to-close security gap."
+    },
+    {
+      "category": "security",
+      "id": "server_version_exposed",
+      "severity": "low",
+      "title": "Server software versions are public",
+      "detail": "The server announces exactly what it runs (server: SimpleHTTP/0.6 Python/3.13.18).",
+      "fix": "Hide version numbers in server config.",
+      "pages": [],
+      "impact": "Attackers use these version numbers to find known exploits for your server."
+    },
+    {
+      "category": "security",
+      "id": "no_cookie_consent",
+      "severity": "low",
+      "title": "Tracking runs with no cookie notice",
+      "detail": "Analytics or ad pixels load without any cookie notice or consent option.",
+      "fix": "Add a consent banner wired to Google Consent Mode.",
+      "pages": [],
+      "impact": "A growing legal risk under state privacy laws, and Google now limits ad data without consent."
+    },
+    {
+      "category": "conversion",
+      "id": "no_trust_badges",
+      "severity": "low",
+      "title": "No trust signals",
+      "detail": "No licenses, certifications, awards, guarantees or 'years in business' anywhere on the site.",
+      "fix": "Add a trust bar under the hero.",
+      "pages": [],
+      "impact": "Trust signals near the top of the page measurably raise the number of visitors who call."
+    },
+    {
+      "category": "conversion",
+      "id": "no_live_chat",
+      "severity": "low",
+      "title": "No chat or text option",
+      "detail": "Visitors can't message the business from the site.",
+      "fix": "Add web chat or text-us.",
+      "pages": [],
+      "impact": "Many younger customers would rather text than call, and chat captures leads after hours."
+    },
+    {
+      "category": "technical",
+      "id": "no_canonical",
+      "severity": "low",
+      "title": "Most pages have no canonical tag",
+      "detail": "Duplicate URL variants may compete with each other.",
+      "fix": "Add a self-referencing rel=canonical on every page.",
+      "pages": [
+        "https://parkslopefamilydental.com/",
+        "https://parkslopefamilydental.com/about.html",
+        "https://parkslopefamilydental.com/contact.html"
+      ],
+      "impact": ""
+    },
+    {
+      "category": "on_page",
+      "id": "no_og",
+      "severity": "low",
+      "title": "No Open Graph tags",
+      "detail": "Links shared on Facebook, LinkedIn and iMessage show no image or proper title.",
+      "fix": "Add og:title, og:description and og:image.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "design",
+      "id": "no_modern_images",
+      "severity": "low",
+      "title": "No modern image formats",
+      "detail": "Images use older JPG/PNG formats only.",
+      "fix": "Serve WebP/AVIF.",
+      "pages": [],
+      "impact": "Modern formats are typically 25-50% smaller, so pages load noticeably faster."
+    },
+    {
+      "category": "accessibility",
+      "id": "no_skip_or_landmarks",
+      "severity": "low",
+      "title": "No page landmarks",
+      "detail": "The page has no <main> region, so keyboard and screen-reader users can't skip to content.",
+      "fix": "Use semantic header/nav/main/footer and a skip link.",
+      "pages": [],
+      "impact": "Makes the site hard to use with assistive technology."
+    },
+    {
+      "category": "local_seo",
+      "id": "no_map",
+      "severity": "low",
+      "title": "No Google Map embedded",
+      "detail": "A map on the contact page reinforces your location.",
+      "fix": "Embed your Google Business Profile map.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "local_seo",
+      "id": "no_lang",
+      "severity": "low",
+      "title": "No language declared on <html>",
+      "detail": "Helps search engines serve the page to the right audience.",
+      "fix": "Add lang=\"en-US\".",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "ai_readiness",
+      "id": "no_llms_txt",
+      "severity": "low",
+      "title": "No /llms.txt file",
+      "detail": "An emerging standard that tells AI assistants what your business does and which pages matter.",
+      "fix": "Publish /llms.txt with a summary of services, locations and key URLs.",
+      "pages": [],
+      "impact": ""
+    }
+  ],
+  "top_issues": [
+    {
+      "category": "security",
+      "id": "form_posts_insecure",
+      "severity": "critical",
+      "title": "Forms send customer data without encryption",
+      "detail": "Contact or login forms submit over plain http://.",
+      "fix": "Serve and submit every form over HTTPS.",
+      "pages": [
+        "https://parkslopefamilydental.com/contact.html"
+      ],
+      "impact": "Names, phone numbers and messages your customers type can be read by anyone on the network."
+    },
+    {
+      "category": "technical",
+      "id": "no_https",
+      "severity": "critical",
+      "title": "Site is not served over HTTPS",
+      "detail": "Browsers mark the site 'Not secure' and Google uses HTTPS as a ranking signal.",
+      "fix": "Install an SSL certificate and 301-redirect all http:// URLs to https://.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "conversion",
+      "id": "no_cta",
+      "severity": "high",
+      "title": "No clear call to action on the homepage",
+      "detail": "Visitors don't know the next step, so traffic doesn't become leads.",
+      "fix": "Add a prominent 'Book a consultation' / 'Get a free quote' button above the fold.",
+      "pages": [],
+      "impact": ""
+    },
+    {
+      "category": "security",
+      "id": "outdated_cms",
+      "severity": "high",
+      "title": "Outdated, publicly visible CMS version (WordPress 5.8.2)",
+      "detail": "The site runs an old content-management system version and advertises it in the page code.",
+      "fix": "Upgrade core and plugins, remove the generator tag.",
+      "pages": [],
+      "impact": "Old CMS versions are the #1 way small-business sites get hacked and blacklisted by Google."
+    },
+    {
+      "category": "security",
+      "id": "outdated_js_libs",
+      "severity": "high",
+      "title": "Outdated JavaScript libraries: jQuery 1.12.4",
+      "detail": "These versions have publicly known security vulnerabilities.",
+      "fix": "Upgrade or remove the libraries.",
+      "pages": [],
+      "impact": "Known vulnerabilities in old libraries let attackers run code in your visitors' browsers."
+    }
+  ],
+  "rebuild_case": [
+    "The problems aren't in one place: 4 of 8 areas score below 70 (Conversion & trust, Security & privacy, Technical SEO, Design & technology age). Fixing them one by one means touching almost every page and template.",
+    "The site is built on outdated foundations (retired HTML, a table-based layout, an outdated CMS, old JavaScript libraries). Patching old code usually costs more than building new, and the result still looks dated.",
+    "We found 6 security and privacy gaps. A modern build closes them by default instead of one at a time.",
+    "8 conversion problems mean visitors who find you are leaving without calling or booking. A new site can be designed around turning visitors into customers.",
+    "It's slow or awkward on phones, which is where most local customers search.",
+    "Accessibility gaps create ADA lawsuit risk. A new build can meet WCAG 2.1 AA from day one."
+  ],
+  "total_issues": 41,
+  "pages": [
+    {
+      "url": "https://parkslopefamilydental.com/",
+      "status": 200,
+      "title": "Park Slope Family Dental | Dentist in Brooklyn",
+      "meta_description": "Family dentist in Park Slope, Brooklyn.",
+      "robots": "",
+      "canonical": "",
+      "h1": [
+        "Welcome"
+      ],
+      "h2_count": 0,
+      "lang": "",
+      "viewport": true,
+      "og": false,
+      "jsonld": [],
+      "img_total": 6,
+      "img_no_alt": 6,
+      "word_count": 42,
+      "mixed_content": false,
+      "tel_link": false,
+      "phone_text": true,
+      "form": false,
+      "cta": false,
+      "analytics": true,
+      "favicon": false,
+      "address_text": true,
+      "maps_embed": false,
+      "elapsed_ms": 2,
+      "bytes": 1148
+    },
+    {
+      "url": "https://parkslopefamilydental.com/about.html",
+      "status": 200,
+      "title": "About Park Slope Family Dental",
+      "meta_description": "",
+      "robots": "",
+      "canonical": "",
+      "h1": [
+        "About our Brooklyn dental team"
+      ],
+      "h2_count": 0,
+      "lang": "en",
+      "viewport": false,
+      "og": false,
+      "jsonld": [],
+      "img_total": 0,
+      "img_no_alt": 0,
+      "word_count": 19,
+      "mixed_content": false,
+      "tel_link": false,
+      "phone_text": false,
+      "form": false,
+      "cta": false,
+      "analytics": false,
+      "favicon": false,
+      "address_text": false,
+      "maps_embed": false,
+      "elapsed_ms": 1,
+      "bytes": 201
+    },
+    {
+      "url": "https://parkslopefamilydental.com/contact.html",
+      "status": 200,
+      "title": "Contact Park Slope Family Dental",
+      "meta_description": "",
+      "robots": "",
+      "canonical": "",
+      "h1": [
+        "Contact us"
+      ],
+      "h2_count": 0,
+      "lang": "en",
+      "viewport": false,
+      "og": false,
+      "jsonld": [],
+      "img_total": 0,
+      "img_no_alt": 0,
+      "word_count": 7,
+      "mixed_content": false,
+      "tel_link": false,
+      "phone_text": false,
+      "form": true,
+      "cta": true,
+      "analytics": false,
+      "favicon": false,
+      "address_text": false,
+      "maps_embed": false,
+      "elapsed_ms": 1,
+      "bytes": 469
+    }
+  ]
+}

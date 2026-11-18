@@ -1,0 +1,92 @@
+{%- set sev_color = {'critical':'#d93025','high':'#e8710a','medium':'#c98a00','low':'#5f6368'} -%}
+{%- set ov = r.score.overall -%}
+{%- set ov_color = '#188038' if ov >= 80 else ('#c98a00' if ov >= 55 else '#d93025') -%}
+{%- set first = (lead.name or 'there').split(' ')[0] -%}
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your website audit</title></head>
+<body style="margin:0;padding:0;background:#f4f4f7;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1f2330;">
+<span style="display:none;max-height:0;overflow:hidden;">{{ r.site_host }} scored {{ ov }}/100 across {{ r.score.categories|length }} areas. {{ r.counts.critical + r.counts.high }} serious issues found.</span>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f7;"><tr><td align="center" style="padding:24px 12px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;">
+
+<tr><td style="background:#111827;padding:22px 32px;color:#fff;font-size:20px;font-weight:700;letter-spacing:.3px;">{{ brand.name }} <span style="font-weight:400;color:#9ca3af;font-size:14px;">· Website audit</span></td></tr>
+
+<tr><td style="padding:32px 32px 8px;">
+  <p style="margin:0 0 16px;font-size:16px;line-height:1.55;">Hi {{ first }},</p>
+  <p style="margin:0 0 16px;font-size:16px;line-height:1.55;">Thanks for requesting a website audit. We ran a deep review of <strong>{{ r.site_host }}</strong>: {{ r.pages_crawled }} pages and more than 60 checks covering security, speed, how well it turns visitors into customers, design age, accessibility (ADA) and search visibility.</p>
+  <p style="margin:0 0 8px;font-size:16px;line-height:1.55;">Here's what we found.</p>
+</td></tr>
+
+<tr><td align="center" style="padding:8px 32px 24px;">
+  <table role="presentation" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:12px;width:100%;">
+    <tr><td align="center" style="padding:20px;">
+      <div style="font-size:13px;color:#6b7280;text-transform:uppercase;letter-spacing:1px;">Overall score</div>
+      <div style="font-size:56px;font-weight:800;color:{{ ov_color }};line-height:1.1;">{{ ov }}<span style="font-size:22px;color:#9ca3af;">/100</span></div>
+      <div style="font-size:14px;color:#374151;">Grade {{ ov | grade }} · {{ r.total_issues }} issues · {{ r.counts.critical }} critical · {{ r.counts.high }} high</div>
+    </td></tr>
+    <tr><td style="padding:0 20px 20px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;">
+      {% for cat, val in r.score.categories.items() %}
+        {%- set c = '#188038' if val >= 80 else ('#c98a00' if val >= 55 else '#d93025') -%}
+        <tr><td style="padding:5px 0;color:#374151;">{{ labels[cat] }}</td>
+            <td width="40%" style="padding:5px 8px;"><div style="background:#eef0f3;border-radius:4px;height:8px;"><div style="background:{{ c }};width:{{ val }}%;height:8px;border-radius:4px;"></div></div></td>
+            <td align="right" style="padding:5px 0;font-weight:700;color:{{ c }};">{{ val }}</td></tr>
+      {% endfor %}
+      </table>
+    </td></tr>
+  </table>
+</td></tr>
+
+<tr><td style="padding:0 32px;">
+  <h2 style="font-size:18px;margin:0 0 12px;">The {{ r.top_issues|length }} biggest problems</h2>
+  {% for f in r.top_issues %}
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 12px;border-left:4px solid {{ sev_color[f.severity] }};background:#fafafa;border-radius:6px;">
+    <tr><td style="padding:12px 14px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:{{ sev_color[f.severity] }};letter-spacing:.8px;">{{ f.severity }} · {{ labels[f.category] }}</div>
+      <div style="font-size:15px;font-weight:700;margin:4px 0;">{{ f.title }}</div>
+      <div style="font-size:14px;line-height:1.5;color:#4b5563;">{{ f.detail }}{% if f.impact %}<br><strong>What it costs you:</strong> {{ f.impact }}{% endif %}</div>
+    </td></tr>
+  </table>
+  {% endfor %}
+  <p style="font-size:14px;color:#6b7280;margin:4px 0 24px;"><a href="{{ report_url }}" style="color:#4f46e5;font-weight:600;">See all {{ r.total_issues }} issues in the full report</a>, page by page.</p>
+</td></tr>
+
+{% if r.rebuild_case %}
+<tr><td style="padding:0 32px 8px;">
+  <h2 style="font-size:18px;margin:0 0 8px;">Why we'd build you a new site instead of patching this one</h2>
+  <ul style="margin:0 0 20px;padding-left:20px;font-size:15px;line-height:1.55;color:#374151;">
+  {% for line in r.rebuild_case %}<li style="margin:0 0 8px;">{{ line }}</li>{% endfor %}
+  </ul>
+</td></tr>
+{% endif %}
+
+<tr><td style="padding:0 32px 8px;">
+  <h2 style="font-size:18px;margin:0 0 8px;">What your new site would include</h2>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;line-height:1.5;color:#374151;margin:0 0 20px;">
+    <tr><td style="padding:4px 0;">✓ Designed mobile-first and built to load fast</td></tr>
+    <tr><td style="padding:4px 0;">✓ Secure by default: HTTPS, security headers and up-to-date code</td></tr>
+    <tr><td style="padding:4px 0;">✓ Built to convert: click-to-call, online booking, reviews and clear calls to action</td></tr>
+    <tr><td style="padding:4px 0;">✓ Accessible (WCAG 2.1 AA) to reduce ADA risk</td></tr>
+    <tr><td style="padding:4px 0;">✓ Ready for Google and AI search tools from day one</td></tr>
+    <tr><td style="padding:4px 0;">✓ An easy editor so you can change text and photos yourself</td></tr>
+  </table>
+</td></tr>
+
+<tr><td style="padding:0 32px 8px;">
+  <div style="background:#eef2ff;border-radius:10px;padding:18px 20px;margin:0 0 20px;">
+    <div style="font-size:16px;font-weight:700;margin:0 0 6px;">See your new site before you decide</div>
+    <div style="font-size:15px;line-height:1.55;color:#374151;">Reply to this email and we'll design 2-3 free homepage concepts for {{ lead.company or r.site_host }}, no strings attached.</div>
+  </div>
+  <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:8px;background:#4f46e5;">
+    <a href="{{ brand.booking_url }}" style="display:inline-block;padding:14px 26px;color:#fff;font-weight:700;font-size:16px;text-decoration:none;">Or book a 15-minute call</a>
+  </td></tr></table>
+  <p style="margin:14px 0 28px;font-size:14px;color:#4b5563;">Questions? Reply here or write to <a href="mailto:{{ brand.email }}" style="color:#4f46e5;">{{ brand.email }}</a>{% if brand.phone %}, or call <a href="tel:{{ brand.phone|replace(' ','')|replace('(','')|replace(')','')|replace('-','') }}" style="color:#4f46e5;">{{ brand.phone }}</a>{% endif %}.</p>
+  <p style="margin:0 0 28px;font-size:15px;line-height:1.5;">{{ brand.sender_name }}<br><span style="color:#6b7280;">{{ brand.sender_title }}</span></p>
+</td></tr>
+
+<tr><td style="background:#f9fafb;padding:18px 32px;font-size:12px;line-height:1.5;color:#9ca3af;">
+  You received this because you requested a website audit at <a href="{{ brand.site }}" style="color:#9ca3af;">{{ brand.site }}</a>. Reply "unsubscribe" and we won't email you again.<br>{{ brand.name }}{% if brand.address %} · {{ brand.address }}{% endif %} · {{ brand.email }}
+</td></tr>
+</table></td></tr></table>
+</body></html>

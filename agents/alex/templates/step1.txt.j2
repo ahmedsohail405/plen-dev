@@ -1,0 +1,19 @@
+Hi {{ p.business_name }} team,
+
+{% if v.angle == "question" %}Quick question: how many of your {{ customers }} find you through your website? I ask because I ran a full website check on {{ p.domain }}.{% elif v.angle == "business_first" and fact %}{{ fact }} I also ran a full website check on {{ p.domain }}.{% else %}I was looking at {{ group }} in {{ area }} and ran a full website check on {{ p.domain }}.{% endif %} It scored {{ a.score }}/100, and a few things stood out that are likely costing you {{ customers }}:
+
+{% for pt in points %}
+- {{ pt.line }}
+{% endfor %}
+
+{% if more_issues %}That's on top of {{ more_issues }} other issues across security, speed, search and design. {% endif %}The full report is here, free and with no sign-up: {{ report_url }}
+
+Honestly, with this many problems, patching the current site isn't worth the money. We're {{ company }}, a web development team in {{ home_area }}, and we build new, fast websites for {{ group }} that are designed to turn visitors into {{ customers }}.
+
+{% if v.cta == "designs" %}If you'd like, we'll put together 2 or 3 free homepage designs for {{ p.business_name }} so you can see the difference. No strings attached. Just reply "designs" and I'll get them started.{% elif v.cta == "walkthrough" %}Want a quick walkthrough of the report? It takes about 10 minutes and you'll see exactly what's wrong and what it's costing you. Reply with a time that works{% if booking_url %}, or grab a slot here: {{ booking_url }}{% endif %}.{% else %}Would a quick 15-minute call this week be useful? Ahmed, our founder, can show you what a new site for {{ p.business_name }} could look like. Just reply with a day and time that works{% if booking_url %}, or grab a slot here: {{ booking_url }}{% endif %}.{% endif %}{% if general %}
+
+
+And if you're not the right person for this, could you point me to whoever handles the website or marketing{% if bigger %} for the whole company{% endif %}? I'd really appreciate it.{% endif %}
+
+
+{% include "_footer.txt.j2" %}

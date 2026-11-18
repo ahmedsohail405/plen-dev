@@ -1,0 +1,2 @@
+-r ../audit-agent/requirements.txt
+anthropic>=2.0
