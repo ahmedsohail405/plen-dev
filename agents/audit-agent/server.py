@@ -167,7 +167,17 @@ def send(lid: str, overrides: dict) -> dict:
         para = f'\n  <p style="margin:0 0 16px;font-size:16px;line-height:1.55;">{_h.escape(note)}</p>'
         html = re.sub(r"(Hi [^<]*,</p>)", lambda m: m.group(1) + para, html, count=1)
         text = re.sub(r"^(Hi [^\n]*,\n)", lambda m: m.group(1) + "\n" + note + "\n", text, count=1)
-    msg_id = mailer.send(to=st["lead"]["email"], subject=subject, html=html, text=text)
+    # The audit sender (audit@plendev.com, an alias of info@) can sign in separately from Alex's mailboxes:
+    # AUDIT_SMTP_USER=info@plendev.com + AUDIT_MS_REFRESH_TOKEN (Microsoft 365 OAuth) or AUDIT_SMTP_PASS.
+    smtp = None
+    if ENV("AUDIT_SMTP_USER"):
+        smtp = {"user": ENV("AUDIT_SMTP_USER"), "host": ENV("AUDIT_SMTP_HOST", "smtp.office365.com"),
+                "port": ENV("AUDIT_SMTP_PORT", "587")}
+        if ENV("AUDIT_MS_REFRESH_TOKEN"):
+            smtp["refresh_token"] = ENV("AUDIT_MS_REFRESH_TOKEN")
+        else:
+            smtp["password"] = ENV("AUDIT_SMTP_PASS", "")
+    msg_id = mailer.send(to=st["lead"]["email"], subject=subject, html=html, text=text, smtp=smtp)
     st.update(status="sent", sent_at=now(), message_id=msg_id, final_subject=subject)
     st["history"].append({"at": now(), "event": "sent", "provider_id": msg_id})
     save_state(st)

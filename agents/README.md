@@ -46,8 +46,10 @@ AUDIT_WEBHOOK_SECRET=<long random string, same value in the CMS>
 AUTO_SEND=false                 # Ahmed approves every audit email
 CMS_BASE_URL=https://<plen-dev site domain>
 CMS_API_TOKEN=<from the CMS>
-MAIL_FROM=Alex H <the agent mailbox Ahmed created>
-MAIL_REPLY_TO=info@plendev.com
+MAIL_FROM=Alex H <audit@plendev.com>
+MAIL_REPLY_TO=audit@plendev.com
+AUDIT_SMTP_USER=info@plendev.com     # audit@ is an alias of info@; we sign in as info@
+AUDIT_MS_REFRESH_TOKEN=              # from the one-time sign-in below
 
 # ---- Alex
 ALEX_PUBLIC_BASE_URL=https://<alex-domain>
@@ -85,6 +87,30 @@ ALEX_BCC=
 Never set `ALLOW_PRIVATE_TARGETS` in production. Set `DISABLE_ALEX=true` to run only the audit server.
 
 See `audit-agent/PIPELINE.md` and `alex/README.md` and each folder's `.env.example` for details on every setting.
+
+## Audit mailbox: sending as audit@plendev.com (Microsoft 365 via GoDaddy)
+
+`audit@plendev.com` is an alias of `info@plendev.com`. The audit server signs in as info@ with Microsoft OAuth
+(no password stored) and sends with From: audit@. One-time setup:
+
+1. **Allow sending from aliases.** Exchange admin center (admin.exchange.microsoft.com, sign in with the GoDaddy
+   Microsoft 365 admin account) → Settings → Mail flow → tick "Turn on sending from aliases" → Save.
+   Can take up to an hour to apply.
+2. **Turn on SMTP sign-in for info@.** Microsoft 365 admin center → Users → Active users → info@plendev.com → Mail →
+   Manage email apps → tick **Authenticated SMTP** → Save.
+3. **App registration** (reuse the one Alex uses if it exists, same `MS_TENANT_ID` / `MS_CLIENT_ID`):
+   Microsoft Entra admin center → App registrations → New → name "Plen Dev agents", single tenant →
+   Authentication → "Allow public client flows" = Yes → API permissions → add delegated
+   `SMTP.Send`, `IMAP.AccessAsUser.All`, `offline_access` → Grant admin consent.
+4. **Get the refresh token** (sign in once as info@ in a browser):
+   `cd agents/audit-agent && MS_TENANT_ID=... MS_CLIENT_ID=... python3 -c "import ms_oauth; ms_oauth.login()"`
+   (or Railway service → Shell). It prints a code; open the link, sign in as info@plendev.com, and copy the
+   printed refresh token into `AUDIT_MS_REFRESH_TOKEN`.
+5. Send yourself a test before switching `MAIL_PROVIDER=smtp`.
+
+If GoDaddy's account doesn't expose the Exchange admin center or app registrations, the fallback is to send
+as info@ with Reply-To audit@ (set `MAIL_FROM=Alex H <info@plendev.com>`), which needs only step 2 + a password
+or the same OAuth.
 
 ## Run locally
 
