@@ -31,3 +31,8 @@ pnpm dev                    # http://localhost:3000, CMS at /admin
 
 ## Deploying (Vercel)
 Set env vars above with a Postgres `DATABASE_URL`, generate migrations with `pnpm payload migrate:create`, run `pnpm payload migrate`, then `pnpm seed` once (`ALLOW_SEED=true` if using the seed route in production).
+
+### Creating migrations
+Run `pnpm payload migrate:create <name>` with a Postgres `DATABASE_URL` **and** a `BLOB_READ_WRITE_TOKEN` set
+(any `vercel_blob_rw_<id>_<x>` value works). The Blob plugin adds a `_objectKey` column to media only when a token
+is present, so a migration generated without one would drop that column in production.
