@@ -99,16 +99,15 @@ def inboxes() -> list[dict]:
 
 
 def imap_login(m, box: dict) -> None:
-    if box.get("refresh_env"):
-        import ms_oauth  # from audit-agent
-        tok = C.E(box["refresh_env"], "")
-        if not tok:
-            raise RuntimeError(f"{box['refresh_env']} is not set")
-        m.authenticate("XOAUTH2", lambda _: ms_oauth.xoauth2(box["user"], tok).encode())
+    """OAuth when the mailbox has a refresh_env, a saved sign-in, or MS_AUTH=oauth; else its password."""
+    import ms_oauth  # from audit-agent
+    tok = C.E(box.get("refresh_env") or "", "")
+    if box.get("refresh_env") or ms_oauth.stored(box["user"]) or (C.E("MS_AUTH", "").lower() == "oauth" and not box.get("password_env")):
+        m.authenticate("XOAUTH2", lambda _: ms_oauth.xoauth2(box["user"], tok or None).encode())
     else:
         pw = C.E(box.get("password_env") or "ALEX_IMAP_PASS", "")
         if not pw:
-            raise RuntimeError(f"no password or refresh token for {box['user']}")
+            raise RuntimeError(f"no password or Microsoft sign-in for {box['user']}")
         m.login(box["user"], pw)
 
 

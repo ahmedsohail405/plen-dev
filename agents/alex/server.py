@@ -9,6 +9,8 @@
   POST /admin/p/<id>/reject    {"reason": "..."}
   GET  /d/<token>/<n>[.png]    demo homepage concepts for an interested lead (and their screenshots)
   POST /wa                     Twilio WhatsApp webhook: Ahmed's commands (approve/reject/edit/show/queue)
+  GET  /admin/ms-login?user=<mailbox>&key=<ALEX_ADMIN_TOKEN>   one-time Microsoft 365 sign-in for a mailbox
+                               (device code; the refresh token is saved on the data volume, never shown)
   GET  /healthz
 """
 from __future__ import annotations
@@ -20,7 +22,7 @@ import os
 import re
 from argparse import Namespace
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, quote, urlparse
 
 import config as C
 import store
@@ -42,6 +44,10 @@ class H(BaseHTTPRequestHandler):
         self.send_header("X-Robots-Tag", "noindex")
         self.end_headers()
         self.wfile.write(data)
+
+    def log_message(self, fmt, *args):  # never log query strings (the admin key rides in one)
+        args = tuple(a.split("?")[0] if isinstance(a, str) and "?" in a else a for a in args)
+        super().log_message(fmt, *args)
 
     def _page(self, title, body, code=200):
         self._send(code, PAGE.format(title=html.escape(title), body=body), "text/html; charset=utf-8")
@@ -110,8 +116,44 @@ class H(BaseHTTPRequestHandler):
         if len(parts) == 3 and parts[:2] == ["admin", "p"] and self._admin():
             p = store.get(parts[2])
             return self._send(200, p) if p else self._send(404, {})
+        if parts == ["admin", "ms-login"]:
+            return self._ms_login()
         if parts[:1] != ["admin"]:
             self._send(404, {"error": "not found"})
+
+    def _ms_login(self):
+        q = {k: v[0] for k, v in parse_qs(urlparse(self.path).query).items()}
+        if not (C.ADMIN_TOKEN and hmac.compare_digest(q.get("key", ""), C.ADMIN_TOKEN)):
+            return self._page("Not found", "<p>Not found.</p>", 404)
+        import ms_oauth
+        import replies
+        allowed = sorted({b["user"].lower() for b in replies.inboxes()} |
+                         ({os.environ["AUDIT_SMTP_USER"].lower()} if os.environ.get("AUDIT_SMTP_USER") else set()))
+        user = q.get("user", "").lower()
+        key = quote(q["key"])
+        if user not in allowed:
+            rows = "".join(f'<li><a href="?user={quote(u)}&key={key}">{html.escape(u)}</a> '
+                           f'({"signed in" if ms_oauth.stored(u) else "not signed in"})</li>' for u in allowed)
+            return self._page("Microsoft sign-in", f"<h1>Microsoft sign-in</h1><p>Pick a mailbox:</p><ul>{rows or '<li>none configured</li>'}</ul>")
+        if not os.environ.get("MS_CLIENT_ID"):
+            return self._page("Microsoft sign-in", "<p>MS_CLIENT_ID and MS_TENANT_ID are not set.</p>", 500)
+        try:
+            st = ms_oauth.start_login(user) if q.get("start") else ms_oauth.status(user)
+        except Exception as e:  # noqa: BLE001
+            return self._page("Microsoft sign-in", f"<p>Microsoft refused to start the sign-in: {html.escape(str(e))}</p>", 502)
+        u, again = html.escape(user), f'<p><a href="?user={quote(user)}&key={key}&start=1">Start sign-in</a></p>'
+        if st["state"] == "pending":
+            body = (f'<meta http-equiv="refresh" content="5"><h1>Sign in as {u}</h1>'
+                    f'<p>1. Open <a href="{html.escape(st["verification_uri"])}" target="_blank" rel="noopener">{html.escape(st["verification_uri"])}</a></p>'
+                    f'<p>2. Enter this code: <b style="font-size:28px;letter-spacing:2px">{html.escape(st["user_code"])}</b></p>'
+                    f'<p>3. Sign in as <b>{u}</b> and accept. This page updates by itself.</p>')
+        elif st["state"] == "done":
+            body = f"<h1>{u} is signed in</h1><p>Alex can now send and read mail for this mailbox. You can close this page.</p>"
+        elif st["state"] == "error":
+            body = f"<h1>Sign-in didn't finish</h1><p>{html.escape(st.get('error', ''))}</p>{again}"
+        else:
+            body = f"<h1>Microsoft sign-in for {u}</h1><p>Not signed in yet.</p>{again}"
+        return self._page("Microsoft sign-in", body)
 
     def do_POST(self):
         parts = [x for x in urlparse(self.path).path.split("/") if x]

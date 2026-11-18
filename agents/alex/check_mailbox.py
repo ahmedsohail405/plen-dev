@@ -45,8 +45,8 @@ print(f"Mailbox {user}\n")
 try:
     with smtplib.SMTP(E("SMTP_HOST", "smtp.office365.com"), int(E("SMTP_PORT", "587")), timeout=30) as s:
         s.starttls()
-        if E("MS_AUTH", "").lower() == "oauth":
-            import ms_oauth
+        import ms_oauth
+        if E("MS_AUTH", "").lower() == "oauth" or ms_oauth.stored(user):
             ms_oauth.smtp_login(s, user)
         else:
             s.login(user, E("SMTP_PASS", ""))

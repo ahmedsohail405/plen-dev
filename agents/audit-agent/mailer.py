@@ -71,8 +71,9 @@ def send(to: str, subject: str, html: str, text: str, headers: dict | None = Non
         user = sm.get("user") or E("SMTP_USER")
         with smtplib.SMTP(host, port, timeout=30) as s:
             s.starttls()
-            if sm.get("refresh_token") or (not sm and E("MS_AUTH", "").lower() == "oauth"):
-                import ms_oauth
+            import ms_oauth
+            if not sm.get("password") and (sm.get("refresh_token") or sm.get("oauth") or ms_oauth.stored(user)
+                                           or E("MS_AUTH", "").lower() == "oauth"):
                 ms_oauth.smtp_login(s, user, sm.get("refresh_token"))
             else:
                 s.login(user, sm.get("password") or E("SMTP_PASS"))

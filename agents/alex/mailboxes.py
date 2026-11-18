@@ -38,8 +38,9 @@ def smtp_settings(box: dict) -> dict | None:
     if not C.E("ALEX_MAILBOXES"):
         return None  # single-mailbox mode: mailer reads SMTP_* env itself
     s = {"user": box["user"], "host": box.get("host"), "port": box.get("port")}
-    if box.get("refresh_env"):
-        s["refresh_token"] = C.E(box["refresh_env"], "")
+    if box.get("refresh_env") or not box.get("password_env"):  # OAuth (token from env or the saved sign-in)
+        s["oauth"] = True
+        s["refresh_token"] = C.E(box.get("refresh_env") or "", "")
     else:
         s["password"] = C.E(box.get("password_env", ""), "")
     return s
