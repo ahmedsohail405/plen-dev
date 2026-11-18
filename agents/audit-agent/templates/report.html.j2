@@ -40,6 +40,8 @@ table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px
 <tr><td>Largest Contentful Paint</td><td>{{ '%.1fs'|format(r.pagespeed.mobile.lcp_ms/1000) if r.pagespeed.mobile.lcp_ms else '–' }}</td><td>{{ '%.1fs'|format(r.pagespeed.desktop.lcp_ms/1000) if r.pagespeed.desktop and r.pagespeed.desktop.lcp_ms else '–' }}</td></tr>
 <tr><td>Cumulative Layout Shift</td><td>{{ '%.2f'|format(r.pagespeed.mobile.cls) if r.pagespeed.mobile.cls is not none else '–' }}</td><td>{{ '%.2f'|format(r.pagespeed.desktop.cls) if r.pagespeed.desktop and r.pagespeed.desktop.cls is not none else '–' }}</td></tr>
 </table>
+{% else %}
+<p><em>Page speed was not measured in this audit, so it is not part of the score.</em></p>
 {% endif %}
 
 {% if r.rebuild_case %}<h2>Why a new site beats patching this one</h2>

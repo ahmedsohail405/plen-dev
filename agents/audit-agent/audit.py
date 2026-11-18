@@ -148,6 +148,17 @@ def crawl(start: str, max_pages: int) -> tuple[list[Page], dict]:
         "http": fetch(sess, f"http://{base_host}/"),
         "notfound": fetch(sess, f"{site}/plendev-audit-404-check-{int(time.time())}"),
     }
+    if extras["sitemap"].status != 200:
+        # Many sites (WordPress/Yoast/Rank Math) publish the sitemap elsewhere and list it in robots.txt
+        cands = re.findall(r"^\s*sitemap:\s*(\S+)", extras["robots"].html or "", re.I | re.M)
+        cands += [f"{site}/sitemap_index.xml", f"{site}/wp-sitemap.xml"]
+        for c in cands[:5]:
+            if urlparse(c).netloc.lower().removeprefix("www.") != base_host.removeprefix("www."):
+                continue
+            alt = fetch(sess, c)
+            if alt.status == 200:
+                extras["sitemap"] = alt
+                break
     sm = extras["sitemap"]
     if sm.status == 200 and sm.bytes:
         try:
@@ -179,7 +190,11 @@ def pagespeed(url: str, key: str | None, strategy: str) -> dict | None:
     if key:
         params["key"] = key
     try:
-        r = requests.get("https://www.googleapis.com/pagespeedonline/v5/runPagespeed", params=params, timeout=120)
+        url_psi = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed"
+        r = requests.get(url_psi, params=params, timeout=120)
+        if r.status_code in (429, 500, 502, 503):
+            time.sleep(5)
+            r = requests.get(url_psi, params=params, timeout=120)
         if r.status_code != 200:
             return {"error": f"HTTP {r.status_code}"}
         d = r.json()
@@ -247,7 +262,8 @@ def page_facts(pg: Page) -> dict:
         "img_no_alt": sum(1 for i in imgs if not (i.get("alt") or "").strip()),
         "word_count": len(text.split()),
         "mixed_content": pg.final_url.startswith("https") and bool(
-            re.search(r'(src|href)=["\']http://(?!www\.w3\.org)', pg.html or "", re.I)),
+            re.search(r'(?:\b(?:src|data-src|data-lazy-src|data-bg|srcset|data-srcset)=["\'][^"\']*?|\burl\(\s*["\']?)'
+                      r'http://(?!www\.w3\.org|schemas\.)', pg.html or "", re.I)),
         "tel_link": bool(soup.find("a", href=re.compile(r"^tel:", re.I))),
         "phone_text": bool(re.search(r"\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}", text)),
         "form": bool(soup.find("form")),
@@ -256,8 +272,9 @@ def page_facts(pg: Page) -> dict:
         "analytics": any(k in html_l for k in ("googletagmanager.com", "gtag(", "google-analytics.com", "plausible.io",
                                                  "clarity.ms")),
         "favicon": bool(soup.find("link", rel=lambda v: v and "icon" in " ".join(v).lower())),
-        "address_text": bool(re.search(r"\b\d{2,5}\s+\w+.*\b(st|street|ave|avenue|rd|road|blvd|boulevard|ln|lane|dr|drive)\b",
+        "address_text": bool(re.search(r"\b\d{1,5}\s+(?:[A-Za-z0-9.'-]+\s+){0,4}(?:st|street|ave|avenue|rd|road|blvd|boulevard|ln|lane|dr|drive|pl|place|pkwy|parkway|hwy|highway|way|ct|court|sq|square|ter|terrace)\b\.?(?!\s+(?:results|more|traffic|sales|growth|leads))",
                                        text, re.I)),
+        "dead_nav_links": sum(1 for a in (soup.select("nav a, header a") or []) if (a.get("href") or "").strip() in ("#", "", "javascript:void(0)", "javascript:;")),
         "maps_embed": "google.com/maps" in html_l or "maps.googleapis" in html_l,
         "elapsed_ms": pg.elapsed_ms,
         "bytes": pg.bytes,
@@ -295,7 +312,7 @@ def run_checks(pages: list[Page], extras: dict, psi: dict) -> tuple[list[Finding
             "A 'Disallow: /' rule tells search engines not to crawl any page.",
             "Remove the blanket Disallow rule.")
     if extras["sitemap"].status != 200:
-        add("technical", "no_sitemap", "high", "No XML sitemap at /sitemap.xml",
+        add("technical", "no_sitemap", "high", "No XML sitemap found",
             "Google discovers new and updated pages more slowly without a sitemap.",
             "Generate an XML sitemap and submit it in Google Search Console.")
     if extras["notfound"].status == 200:
@@ -319,6 +336,11 @@ def run_checks(pages: list[Page], extras: dict, psi: dict) -> tuple[list[Finding
     if mixed:
         add("technical", "mixed_content", "medium", "Insecure (http://) resources on HTTPS pages",
             "Can trigger browser security warnings.", "Load every asset over https.", mixed)
+    dead_nav = [f["url"] for f in facts if f.get("dead_nav_links")]
+    if home and home.get("dead_nav_links"):
+        add("technical", "dead_menu_links", "low", "Menu items that go nowhere",
+            f"{home['dead_nav_links']} link(s) in the header menu point to '#' and don't open a page.",
+            "Point every menu item to a real page.", dead_nav)
     if home and not home["viewport"]:
         add("technical", "no_viewport", "critical", "Not mobile-friendly (no viewport tag)",
             "Google indexes the mobile version first; this page will render poorly on phones.",
@@ -550,6 +572,7 @@ def run_audit(url: str, lead: dict, out: Path, max_pages: int = 15, psi_key: str
         "pages_crawled": len(pages),
         "score": sc,
         "pagespeed": psi,
+        "speed_measured": "performance" in ((psi.get("mobile") or {}).get("scores") or {}),
         "counts": {s: sum(1 for f in findings if f.severity == s) for s in order},
         "findings": fd,
         "top_issues": fd[:5],

@@ -148,6 +148,7 @@ def process(lead: dict) -> None:
         notify(f"Audit FAILED for {lead.get('website_url')} ({lead.get('email')}): {e}")
         return
     st.update(status="awaiting_approval", score=r["score"]["overall"], report_url=report_url,
+              speed_measured=r.get("speed_measured", False),
               email=json.loads((OUTBOX / lid / "email.json").read_text()))
     st["history"].append({"at": now(), "event": "audit_done", "score": r["score"]["overall"]})
     save_state(st)
@@ -259,7 +260,7 @@ def admin_page() -> bytes:
         rows.append(f"""<section id="a-{lid}" class="card {h.escape(st.get('status', ''))}">
 <div class=top><b>{h.escape(lead.get('company') or lead.get('website_url', ''))}</b><span class=pill>{h.escape(status)}</span></div>
 <div class=meta>{h.escape(lead.get('name', ''))} &lt;{h.escape(lead.get('email', ''))}&gt; · {h.escape(lead.get('website_url', ''))}
-{f" · score <b>{st['score']}/100</b>" if st.get('score') is not None else ''} · {h.escape(st.get('updated_at', '')[:16].replace('T', ' '))} UTC</div>
+{f" · score <b>{st['score']}/100</b>" if st.get('score') is not None else ''}{' · <span class=err>speed not measured (add PAGESPEED_API_KEY)</span>' if st.get('score') is not None and st.get('speed_measured') is False else ''} · {h.escape(st.get('updated_at', '')[:16].replace('T', ' '))} UTC</div>
 <div class=links>{f'<a href="{email_link}" target=_blank>Preview email</a>' if st.get('email') else ''}
 {f'<a href="{st["report_url"]}" target=_blank>Full report</a>' if st.get('report_url') else ''}</div>{actions}</section>""")
     test = '<p class=banner>Test mode: approving will NOT send real email (MAIL_PROVIDER=dryrun).</p>' if mailer.PROVIDER == "dryrun" else ''
