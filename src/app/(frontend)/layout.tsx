@@ -46,6 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+        <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable summary" />
         <JsonLd data={organizationSchema(settings)} />
         <CodeSnippets snippets={siteWide} placement="head" />

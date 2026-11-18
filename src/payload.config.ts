@@ -79,7 +79,8 @@ export default buildConfig({
     // Uploaded images go to Vercel Blob in production (local disk in dev)
     vercelBlobStorage({
       enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
-      collections: { media: true },
+      // Serve files straight from the Blob CDN (fast, supports video seeking) instead of proxying through /api/media
+      collections: { media: { disablePayloadAccessControl: true } },
       token: process.env.BLOB_READ_WRITE_TOKEN,
       clientUploads: true,
     }),

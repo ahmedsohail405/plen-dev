@@ -46,8 +46,18 @@ export const AdminBar: React.FC<{
     setShow(Boolean(user?.id))
   }, [])
 
+  // Push the fixed site header below the admin bar while an editor is logged in
+  const barRef = React.useRef<HTMLDivElement>(null)
+  React.useEffect(() => {
+    const root = document.documentElement
+    const h = show && barRef.current ? barRef.current.offsetHeight : 0
+    root.style.setProperty('--admin-bar-h', `${h}px`)
+    return () => root.style.setProperty('--admin-bar-h', '0px')
+  }, [show])
+
   return (
     <div
+      ref={barRef}
       className={cn(baseClass, 'py-2 bg-black text-white', {
         block: show,
         hidden: !show,

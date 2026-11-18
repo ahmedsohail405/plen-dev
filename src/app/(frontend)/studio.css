@@ -154,7 +154,7 @@ html.studio body {
 /* ---------- header ---------- */
 .site-header {
   position: fixed;
-  top: 14px;
+  top: calc(14px + var(--admin-bar-h, 0px));
   left: 0;
   right: 0;
   z-index: 60;
@@ -175,9 +175,9 @@ html.studio body {
   transition: background 0.3s, box-shadow 0.3s;
 }
 .site-header.is-scrolled .bar { box-shadow: 0 10px 40px -18px rgba(0, 0, 0, 0.35); background: rgba(243, 240, 232, 0.9); }
-.logo { display: inline-flex; align-items: baseline; gap: 1px; font-weight: 700; font-size: 22px; letter-spacing: -0.05em; text-decoration: none; }
-.logo .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--violet); display: inline-block; margin: 0 1px; animation: pulse 2.4s var(--ease) infinite; }
-.logo em { font-family: var(--font-serif); font-weight: 400; font-style: italic; letter-spacing: -0.02em; }
+.logo { display: inline-flex; align-items: baseline; gap: 0.2em; white-space: pre; font-weight: 700; font-size: 22px; letter-spacing: -0.05em; text-decoration: none; }
+.logo em { font-family: var(--font-serif); font-weight: 400; font-style: italic; letter-spacing: -0.02em; color: var(--violet); }
+.section--dark .logo em, .site-footer .logo em { color: #8b74ff; }
 @keyframes pulse { 50% { transform: scale(1.35); background: var(--coral); } }
 .nav { display: flex; align-items: center; gap: 4px; }
 .nav a {
@@ -554,3 +554,21 @@ a.area:hover p { color: var(--ink-3); }
 @media (max-width: 760px) { .case-cols { grid-template-columns: 1fr; } }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chips span { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); font-size: 14px; }
+
+/* ---------- blog ---------- */
+.post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.post-card { display: flex; flex-direction: column; gap: 14px; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius-lg); text-decoration: none; background: rgba(255, 255, 255, 0.35); transition: transform 0.4s var(--ease), border-color 0.4s var(--ease), background 0.4s var(--ease); }
+.post-card:hover { transform: translateY(-4px); border-color: var(--ink); background: #fff; }
+.post-card .h3 { margin: 0; }
+.post-card p { margin: 0; color: var(--ink-3); }
+.post-meta { font: 13px var(--font-mono); text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.post-more { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
+.hero-post .display { font-size: clamp(2.4rem, 5.6vw, 5.2rem); max-width: 20ch; }
+.hero-post .media { max-width: 1000px; }
+.post-article .prose-studio { margin: 0; }
+.prose-studio ul, .prose-studio ol { padding-left: 1.3em; margin: 0.8em 0 1.2em; }
+.prose-studio ul { list-style: disc; }
+.prose-studio ol { list-style: decimal; }
+.prose-studio li { margin: 0.45em 0; padding-left: 0.2em; }
+.prose-studio li::marker { color: var(--violet); }
+.prose-studio p { margin: 0 0 1em; }

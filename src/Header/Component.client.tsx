@@ -9,8 +9,8 @@ import { Arrow } from '@/components/studio/Icon'
 
 export const Logo = () => (
   <Link href="/" className="logo" aria-label="Plen Dev home">
-    plen<span className="dot" aria-hidden />
-    <em>dev</em>
+    <span>Plen</span>
+    <em>Dev</em>
   </Link>
 )
 
