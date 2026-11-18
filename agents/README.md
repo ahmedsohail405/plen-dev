@@ -68,6 +68,7 @@ MS_CLIENT_ID=
 MS_REFRESH_TOKEN=
 ALEX_IMAP_HOST=outlook.office365.com
 ALEX_IMAP_USER=
+ALEX_READ_INBOXES=[{"user":"info@plendev.com","refresh_env":"AUDIT_MS_REFRESH_TOKEN"}]   # Alex reads audit replies in info@ (read-only)
 # WhatsApp (Twilio)
 WHATSAPP_PROVIDER=twilio
 WHATSAPP_TO=
@@ -96,8 +97,8 @@ See `audit-agent/PIPELINE.md` and `alex/README.md` and each folder's `.env.examp
 1. **Allow sending from aliases.** Exchange admin center (admin.exchange.microsoft.com, sign in with the GoDaddy
    Microsoft 365 admin account) → Settings → Mail flow → tick "Turn on sending from aliases" → Save.
    Can take up to an hour to apply.
-2. **Turn on SMTP sign-in for info@.** Microsoft 365 admin center → Users → Active users → info@plendev.com → Mail →
-   Manage email apps → tick **Authenticated SMTP** → Save.
+2. **Turn on SMTP and IMAP for info@.** Microsoft 365 admin center → Users → Active users → info@plendev.com → Mail →
+   Manage email apps → tick **Authenticated SMTP** and **IMAP** → Save.
 3. **App registration** (reuse the one Alex uses if it exists, same `MS_TENANT_ID` / `MS_CLIENT_ID`):
    Microsoft Entra admin center → App registrations → New → name "Plen Dev agents", single tenant →
    Authentication → "Allow public client flows" = Yes → API permissions → add delegated
