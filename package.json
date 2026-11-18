@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "build": "node scripts/migrate-if-postgres.mjs && cross-env NODE_OPTIONS=--no-deprecation next build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "dev:prod": "cross-env NODE_OPTIONS=--no-deprecation rm -rf .next && pnpm build && pnpm start",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
@@ -33,6 +33,7 @@
     "@payloadcms/plugin-search": "3.94.0",
     "@payloadcms/plugin-seo": "3.94.0",
     "@payloadcms/richtext-lexical": "3.94.0",
+    "@payloadcms/storage-vercel-blob": "3.94.0",
     "@payloadcms/ui": "3.94.0",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-label": "^2.0.2",

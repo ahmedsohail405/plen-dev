@@ -44,6 +44,10 @@ const nextConfig: NextConfig = {
 
     return webpackConfig
   },
+  // The seed route uploads the demo videos/covers, so ship them with that function
+  outputFileTracingIncludes: {
+    '/next/seed': ['./public/showcase-media/**/*'],
+  },
   reactStrictMode: true,
   redirects,
   turbopack: {

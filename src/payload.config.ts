@@ -1,6 +1,7 @@
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import sharp from 'sharp'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
@@ -66,12 +67,23 @@ export default buildConfig({
   editor: defaultLexical,
   // SQLite locally (file:./plen.db), Postgres in production (postgres://…)
   db: (process.env.DATABASE_URL || '').startsWith('postgres')
-    ? postgresAdapter({ pool: { connectionString: process.env.DATABASE_URL } })
+    ? postgresAdapter({
+        pool: { connectionString: process.env.DATABASE_URL }
+      })
     : sqliteAdapter({ client: { url: process.env.DATABASE_URL || 'file:./plen.db' } }),
   collections: [Leads, Pages, Projects, Packages, Posts, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [SiteSettings, Header, Footer],
-  plugins,
+  plugins: [
+    ...plugins,
+    // Uploaded images go to Vercel Blob in production (local disk in dev)
+    vercelBlobStorage({
+      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      collections: { media: true },
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+      clientUploads: true,
+    }),
+  ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {

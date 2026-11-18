@@ -2,8 +2,9 @@ import { createLocalReq, getPayload } from 'payload'
 import { seed } from '@/endpoints/seed'
 import config from '@payload-config'
 import { headers } from 'next/headers'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
-export const maxDuration = 60
+export const maxDuration = 300
 
 /** Re-seeds demo content. Disabled in production because it replaces all pages. */
 export async function POST(): Promise<Response> {
@@ -15,6 +16,11 @@ export async function POST(): Promise<Response> {
   if (!user || (user as { role?: string }).role !== 'admin') return new Response('Action forbidden.', { status: 403 })
   try {
     await seed({ payload, req: await createLocalReq({ user }, payload) })
+    // Seeding skips per-document revalidation, so clear every cached page and data entry once
+    for (const tag of ['packages', 'projects', 'redirects', 'pages-sitemap', 'global_site-settings', 'global_header', 'global_footer']) {
+      revalidateTag(tag, 'max')
+    }
+    revalidatePath('/', 'layout')
     return Response.json({ success: true })
   } catch (e) {
     payload.logger.error({ err: e, message: 'Error seeding data' })
