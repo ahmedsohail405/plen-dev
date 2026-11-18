@@ -5,7 +5,7 @@ import type { Media, Page, Project } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import { Arrow } from '@/components/studio/Icon'
 import { Hl } from '@/components/studio/Hl'
-import { mediaUrl } from '@/lib/data'
+import { mediaUrl, projectCover, projectVideo } from '@/lib/data'
 
 type Props = Page['hero'] & { pageTitle?: string; crumbs?: { name: string; path: string }[] }
 
@@ -63,8 +63,8 @@ const StudioHero: React.FC<Props> = (p) => {
           <div className="hero-reel" aria-label="Recent work">
             {showcase.slice(0, 5).map((proj, i) => {
               const pos = positions[i % positions.length]!
-              const video = mediaUrl(proj.video)
-              const img = mediaUrl(proj.cover)
+              const video = projectVideo(proj)
+              const img = projectCover(proj)
               return (
                 <Link
                   key={proj.id}

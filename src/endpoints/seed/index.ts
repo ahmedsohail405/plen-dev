@@ -150,8 +150,11 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
   const mediaErrors: string[] = []
   for (const pr of PROJECTS) {
     const upload = (file: string, alt: string) => uploadShowcaseMedia(payload, req, file, alt, mediaErrors)
-    const cover = await upload(`${pr.slug}.jpg`, `${pr.title} website homepage`)
-    const video = await upload(`${pr.slug}.mp4`, `${pr.title} website walkthrough video`)
+    // Demo covers/videos are served as static files (/showcase-media/<slug>.*), so nothing to upload.
+    // Editors can still attach their own cover or video to a project in the CMS.
+    void upload
+    const cover = undefined
+    const video = undefined
     const doc = await payload.create({
       collection: 'projects',
       req,

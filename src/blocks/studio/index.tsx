@@ -6,7 +6,7 @@ import { CMSLink } from '@/components/Link'
 import { Hl } from '@/components/studio/Hl'
 import { Arrow, Icon } from '@/components/studio/Icon'
 import { SectionHead } from '@/components/studio/SectionHead'
-import { getPackages, getProjects, mediaUrl } from '@/lib/data'
+import { getPackages, getProjects, mediaUrl, projectCover, projectVideo } from '@/lib/data'
 import { faqSchema, JsonLd } from '@/lib/schema'
 import { PackagesTabs } from './PackagesTabs'
 import { LeadFormClient } from './LeadForm'
@@ -73,8 +73,8 @@ export const ServicesBlock: React.FC<B<ServicesProps>> = ({ eyebrow, heading, in
 
 /* ------------------------------------------------------------------ */
 export const ProjectScreen: React.FC<{ project: Project; eager?: boolean }> = ({ project, eager }) => {
-  const video = mediaUrl(project.video)
-  const img = mediaUrl(project.cover)
+  const video = projectVideo(project)
+  const img = projectCover(project)
   if (video)
     return <video src={video} poster={img || undefined} autoPlay muted loop playsInline preload={eager ? 'auto' : 'metadata'} aria-label={`${project.title} website walkthrough video`} />
   // eslint-disable-next-line @next/next/no-img-element

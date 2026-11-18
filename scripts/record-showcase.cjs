@@ -12,7 +12,7 @@ const tmp = path.join(out, '.tmp')
 fs.mkdirSync(tmp, { recursive: true })
 
 const SITES = {
-  'lumen-pine-dental': async (p, s) => { await s(0.22, 3500); await p.click('.slots span:nth-child(4)').catch(() => {}); await p.waitForTimeout(500); await s(1, 14000) },
+  'northbridge-medical': async (p, s) => { await s(0.2, 3500); await p.hover('.svc:nth-child(2)').catch(() => {}); await p.waitForTimeout(700); await s(1, 14500) },
   'kestrel-row-realty': async (p, s) => { await s(0.18, 3000); await p.hover('.lst:nth-child(2)').catch(() => {}); await p.waitForTimeout(900); await s(1, 15000) },
   relaywave: async (p, s) => { await p.waitForTimeout(800); await s(0.12, 2500); await p.waitForTimeout(1200); await s(1, 16000) },
   'hearthside-home-care': async (p, s) => { await s(1, 18000) },
@@ -27,7 +27,9 @@ const SITES = {
 
 ;(async () => {
   const browser = await chromium.launch()
+  const only = process.argv[3]
   for (const [slug, script] of Object.entries(SITES)) {
+    if (only && slug !== only) continue
     const url = `${base}/showcase/${slug}/index.html`
     // cover image
     const shotCtx = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1.5 })

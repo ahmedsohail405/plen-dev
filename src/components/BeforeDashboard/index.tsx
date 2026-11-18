@@ -2,7 +2,6 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 
-import { hasMissingMedia } from '@/endpoints/seed'
 import { LoadContentButton } from './LoadContentButton'
 import './index.scss'
 
@@ -16,14 +15,13 @@ const BeforeDashboard = async () => {
     payload.count({ collection: 'leads', where: { audit_status: { equals: 'awaiting_approval' } }, overrideAccess: true }),
     payload.count({ collection: 'pages', overrideAccess: true }),
   ])
-  const missingMedia = pages.totalDocs > 0 && (await hasMissingMedia(payload))
   const card = { padding: '18px 20px', borderRadius: 12, border: '1px solid var(--theme-elevation-150)', textDecoration: 'none', color: 'inherit', display: 'block' }
   return (
     <div className={baseClass}>
       <h2 style={{ marginBottom: 6 }}>Welcome to the Plen CMS</h2>
       <p style={{ opacity: 0.7, marginTop: 0 }}>Edit any page with live preview, follow up on leads and manage SEO and tracking code from here.</p>
       {pages.totalDocs === 0 && <LoadContentButton />}
-      {missingMedia && <LoadContentButton mode="media" />}
+      {pages.totalDocs > 0 && <LoadContentButton mode="reset" />}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, marginTop: 16 }}>
         <a href="/admin/collections/leads?where[status][equals]=new" style={card}>
           <strong style={{ fontSize: 28 }}>{newLeads.totalDocs}</strong>

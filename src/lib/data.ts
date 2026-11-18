@@ -41,3 +41,13 @@ export const mediaUrl = (m: unknown): string | null => {
   if (m && typeof m === 'object' && 'url' in m && typeof (m as { url?: string }).url === 'string') return (m as { url: string }).url
   return null
 }
+
+/** Demo projects ship their cover/video as static files, used when no CMS media is attached. */
+const SHOWCASE_SLUGS = ['northbridge-medical', 'kestrel-row-realty', 'relaywave', 'hearthside-home-care', 'saltgrain-ceramics']
+type ProjectLike = { slug?: string | null; cover?: unknown; video?: unknown }
+export const projectCover = (p: ProjectLike): string | null =>
+  mediaUrl(p.cover) || (p.slug && SHOWCASE_SLUGS.includes(p.slug) ? `/showcase-media/${p.slug}.jpg` : null)
+export const projectVideo = (p: ProjectLike): string | null =>
+  mediaUrl(p.video) || (p.slug && SHOWCASE_SLUGS.includes(p.slug) ? `/showcase-media/${p.slug}.mp4` : null)
+/** Absolute URL for schema/OG use. */
+export const absUrl = (u: string | null, site: string) => (u ? (u.startsWith('http') ? u : site + u) : undefined)

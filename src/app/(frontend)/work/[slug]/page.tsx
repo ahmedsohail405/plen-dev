@@ -8,7 +8,7 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Arrow } from '@/components/studio/Icon'
 import { Breadcrumbs } from '@/heros/RenderHero'
 import { ProjectScreen } from '@/blocks/studio'
-import { getProjects, mediaUrl, publishedProjects } from '@/lib/data'
+import { absUrl, getProjects, projectCover, projectVideo, publishedProjects } from '@/lib/data'
 import { breadcrumbSchema, JsonLd, orgId, SITE } from '@/lib/schema'
 import { generateMeta } from '@/utilities/generateMeta'
 
@@ -33,7 +33,8 @@ export default async function ProjectPage({ params }: Args) {
     { name: p.title, path: `/work/${p.slug}` },
   ]
   const host = p.domain || ''
-  const video = mediaUrl(p.video)
+  const video = projectVideo(p)
+  const cover = projectCover(p)
 
   return (
     <article style={{ ['--accent' as string]: p.accent || undefined }}>
@@ -47,8 +48,8 @@ export default async function ProjectPage({ params }: Args) {
           description: p.summary,
           url: `${SITE()}/work/${p.slug}`,
           creator: { '@id': orgId() },
-          image: mediaUrl(p.cover) ? SITE() + mediaUrl(p.cover) : undefined,
-          ...(video ? { video: { '@type': 'VideoObject', name: `${p.title} website walkthrough`, description: p.summary, contentUrl: SITE() + video, thumbnailUrl: mediaUrl(p.cover) ? SITE() + mediaUrl(p.cover) : undefined, uploadDate: p.createdAt } } : {}),
+          image: absUrl(cover, SITE()),
+          ...(video ? { video: { '@type': 'VideoObject', name: `${p.title} website walkthrough`, description: p.summary, contentUrl: absUrl(video, SITE()), thumbnailUrl: absUrl(cover, SITE()), uploadDate: p.createdAt } } : {}),
         }}
       />
       <JsonLd data={breadcrumbSchema(crumbs)} />

@@ -450,9 +450,9 @@ const auditPage: PageSeed = {
 const workPage: PageSeed = {
   title: 'Work',
   slug: 'work',
-  hero: { type: 'page', eyebrow: 'Portfolio', title: 'Selected *work*', subtitle: 'Websites for dentists, real estate teams, home care agencies, tech companies and online brands. Each one designed from scratch and run on the Plen CMS.' },
+  hero: { type: 'page', eyebrow: 'Portfolio', title: 'Selected *work*', subtitle: 'Websites for medical practices, real estate teams, home care agencies, tech companies and online brands. Each one designed from scratch and run on the Plen CMS.' },
   layout: [statementBlock('Want your business *here* next?', true)],
-  meta: { title: 'Web Design Portfolio | Plen Dev', description: 'Web design portfolio: dental, real estate, home healthcare, tech and ecommerce websites designed and built by Plen Dev in New York.', keywords: 'web design portfolio NYC, website examples', schemaType: 'CollectionPage' },
+  meta: { title: 'Web Design Portfolio | Plen Dev', description: 'Web design portfolio: medical, real estate, home healthcare, tech and ecommerce websites designed and built by Plen Dev in New York.', keywords: 'web design portfolio NYC, website examples', schemaType: 'CollectionPage' },
 }
 
 const aboutPage: PageSeed = {
@@ -689,7 +689,7 @@ const industriesHub: PageSeed = {
     {
       blockType: 'services', heading: undefined, columns: '3',
       items: [
-        { icon: 'tooth', title: 'Dental practices', text: 'Online booking, insurance info and before-and-after galleries.', href: '/industries/dental' },
+        { icon: 'heart', title: 'Medical practices', text: 'Online booking, patient portals, insurance info and doctor profiles.', href: '/industries/medical-practices' },
         { icon: 'home', title: 'Real estate', text: 'Live listings, agent pages and lead capture.', href: '/industries/real-estate' },
         { icon: 'heart', title: 'Home healthcare', text: 'Service areas, family enquiries and caregiver recruiting.', href: '/industries/home-healthcare' },
         { icon: 'cpu', title: 'Tech & SaaS', text: 'Product storytelling, pricing pages and docs.', href: '/industries/tech' },
@@ -699,28 +699,29 @@ const industriesHub: PageSeed = {
     workBlock({ source: 'all', style: 'grid', dark: true }),
     auditBlock(),
   ],
-  meta: { title: 'Website Design by Industry | Plen Dev', description: 'Websites for dental practices, real estate, home healthcare, tech and SaaS companies and ecommerce brands, designed and built in New York.', keywords: 'industry website design NYC', schemaType: 'CollectionPage' },
+  meta: { title: 'Website Design by Industry | Plen Dev', description: 'Websites for medical practices, real estate, home healthcare, tech and SaaS companies and ecommerce brands, designed and built in New York.', keywords: 'industry website design NYC', schemaType: 'CollectionPage' },
 }
 
 const industries: PageSeed[] = [
   industryPage({
-    slug: 'dental', title: 'Dental', project: 'lumen-pine-dental',
-    h1: 'Websites that fill *dental chairs*',
-    sub: 'Dental websites with online booking, insurance information and treatment pages that answer patients’ questions before they call.',
-    answer: 'Plen Dev designs dental websites in NYC with online booking, insurance and financing pages, treatment pages and reviews. Dental websites start at $3,499.',
-    metaTitle: 'Dental Website Design NYC | Plen Dev', metaDesc: 'Dentist website design in NYC: online booking, insurance info, treatment pages and reviews. Built to bring in new patients.',
-    keywords: 'dentist website design NYC, dental website design, dental practice website',
+    slug: 'medical-practices', title: 'Medical Practices', project: 'northbridge-medical',
+    h1: 'Websites that fill *appointment books*',
+    sub: 'Medical practice websites with online booking, patient portal links, insurance information and doctor profiles that answer patients’ questions before they call.',
+    answer: 'Plen Dev designs medical practice websites in NYC for primary care, pediatrics, specialists, dental, urgent care and multi-location groups, with online booking, insurance pages, doctor profiles and HIPAA-aware forms. Medical websites start at $3,499.',
+    metaTitle: 'Medical Practice Website Design NYC | Plen Dev', metaDesc: 'Medical practice website design in NYC: online booking, patient portal links, insurance info, doctor profiles and location pages. Built to bring in new patients.',
+    keywords: 'medical practice website design NYC, doctor website design, healthcare website design, clinic website, dental website design',
     features: [
-      { icon: 'cpu', title: 'Online booking', text: 'Connect to your scheduling software or take requests straight into the CMS lead inbox.' },
-      { icon: 'tooth', title: 'Treatment pages', text: 'Implants, Invisalign, whitening and emergency pages written to answer real patient questions.' },
-      { icon: 'shield', title: 'Insurance & financing', text: 'Clear accepted-plans lists and financing options to remove the biggest objection.' },
-      { icon: 'map', title: 'Local search', text: 'Dentist schema, location pages and Google Business Profile integration.' },
+      { icon: 'cpu', title: 'Online booking & telehealth', text: 'Connect your scheduling and telehealth tools, or take appointment requests straight into the CMS lead inbox.' },
+      { icon: 'heart', title: 'Service & specialty pages', text: 'Primary care, pediatrics, cardiology, dental and more, each written around the questions patients actually ask.' },
+      { icon: 'shield', title: 'Insurance & HIPAA-aware forms', text: 'Clear accepted-plan lists, and sensitive health details kept out of standard web forms.' },
+      { icon: 'map', title: 'Locations & local search', text: 'Location pages with hours and directions, MedicalClinic schema and Google Business Profile integration.' },
     ],
-    statement: 'Patients choose a dentist they *trust*. Your website builds that trust before the first visit.',
+    statement: 'Patients choose a doctor they *trust*. Your website builds that trust before the first visit.',
     faqs: [
-      ['What should a dental website include?', 'Online booking, a clear list of accepted insurance, treatment pages, doctor bios with photos, patient reviews, emergency information and click-to-call on mobile.'],
-      ['Can patients book appointments online?', 'Yes. We integrate with popular dental scheduling tools or send booking requests to your CMS inbox and email.'],
-      ['Is the site HIPAA compliant?', 'We keep sensitive health information out of standard web forms and can connect secure, HIPAA-compliant intake tools when you need them.'],
+      ['What should a medical practice website include?', 'Online booking, accepted insurance, service and specialty pages, doctor profiles with photos and languages spoken, location pages with hours, patient portal links, reviews and click-to-call on mobile.'],
+      ['Can patients book appointments online?', 'Yes. We integrate with popular medical scheduling and telehealth tools, or send booking requests to your CMS inbox and email.'],
+      ['Is the site HIPAA compliant?', 'We keep protected health information out of standard web forms and connect secure, HIPAA-compliant intake and portal tools when you need them.'],
+      ['Do you build dental and specialist websites too?', 'Yes. The same approach works for dental practices, physical therapy, dermatology, urgent care and multi-specialty groups.'],
     ],
   }),
   industryPage({
@@ -848,12 +849,12 @@ export const PACKAGES = [
 /* ---------------- portfolio (demo sites in /public/showcase) ---------------- */
 export const PROJECTS = [
   {
-    slug: 'lumen-pine-dental', title: 'Lumen & Pine Dental', industry: 'Dental', location: 'Park Slope, Brooklyn', year: '2026', accent: '#2f8f83', domain: 'lumenpinedental.com', order: 1,
-    summary: 'A calm, modern website for a family and cosmetic dental studio, with online booking, insurance information and treatment pages.',
-    challenge: 'A growing two-dentist practice needed a site that felt as calm and modern as the studio itself, and that answered insurance and booking questions without a phone call.',
-    solution: 'A warm, airy design with a sticky “Book a visit” bar, treatment pages written around patient questions, an insurance checker section and new-patient specials editable in the CMS.',
+    slug: 'northbridge-medical', title: 'Northbridge Medical Group', industry: 'Medical practice', location: 'Forest Hills, Queens', year: '2026', accent: '#2563eb', domain: 'northbridgemed.com', order: 1,
+    summary: 'A modern website for a multi-specialty medical group, with online booking, telehealth, a patient portal and two Queens locations.',
+    challenge: 'A growing primary and specialty care group with two offices had an outdated site that sent every booking, insurance and lab question to an overloaded phone line.',
+    solution: 'A clear, trustworthy design with booking from the first screen, specialty pages written around patient questions, doctor profiles with languages spoken, location pages and portal links, all editable in the CMS.',
     services: ['Website design', 'Development', 'Plen CMS', 'Online booking'],
-    results: [{ value: '1 tap', label: 'to call or book on mobile' }, { value: '8', label: 'treatment pages in the CMS' }],
+    results: [{ value: '1 tap', label: 'to book or start a video visit' }, { value: '2', label: 'locations managed in the CMS' }],
   },
   {
     slug: 'kestrel-row-realty', title: 'Kestrel Row Realty', industry: 'Real estate', location: 'North Shore, Long Island', year: '2026', accent: '#b8893b', domain: 'kestrelrow.com', order: 2,
