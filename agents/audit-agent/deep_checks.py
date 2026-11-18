@@ -173,6 +173,14 @@ def run(pages, facts, psi, add) -> None:
             "We found no customer reviews, testimonials or review widgets on any page we checked.",
             "Embed Google reviews and add testimonials near every call to action.",
             impact="Most people read reviews before contacting a local business. Without them, many leave to check a competitor.")
+    verified_kw = ("trustpilot", "elfsight", "birdeye", "podium", "yelp.com/biz", "google reviews",
+                   "aggregaterating", "reviewsonmywebsite", "trustindex", "widget.reviews", "g.page/", "clutch.co",
+                   "search.google.com/local/reviews", "grade.us", "bbb.org")
+    if any(k in all_html for k in review_kw) and not any(k in all_html for k in verified_kw):
+        add("conversion", "no_verified_reviews", "medium", "Testimonials can't be verified",
+            "The site shows testimonials, but no Google, Yelp, Clutch or Trustpilot reviews and no review rating data.",
+            "Embed live Google reviews and add AggregateRating schema.",
+            impact="Visitors trust reviews they can check on Google far more than quotes on your own site, and Google can't show star ratings for you.")
     booking_kw = ("calendly", "acuityscheduling", "zocdoc", "squareup.com/appointments", "booksy", "vagaro",
                   "mindbody", "opentable", "resy.com", "setmore", "localmed", "nexhealth", "jane.app",
                   "simplybook", "book online", "book now", "schedule online", "book an appointment", "request appointment")

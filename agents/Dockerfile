@@ -7,6 +7,9 @@ WORKDIR /app
 COPY audit-agent/requirements.txt audit-agent/requirements.txt
 COPY alex/requirements.txt alex/requirements.txt
 RUN pip install -r audit-agent/requirements.txt -r alex/requirements.txt
+# Headless Chromium + its system libraries for the visual audit, and a font for screenshot markers
+RUN python -m playwright install --with-deps chromium && apt-get update && apt-get install -y --no-install-recommends fonts-dejavu-core fonts-liberation \
+    && rm -rf /var/lib/apt/lists/*
 COPY . .
 ENV OUTBOX_DIR=/data/audit-outbox ALEX_DATA_DIR=/data/alex ALEX_DIR=/app/alex AUDIT_ENGINE_DIR=/app/audit-agent
 CMD ["python", "run.py"]
