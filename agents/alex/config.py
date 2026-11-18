@@ -33,7 +33,8 @@ PRICE_FROM = E("PLENDEV_PRICE_FROM", "$1,499")  # Launch package; matches /packa
 HOME_AREA = E("PLENDEV_HOME_AREA", "Brooklyn")
 
 # Targeting and qualification
-MAX_SCORE = int(E("ALEX_MAX_SCORE", "72"))        # pitch sites at or below this score...
+MAX_SCORE = int(E("ALEX_MAX_SCORE", "62"))        # pitch sites at or below this score (deep audit scoring, Nov 18)...
+VISUAL = E("ALEX_VISUAL_AUDIT", "false").lower() == "true"  # headless-browser checks: +15-25s per site
 MIN_SERIOUS = int(E("ALEX_MIN_SERIOUS", "5"))      # ...or with at least this many critical/high pitchable issues
 MIN_ISSUES = int(E("ALEX_MIN_PITCH_ISSUES", "2"))  # need this many sales-relevant medium+ issues
 AUDIT_PAGES = int(E("ALEX_AUDIT_PAGES", "8"))
