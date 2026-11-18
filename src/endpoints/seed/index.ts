@@ -12,7 +12,7 @@ const ctx = { disableRevalidate: true }
  * packages (never leads or users) and recreates them.
  * Portfolio media is read from /public/showcase-media/<slug>.{jpg,mp4} if present.
  */
-export const seed = async ({ payload, req }: { payload: Payload; req: PayloadRequest }): Promise<void> => {
+export const seed = async ({ payload, req }: { payload: Payload; req: PayloadRequest }): Promise<{ mediaErrors: string[] }> => {
   payload.logger.info('Seeding Plen Dev…')
 
   const clear: CollectionSlug[] = ['pages', 'posts', 'projects', 'packages', 'categories', 'search', 'redirects']
@@ -68,12 +68,36 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
   /* ---------- portfolio ---------- */
   const mediaDir = path.resolve(process.cwd(), 'public/showcase-media')
   const projectIds: Record<string, number | string> = {}
+  const mediaErrors: string[] = []
   for (const pr of PROJECTS) {
     const upload = async (file: string, alt: string) => {
-      const full = path.join(mediaDir, file)
-      if (!fs.existsSync(full)) return undefined
-      const doc = await payload.create({ collection: 'media', req, context: ctx, data: { alt: `[showcase] ${alt}` }, filePath: full })
-      return doc.id
+      try {
+        // On disk locally; on Vercel public/ isn't in the function bundle, so fetch it from the site itself
+        const full = path.join(mediaDir, file)
+        let data: Buffer | undefined
+        if (fs.existsSync(full)) data = fs.readFileSync(full)
+        else {
+          const base = process.env.NEXT_PUBLIC_SERVER_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '')
+          if (!base) return undefined
+          const res = await fetch(`${base}/showcase-media/${file}`)
+          if (!res.ok) throw new Error(`fetch ${file}: ${res.status}`)
+          data = Buffer.from(await res.arrayBuffer())
+        }
+        const mimetype = file.endsWith('.mp4') ? 'video/mp4' : 'image/jpeg'
+        const doc = await payload.create({
+          collection: 'media',
+          req,
+          context: ctx,
+          data: { alt: `[showcase] ${alt}` },
+          file: { data, mimetype, name: file, size: data.length },
+        })
+        return doc.id
+      } catch (err) {
+        // Don't let one media upload stop the whole content load
+        payload.logger.error({ err, message: `Seed: could not upload ${file}` })
+        mediaErrors.push(`${file}: ${err instanceof Error ? err.message : String(err)}`)
+        return undefined
+      }
     }
     const cover = await upload(`${pr.slug}.jpg`, `${pr.title} website homepage`)
     const video = await upload(`${pr.slug}.mp4`, `${pr.title} website walkthrough video`)
@@ -204,4 +228,5 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
   })
 
   payload.logger.info(`Seeded ${PAGES.length} pages, ${PACKAGES.length} packages, ${PROJECTS.length} projects, ${POSTS.length} posts.`)
+  return { mediaErrors }
 }

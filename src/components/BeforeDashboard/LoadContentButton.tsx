@@ -11,6 +11,12 @@ export const LoadContentButton: React.FC = () => {
     try {
       const res = await fetch('/next/seed', { method: 'POST', credentials: 'include' })
       if (!res.ok) throw new Error(await res.text())
+      const json = (await res.json()) as { mediaErrors?: string[] }
+      if (json.mediaErrors?.length) {
+        setState('error')
+        setMsg(`Content loaded, but some demo videos/images failed: ${json.mediaErrors.join('; ')}`)
+        return
+      }
       setState('done')
       setTimeout(() => window.location.reload(), 1200)
     } catch (e) {
