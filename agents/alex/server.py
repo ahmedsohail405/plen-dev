@@ -138,7 +138,15 @@ class H(BaseHTTPRequestHandler):
         if not os.environ.get("MS_CLIENT_ID"):
             return self._page("Microsoft sign-in", "<p>MS_CLIENT_ID and MS_TENANT_ID are not set.</p>", 500)
         try:
-            st = ms_oauth.start_login(user) if q.get("start") else ms_oauth.status(user)
+            if q.get("start"):
+                ms_oauth.start_login(user)
+                # Redirect so the page's auto-refresh polls status instead of starting a new sign-in each time
+                self.send_response(303)
+                self.send_header("Location", f"?user={quote(user)}&key={key}")
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                return
+            st = ms_oauth.status(user)
         except Exception as e:  # noqa: BLE001
             return self._page("Microsoft sign-in", f"<p>Microsoft refused to start the sign-in: {html.escape(str(e))}</p>", 502)
         u, again = html.escape(user), f'<p><a href="?user={quote(user)}&key={key}&start=1">Start sign-in</a></p>'

@@ -120,10 +120,14 @@ def _poll(user: str, d: dict) -> None:
             continue
         if "refresh_token" in t:
             who = _signed_in_as(t.get("id_token", ""))
-            if who and who != user:
+            if who and who != user and who.split("@")[0] != user.split("@")[0]:
                 f.update(state="error", error=f"signed in as {who}, not {user}. Try again and pick {user}.")
                 return
-            save(user, t["refresh_token"])
+            try:
+                save(user, t["refresh_token"])
+            except OSError as e:
+                f.update(state="error", error=f"signed in, but the token couldn't be saved to {token_dir()}: {e}")
+                return
             _cache.pop(user, None)
             f.update(state="done")
             return
@@ -161,7 +165,12 @@ def start_login(user: str) -> dict:
 
 def status(user: str) -> dict:
     user = user.lower()
-    return _flows.get(user) or {"state": "done" if stored(user) else "none"}
+    f = _flows.get(user)
+    if f and f.get("state") == "pending" and f.get("expires", 0) < time.time():
+        f.update(state="error", error="the code expired; start again")
+    if f and f.get("state") in ("pending", "error"):
+        return f
+    return {"state": "done" if stored(user) else "none"}
 
 
 def login(user: str = "") -> None:
