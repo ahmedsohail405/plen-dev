@@ -27,17 +27,22 @@ Nothing here contains secrets; everything is set as Railway variables.
 
 ### Variables (paste into the Raw editor)
 
+Comments must sit on their own lines: Railway would treat text after a value as part of the value.
+
 ```
 # ---- shared
 PORT=8080
 ALEX_PORT=8081
-MAIL_PROVIDER=dryrun            # keep dryrun until the business address is set; then smtp
-PLENDEV_ADDRESS=                # required before real sending (CAN-SPAM)
+# keep dryrun until the business address is set; then smtp
+MAIL_PROVIDER=dryrun
+# required before real sending (CAN-SPAM)
+PLENDEV_ADDRESS=
 PLENDEV_SITE=https://plendev.com
 PLENDEV_EMAIL=info@plendev.com
 PLENDEV_PHONE=
 PLENDEV_BOOKING_URL=
-PAGESPEED_API_KEY=              # free, Google Cloud console > PageSpeed Insights API
+# free, Google Cloud console > PageSpeed Insights API (optional: speed is also measured by the visual audit)
+PAGESPEED_API_KEY=
 # Optional. The visual audit (phone + desktop screenshots in headless Chromium) is on by default.
 # Set VISUAL_AUDIT=0 to turn it off; VISUAL_TIMEOUT_MS is how long to wait for a slow page (default 45000).
 
@@ -45,12 +50,14 @@ PAGESPEED_API_KEY=              # free, Google Cloud console > PageSpeed Insight
 PUBLIC_BASE_URL=https://<audit-domain>
 ADMIN_TOKEN=<long random string>
 AUDIT_WEBHOOK_SECRET=<long random string, same value in the CMS>
-AUTO_SEND=false                 # Ahmed approves every audit email
+# Ahmed approves every audit email
+AUTO_SEND=false
 CMS_BASE_URL=https://<plen-dev site domain>
 CMS_API_TOKEN=<from the CMS>
 MAIL_FROM=Alex H <audit@plendev.com>
 MAIL_REPLY_TO=audit@plendev.com
-AUDIT_SMTP_USER=info@plendev.com     # audit@ is an alias of info@; we sign in as info@
+# audit@ is an alias of info@; we sign in as info@
+AUDIT_SMTP_USER=info@plendev.com
 
 # ---- Alex
 ALEX_PUBLIC_BASE_URL=https://<alex-domain>
@@ -68,7 +75,8 @@ MS_TENANT_ID=6209b41b-f4cb-4e81-ae2f-26a6e6c93eba
 MS_CLIENT_ID=9215b5a4-063b-4759-ae51-8760248d11d7
 ALEX_IMAP_HOST=outlook.office365.com
 ALEX_IMAP_USER=
-ALEX_READ_INBOXES=[{"user":"info@plendev.com"}]   # Alex reads audit replies in info@ (read-only)
+# Alex reads audit replies in info@ (read-only)
+ALEX_READ_INBOXES=[{"user":"info@plendev.com"}]
 # WhatsApp (Twilio)
 WHATSAPP_PROVIDER=twilio
 WHATSAPP_TO=
@@ -77,7 +85,8 @@ TWILIO_AUTH_TOKEN=
 TWILIO_WHATSAPP_FROM=
 TWILIO_CONTENT_SID=
 # writer
-ALEX_LLM=off                    # on = Claude writes each email (needs ANTHROPIC_API_KEY)
+# on = Claude writes each email (needs ANTHROPIC_API_KEY)
+ALEX_LLM=off
 ANTHROPIC_API_KEY=
 # optional
 GOOGLE_PLACES_API_KEY=
