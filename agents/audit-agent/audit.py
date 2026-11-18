@@ -173,12 +173,15 @@ def crawl(start: str, max_pages: int) -> tuple[list[Page], dict]:
     if sm.status == 200 and sm.bytes:
         try:
             locs = re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", sess.get(sm.final_url, timeout=TIMEOUT).text)
+            posts: list[str] = []
             for child in [u for u in locs if u.endswith(".xml")][:4]:  # sitemap index: read the page/post sitemaps
                 try:
-                    locs += re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", sess.get(child, timeout=TIMEOUT).text)
+                    got = re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", sess.get(child, timeout=TIMEOUT).text)
                 except requests.RequestException:
-                    pass
+                    continue
+                (posts if re.search(r"post|blog|news|article|categor|tag|author", child.split("/")[-1], re.I) else locs).extend(got)
             sitemap_urls[:] = [u for u in locs if not u.endswith(".xml")][:500]
+            extras["sitemap_post_urls"] = posts[:500]
             for loc in locs[:200]:
                 n = normalize(loc)
                 if urlparse(n).netloc.lower() == base_host and n not in seen and not n.endswith(".xml"):

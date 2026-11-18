@@ -19,6 +19,9 @@ import requests
 from bs4 import BeautifulSoup
 
 # Areas Plen Dev targets first; any "City, ST" found on the site is added too.
+# Boroughs, regions and counties: each one is worth its own page. Neighborhoods are listed as mentions only.
+TOP_AREAS = {"brooklyn", "queens", "manhattan", "bronx", "staten island", "long island", "nassau", "suffolk",
+             "westchester", "yonkers", "jersey city", "hoboken", "newark"}
 NY_AREAS = [
     "brooklyn", "queens", "manhattan", "bronx", "staten island", "long island", "nassau", "suffolk", "new york city",
     "nyc", "williamsburg", "bushwick", "park slope", "bay ridge", "dumbo", "greenpoint", "bensonhurst", "flatbush",
@@ -129,11 +132,13 @@ def run(pages, facts, extras, lead: dict, add) -> dict:
     for a in areas:
         if not area_pages[a] and any(a.replace(" ", "-") in sp for sp in sm_paths):
             area_pages[a] = ["(in sitemap)"]
-    served_no_page = [a for a in areas if not area_pages[a]]
-    out["area_pages"] = area_pages
-    if len(areas) >= 2 and len(served_no_page) >= 2:
-        add("seo_structure", "no_location_pages", "high",
-            f"No pages for {len(served_no_page)} of the {len(areas)} areas you mention",
+    # Only areas that warrant their own page: boroughs/regions/counties and other cities found as "City, ST"
+    page_areas = [a for a in areas if a in TOP_AREAS or a not in NY_AREAS]
+    served_no_page = [a for a in page_areas if not area_pages[a]]
+    out["area_pages"] = {a: area_pages[a] for a in page_areas}
+    if len(page_areas) >= 2 and len(served_no_page) >= 2:
+        add("seo_structure", "no_location_pages", "high" if len(served_no_page) >= 3 else "medium",
+            f"No pages for {len(served_no_page)} of the {len(page_areas)} areas you mention",
             "The site mentions " + ", ".join(a.title() for a in areas[:6]) + " but has no page built to rank in "
             + ", ".join(a.title() for a in served_no_page[:5]) + ".",
             "Create one location page per area with unique content, map, reviews and LocalBusiness schema.",
@@ -141,14 +146,18 @@ def run(pages, facts, extras, lead: dict, add) -> dict:
 
     # ---- what people search (Google autocomplete), and whether a page targets it
     if service:
-        for a in (areas[:3] or [""]):
-            for q in [f"{service} {a}".strip(), f"{service} near {a}".strip() if a else ""]:
-                if not q:
-                    continue
-                for sug in autocomplete(q)[:4]:
+        svc_words = [w for w in re.findall(r"[a-z]+", service) if len(w) > 2]
+        for a in ([x for x in areas if x in TOP_AREAS][:3] or areas[:2]):
+            for q in [f"{service} {a}", f"{service} in {a}"]:
+                for sug in autocomplete(q)[:6]:
+                    # keep only suggestions that are really about this service in this area
+                    # (drops "queens" -> "queensland", and generic questions)
+                    if not re.search(rf"\b{re.escape(a)}\b", sug) or not any(w in sug for w in svc_words):
+                        continue
                     if sug not in [x["query"] for x in out["searches"]]:
                         words = [w for w in re.findall(r"[a-z]+", sug) if len(w) > 3 and w not in ("near", "best", "with")]
-                        has = [m["url"] for m in page_meta if words and all(w in (m["title"] + " " + m["h1"] + " " + m["path"]).lower() for w in words)]
+                        stems = [w[:5] for w in words if w not in ("services", "service", "company", "companies", "agency", "agencies") or len(words) <= 2]
+                        has = [m["url"] for m in page_meta if stems and all(st in (m["title"] + " " + m["h1"] + " " + m["path"]).lower() for st in stems)]
                         out["searches"].append({"query": sug, "page": has[0] if has else ""})
         missing = [s for s in out["searches"] if not s["page"]]
         if len(out["searches"]) >= 3 and len(missing) / len(out["searches"]) >= 0.5:
@@ -236,7 +245,7 @@ def run(pages, facts, extras, lead: dict, add) -> dict:
                 linked.add(urljoin(p.final_url, href).rstrip("/").lower())
             if a.get_text(" ", strip=True).lower() in GENERIC_ANCHORS:
                 generic += 1
-    orphans = [u for u in extras.get("sitemap_urls", [])
+    orphans = [u for u in extras.get("sitemap_urls", [])  # page sitemaps only; blog posts live in archives
                if u.rstrip("/").lower() not in linked and not BLOGGY.search(urlparse(u).path) and not UTILITY.search(urlparse(u).path)]
     if len(orphans) >= 3:
         add("seo_structure", "orphan_pages", "medium", f"{len(orphans)} pages aren't linked from the rest of the site",

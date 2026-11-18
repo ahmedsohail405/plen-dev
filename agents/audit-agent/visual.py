@@ -88,6 +88,8 @@ MEASURE_JS = r"""
     if (getComputedStyle(t.el).position === 'fixed') continue;
     const inline = t.el.tagName === 'A' && t.el.closest('p, li p, td') && t.r.height < 30;  // links inside sentences are exempt (WCAG)
     if (inline) continue;
+    // a checkbox or radio with a clickable label is a big target in practice (WCAG exception)
+    if (/^(checkbox|radio)$/i.test(t.el.type || '') && t.el.labels && t.el.labels.length) continue;
     const tw = t.r.width * k, th = t.r.height * k;
     if (tw < 24 || th < 24) { tiny.push({box: box(t.el), w: Math.round(tw), h: Math.round(th), text: label(t.el)}); continue; }
     if (th < 40) {
@@ -497,7 +499,7 @@ def findings(v: dict, out: Path, add) -> dict:
     ip = image_problems(desk, dpr=1)
     ipm = image_problems(mob, dpr=2)
     if ip["broken"] or ipm["broken"]:
-        b = (ip["broken"] or ipm["broken"])
+        b = list({i["src"]: i for i in ip["broken"] + ipm["broken"]}.values())
         add("design", "broken_images", "high", f"{len(b)} broken image{'s' if len(b) != 1 else ''}",
             "These images fail to load and show as empty boxes or broken icons.", "Replace or remove them.",
             [i["src"] for i in b], impact="Broken images make a business look closed or careless.")
