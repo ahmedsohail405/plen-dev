@@ -168,15 +168,17 @@ def send(lid: str, overrides: dict) -> dict:
         html = re.sub(r"(Hi [^<]*,</p>)", lambda m: m.group(1) + para, html, count=1)
         text = re.sub(r"^(Hi [^\n]*,\n)", lambda m: m.group(1) + "\n" + note + "\n", text, count=1)
     # The audit sender (audit@plendev.com, an alias of info@) can sign in separately from Alex's mailboxes:
-    # AUDIT_SMTP_USER=info@plendev.com + AUDIT_MS_REFRESH_TOKEN (Microsoft 365 OAuth) or AUDIT_SMTP_PASS.
+    # AUDIT_SMTP_USER=info@plendev.com, signed in once via Alex's /admin/ms-login page (Microsoft 365 OAuth).
     smtp = None
     if ENV("AUDIT_SMTP_USER"):
         smtp = {"user": ENV("AUDIT_SMTP_USER"), "host": ENV("AUDIT_SMTP_HOST", "smtp.office365.com"),
                 "port": ENV("AUDIT_SMTP_PORT", "587")}
-        if ENV("AUDIT_MS_REFRESH_TOKEN"):
-            smtp["refresh_token"] = ENV("AUDIT_MS_REFRESH_TOKEN")
-        else:
-            smtp["password"] = ENV("AUDIT_SMTP_PASS", "")
+        if ENV("AUDIT_SMTP_PASS"):
+            smtp["password"] = ENV("AUDIT_SMTP_PASS")
+        else:  # Microsoft OAuth: token saved by Alex's /admin/ms-login page, or AUDIT_MS_REFRESH_TOKEN
+            smtp["oauth"] = True
+            if ENV("AUDIT_MS_REFRESH_TOKEN"):
+                smtp["refresh_token"] = ENV("AUDIT_MS_REFRESH_TOKEN")
     msg_id = mailer.send(to=st["lead"]["email"], subject=subject, html=html, text=text, smtp=smtp)
     st.update(status="sent", sent_at=now(), message_id=msg_id, final_subject=subject)
     st["history"].append({"at": now(), "event": "sent", "provider_id": msg_id})

@@ -49,7 +49,6 @@ CMS_API_TOKEN=<from the CMS>
 MAIL_FROM=Alex H <audit@plendev.com>
 MAIL_REPLY_TO=audit@plendev.com
 AUDIT_SMTP_USER=info@plendev.com     # audit@ is an alias of info@; we sign in as info@
-AUDIT_MS_REFRESH_TOKEN=              # from the one-time sign-in below
 
 # ---- Alex
 ALEX_PUBLIC_BASE_URL=https://<alex-domain>
@@ -63,9 +62,8 @@ SMTP_HOST=smtp.office365.com
 SMTP_PORT=587
 SMTP_USER=
 MS_AUTH=oauth
-MS_TENANT_ID=
-MS_CLIENT_ID=
-MS_REFRESH_TOKEN=
+MS_TENANT_ID=6209b41b-f4cb-4e81-ae2f-26a6e6c93eba
+MS_CLIENT_ID=9215b5a4-063b-4759-ae51-8760248d11d7
 ALEX_IMAP_HOST=outlook.office365.com
 ALEX_IMAP_USER=
 ALEX_READ_INBOXES=[{"user":"info@plendev.com","refresh_env":"AUDIT_MS_REFRESH_TOKEN"}]   # Alex reads audit replies in info@ (read-only)
@@ -103,10 +101,10 @@ See `audit-agent/PIPELINE.md` and `alex/README.md` and each folder's `.env.examp
    Microsoft Entra admin center → App registrations → New → name "Plen Dev agents", single tenant →
    Authentication → "Allow public client flows" = Yes → API permissions → add delegated
    `SMTP.Send`, `IMAP.AccessAsUser.All`, `offline_access` → Grant admin consent.
-4. **Get the refresh token** (sign in once as info@ in a browser):
-   `cd agents/audit-agent && MS_TENANT_ID=... MS_CLIENT_ID=... python3 -c "import ms_oauth; ms_oauth.login()"`
-   (or Railway service → Shell). It prints a code; open the link, sign in as info@plendev.com, and copy the
-   printed refresh token into `AUDIT_MS_REFRESH_TOKEN`.
+4. **Sign in each mailbox once.** After deploying, open
+   `https://<alex-domain>/admin/ms-login?key=<ALEX_ADMIN_TOKEN>` and sign in info@plendev.com (and Alex's
+   mailbox). Tokens are saved on the volume (`/data/ms-tokens`) and refreshed automatically; nothing to paste,
+   and no client secret is needed.
 5. Send yourself a test before switching `MAIL_PROVIDER=smtp`.
 
 If GoDaddy's account doesn't expose the Exchange admin center or app registrations, the fallback is to send
