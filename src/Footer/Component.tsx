@@ -29,7 +29,8 @@ export async function Footer() {
         </div>
         <div className="foot-cols">
           <div>
-            <h4>{s.businessName}</h4>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="foot-logo" src="/brand/plendev-wordmark-light.svg" alt={s.businessName || 'Plen Dev'} width={150} height={35} />
             <p>{s.tagline}</p>
             {addr && (addr.city || addr.region) && (
               <p>

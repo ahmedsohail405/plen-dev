@@ -530,6 +530,8 @@ a.area:hover p { color: var(--ink-3); }
 .site-footer .big .hl { color: var(--lime); }
 .foot-cols { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; padding-top: 50px; border-top: 1px solid var(--line-dark); margin-top: 50px; }
 @media (max-width: 860px) { .foot-cols { grid-template-columns: 1fr 1fr; } }
+.foot-logo { display: block; height: 32px; width: auto; margin: 0 0 18px; }
+.logo img { display: block; height: 26px; width: auto; }
 .foot-cols h4 { font: 12px var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted-dark); margin: 0 0 16px; }
 .foot-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
 .foot-cols a { text-decoration: none; color: rgba(243, 240, 232, 0.85); }

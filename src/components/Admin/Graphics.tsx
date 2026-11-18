@@ -8,5 +8,6 @@ export const AdminLogo = () => (
 )
 
 export const AdminIcon = () => (
-  <span style={{ display: 'grid', placeItems: 'center', width: 26, height: 26, borderRadius: 8, background: '#0d0d0f', color: '#c8f560', fontWeight: 700, fontSize: 15 }}>P</span>
+  // eslint-disable-next-line @next/next/no-img-element
+  <img src="/brand/plendev-avatar-ink.svg" alt="Plen Dev" width={26} height={26} style={{ borderRadius: 8, display: 'block' }} />
 )

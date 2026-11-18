@@ -9,8 +9,8 @@ import { Arrow } from '@/components/studio/Icon'
 
 export const Logo = () => (
   <Link href="/" className="logo" aria-label="Plen Dev home">
-    <span>Plen</span>
-    <em>Dev</em>
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img src="/brand/plendev-wordmark-dark.svg" alt="Plen Dev" width={118} height={28} />
   </Link>
 )
 
