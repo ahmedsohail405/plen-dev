@@ -303,6 +303,12 @@ export interface Page {
                     | 'home'
                     | 'heart'
                     | 'cpu'
+                    | 'zap'
+                    | 'trending'
+                    | 'lock'
+                    | 'accessibility'
+                    | 'key'
+                    | 'headset'
                   )
                 | null;
               title: string;

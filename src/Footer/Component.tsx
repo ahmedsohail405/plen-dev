@@ -14,7 +14,7 @@ export async function Footer() {
       <div className="wrap">
         <p className="big">
           <Link href="/contact">
-            <Hl text={footer.bigLine || "Let's build *something.*"} />
+            <Hl text={footer.bigLine || 'Ready for a website that *brings in customers?*'} />
           </Link>
         </p>
         <div className="btn-row">

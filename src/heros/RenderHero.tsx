@@ -13,7 +13,12 @@ const HeroLinks: React.FC<{ links: Page['hero']['links'] }> = ({ links }) =>
   links && links.length ? (
     <div className="btn-row">
       {links.map(({ link }, i) => (
-        <CMSLink key={i} {...link} appearance="inline" className={i === 0 ? 'btn' : 'btn btn--ghost'}>
+        <CMSLink
+          key={i}
+          {...link}
+          appearance="inline"
+          className={i === 0 ? 'btn' : 'btn btn--ghost'}
+        >
           <Arrow />
         </CMSLink>
       ))}
@@ -70,7 +75,13 @@ const StudioHero: React.FC<Props> = (p) => {
                   key={proj.id}
                   href={`/work/${proj.slug}`}
                   className="float-card"
-                  style={{ left: pos.left, top: pos.top, ['--r' as string]: pos.r, ['--delay' as string]: pos.delay, zIndex: i % 2 ? 2 : 1 }}
+                  style={{
+                    left: pos.left,
+                    top: pos.top,
+                    ['--r' as string]: pos.r,
+                    ['--delay' as string]: pos.delay,
+                    zIndex: i % 2 ? 2 : 1,
+                  }}
                 >
                   <div className="chrome">
                     <i />
@@ -79,7 +90,16 @@ const StudioHero: React.FC<Props> = (p) => {
                     <span>{proj.domain || proj.title}</span>
                   </div>
                   {video ? (
-                    <video src={video} poster={img || undefined} autoPlay muted loop playsInline preload="none" aria-label={`${proj.title} website walkthrough`} />
+                    <video
+                      src={video}
+                      poster={img || undefined}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="none"
+                      aria-label={`${proj.title} website walkthrough`}
+                    />
                   ) : img ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={img} alt={`${proj.title} website`} loading="lazy" />
@@ -100,11 +120,19 @@ export const Breadcrumbs: React.FC<{ crumbs?: { name: string; path: string }[] }
     <nav aria-label="Breadcrumb">
       <ol className="crumbs">
         {crumbs.map((c, i) => (
-          <li key={c.path}>{i < crumbs.length - 1 ? <Link href={c.path}>{c.name}</Link> : <span aria-current="page">{c.name}</span>}</li>
+          <li key={c.path}>
+            {i < crumbs.length - 1 ? (
+              <Link href={c.path}>{c.name}</Link>
+            ) : (
+              <span aria-current="page">{c.name}</span>
+            )}
+          </li>
         ))}
       </ol>
     </nav>
   ) : null
+
+const TRUST = ['Fixed price before we start', 'You own your website', 'Reply within 1 business day']
 
 const PageHero: React.FC<Props> = (p) => {
   const img = mediaUrl(p.media)
@@ -122,21 +150,33 @@ const PageHero: React.FC<Props> = (p) => {
             <h1 className="display" data-reveal style={{ ['--d' as string]: '80ms' }}>
               <Hl text={p.title || p.pageTitle} />
             </h1>
+            <div data-reveal style={{ ['--d' as string]: '160ms' }}>
+              {p.subtitle && <p className="hero-sub">{p.subtitle}</p>}
+              <HeroLinks links={p.links} />
+              <ul className="hero-trust">
+                {TRUST.map((t) => (
+                  <li key={t}>{t}</li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div data-reveal style={{ ['--d' as string]: '180ms' }}>
-            {img ? (
-              <div className="media">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img} alt={(p.media as Media)?.alt || ''} />
-              </div>
-            ) : null}
-          </div>
+          {(img || p.answer) && (
+            <div data-reveal style={{ ['--d' as string]: '240ms' }}>
+              {img ? (
+                <div className="media">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={img} alt={(p.media as Media)?.alt || ''} />
+                </div>
+              ) : p.answer ? (
+                <div className="hero-card">
+                  <span className="hero-card-label">The short answer</span>
+                  <p>{p.answer}</p>
+                </div>
+              ) : null}
+            </div>
+          )}
         </div>
-        <div data-reveal style={{ ['--d' as string]: '240ms', maxWidth: 760 }}>
-          {p.subtitle && <p className="hero-sub">{p.subtitle}</p>}
-          {p.answer && <p className="hero-answer">{p.answer}</p>}
-          <HeroLinks links={p.links} />
-        </div>
+        {img && p.answer && <p className="hero-answer">{p.answer}</p>}
       </div>
     </section>
   )

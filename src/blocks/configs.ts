@@ -11,6 +11,7 @@ const heading = [
 
 export const ICONS = [
   'code', 'palette', 'database', 'cart', 'search', 'sparkles', 'shield', 'gauge', 'layout', 'smartphone', 'map', 'bot', 'chart', 'wrench', 'tooth', 'home', 'heart', 'cpu',
+  'zap', 'trending', 'lock', 'accessibility', 'key', 'headset',
 ].map((v) => ({ label: v, value: v }))
 
 export const MarqueeBlock: Block = {

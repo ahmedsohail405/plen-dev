@@ -66,7 +66,7 @@ export const HeaderClient: React.FC<{ data: Header }> = ({ data }) => {
             {it.label}
           </Link>
         ))}
-        <Link href={cta.href || '/website-audit'} className="btn btn--lime" style={{ marginTop: 24, alignSelf: 'flex-start', fontSize: 18 }} tabIndex={open ? 0 : -1}>
+        <Link href={cta.href || '/website-audit'} className="btn btn--lime" tabIndex={open ? 0 : -1}>
           {cta.label} <Arrow />
         </Link>
       </div>

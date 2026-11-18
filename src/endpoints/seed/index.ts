@@ -110,9 +110,9 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     context: ctx,
     data: {
       businessName: 'Plen Dev',
-      tagline: 'Web design & development studio in New York',
+      tagline: 'Web design and development company in New York',
       description:
-        'Plen Dev is a New York web design and development company. We design and build custom websites, ecommerce stores, custom CMS platforms and web apps for businesses in Brooklyn, Queens, New York City and Long Island. Every site includes the Plen CMS with live-preview editing, a lead inbox and SEO controls.',
+        'Plen Dev is a New York web design and development company. We design and build custom websites, ecommerce stores, custom CMS platforms and web apps for businesses in Brooklyn, Queens, New York City and Long Island. Every site comes with an easy editor, so owners can update text, photos and prices themselves.',
       email: 'info@plendev.com',
       phone: '',
       address: { city: 'Brooklyn', region: 'NY', hideStreet: true },
@@ -120,7 +120,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       hours: 'Mo-Fr 09:00-18:00',
       titleSuffix: ' | Plen Dev',
       defaultDescription:
-        'Plen Dev builds fast, creative websites with an easy custom CMS for businesses in Brooklyn, Queens, NYC and Long Island. Websites from $1,499.',
+        'Plen Dev builds fast, custom websites for businesses in Brooklyn, Queens, NYC and Long Island. Easy to update yourself. Websites from $1,499.',
       allowAiCrawlers: true,
       llmsIntro:
         'Plen Dev is a web design and development studio in New York (Brooklyn, Queens, NYC and Long Island). It builds custom Next.js websites, online stores, custom CMS platforms and web apps, with fixed published prices starting at $1,499.',
@@ -241,15 +241,15 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     req,
     context: ctx,
     data: {
-      bigLine: "Let's build *something.*",
+      bigLine: 'Ready for a website that *brings in customers?*',
       columns: [
         {
           title: 'Services',
           links: [
             ['Web development', '/services/web-development'],
             ['Website design', '/services/web-design'],
-            ['Custom CMS', '/services/custom-cms'],
-            ['Ecommerce', '/services/ecommerce'],
+            ['Custom CMS (easy editor)', '/services/custom-cms'],
+            ['Online stores', '/services/ecommerce'],
             ['Web apps', '/services/web-apps'],
             ['Care plans', '/services/website-maintenance'],
           ].map(([label, href]) => ({ label, href })),
@@ -266,7 +266,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
           ].map(([label, href]) => ({ label, href })),
         },
         {
-          title: 'Studio',
+          title: 'Company',
           links: [
             ['Work', '/work'],
             ['Packages', '/packages'],

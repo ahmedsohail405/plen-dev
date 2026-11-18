@@ -76,7 +76,7 @@ export default async function ProjectPage({ params }: Args) {
             </div>
             <div>
               <span>Built with</span>
-              Next.js + Plen CMS
+              Next.js + custom CMS
             </div>
           </div>
         </div>
@@ -131,6 +131,21 @@ export default async function ProjectPage({ params }: Args) {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+      </section>
+      <section className="section section--tight">
+        <div className="wrap">
+          <p className="statement" data-reveal>
+            Want a website like this for <span className="hl">your business</span>?
+          </p>
+          <div className="btn-row" data-reveal>
+            <Link className="btn" href="/contact">
+              Get a free quote <Arrow />
+            </Link>
+            <Link className="btn btn--ghost" href="/website-audit">
+              Free website audit <Arrow />
+            </Link>
           </div>
         </div>
       </section>

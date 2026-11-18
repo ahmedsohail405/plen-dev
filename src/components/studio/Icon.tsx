@@ -1,11 +1,12 @@
 import {
-  Bot, Code2, Cpu, Database, Gauge, HeartPulse, Home, LayoutTemplate, LineChart, MapPin, Palette, Search, ShieldCheck, ShoppingCart, Smartphone, Sparkles, Smile, Wrench,
+  Accessibility, Bot, Code2, Headset, KeyRound, Lock, TrendingUp, Zap, Cpu, Database, Gauge, HeartPulse, Home, LayoutTemplate, LineChart, MapPin, Palette, Search, ShieldCheck, ShoppingCart, Smartphone, Sparkles, Smile, Wrench,
 } from 'lucide-react'
 import React from 'react'
 
 const map = {
   code: Code2, palette: Palette, database: Database, cart: ShoppingCart, search: Search, sparkles: Sparkles, shield: ShieldCheck, gauge: Gauge,
   layout: LayoutTemplate, smartphone: Smartphone, map: MapPin, bot: Bot, chart: LineChart, wrench: Wrench, tooth: Smile, home: Home, heart: HeartPulse, cpu: Cpu,
+  zap: Zap, trending: TrendingUp, lock: Lock, accessibility: Accessibility, key: KeyRound, headset: Headset,
 }
 
 export const Icon: React.FC<{ name?: string | null; size?: number }> = ({ name, size = 24 }) => {
