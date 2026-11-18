@@ -22,7 +22,7 @@ import store
 def pool() -> list[dict]:
     raw = C.E("ALEX_MAILBOXES", "")
     if raw:
-        boxes = json.loads(raw)
+        boxes = [b for b in json.loads(raw) if b.get("send", True)]  # "send": false = read-only inbox
     else:
         boxes = [{"from": C.MAIL_FROM, "user": C.E("SMTP_USER", "") or C.MAIL_FROM.split("<")[-1].strip(">"),
                   "warmup_start": C.WARMUP_START, "daily_cap": C.DAILY_CAP,

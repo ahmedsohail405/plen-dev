@@ -59,13 +59,14 @@ except smtplib.SMTPAuthenticationError as e:
 except Exception as e:  # noqa: BLE001
     line(False, "SMTP login", str(e)[:200])
 
-try:
-    with imaplib.IMAP4_SSL(C.IMAP_HOST or "outlook.office365.com") as m:
-        replies.imap_login(m)
-        typ, data = m.select("INBOX", readonly=True)
-        line(True, "IMAP login", f"{data[0].decode()} messages in inbox")
-except Exception as e:  # noqa: BLE001
-    line(False, "IMAP login", f"{str(e)[:160]}\n     -> Microsoft 365 needs OAuth for IMAP (MS_AUTH=oauth) and IMAP enabled on the mailbox")
+for box in replies.inboxes():  # every inbox Alex reads, including read-only ones like info@
+    try:
+        with imaplib.IMAP4_SSL(box.get("imap_host") or C.IMAP_HOST or "outlook.office365.com") as m:
+            replies.imap_login(m, box)
+            typ, data = m.select(box.get("folder", "INBOX"), readonly=True)
+            line(True, f"IMAP login {box['user']}", f"{data[0].decode()} messages in inbox")
+    except Exception as e:  # noqa: BLE001
+        line(False, f"IMAP login {box['user']}", f"{str(e)[:160]}\n     -> Microsoft 365 needs OAuth for IMAP and IMAP enabled on the mailbox")
 
 mx = dns(domain, "MX")
 line(any("outlook.com" in r for r in mx), "MX points to Microsoft 365", ", ".join(mx) or "none")

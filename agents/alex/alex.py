@@ -499,7 +499,7 @@ def cmd_inbox(a):
         p = match_prospect(msg)
         if p:
             log(p["id"], handle_reply(p, msg["text"], msg["from"], msg["subject"]))
-        else:
+        elif msg.get("inbox") in {b["id"] for b in mailboxes.pool()}:  # don't log other mail in shared inboxes
             log("unmatched reply from", msg["from"], msg["subject"])
 
 
