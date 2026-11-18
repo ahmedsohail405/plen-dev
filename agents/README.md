@@ -38,6 +38,8 @@ PLENDEV_EMAIL=info@plendev.com
 PLENDEV_PHONE=
 PLENDEV_BOOKING_URL=
 PAGESPEED_API_KEY=              # free, Google Cloud console > PageSpeed Insights API
+# Optional. The visual audit (phone + desktop screenshots in headless Chromium) is on by default.
+# Set VISUAL_AUDIT=0 to turn it off; VISUAL_TIMEOUT_MS is how long to wait for a slow page (default 45000).
 
 # ---- inbound audit server
 PUBLIC_BASE_URL=https://<audit-domain>
