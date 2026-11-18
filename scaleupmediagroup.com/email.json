@@ -1,0 +1,7 @@
+{
+  "to": "test@example.com",
+  "subject": "Your website audit: scaleupmediagroup.com scored 73/100 (7 serious issues)",
+  "html_file": "email.html",
+  "text_file": "email.txt",
+  "status": "awaiting_approval"
+}

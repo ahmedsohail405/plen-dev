@@ -1,0 +1,71 @@
+Hi Ahmed,
+
+Thanks for requesting a website audit. We ran a deep review of scaleupmediagroup.com: 15 pages and more than 100 checks covering how it looks and works on a real phone, speed, security, how well it turns visitors into customers, design, accessibility (ADA) and how well it is set up to rank on Google.
+
+OVERALL SCORE: 73/100 (grade C) · 30 issues, 0 critical, 7 high
+
+- Conversion & trust: 63/100
+- Speed & Core Web Vitals: 53/100
+- Mobile experience: 92/100
+- Security & privacy: 64/100
+- SEO structure & keywords: 76/100
+- Technical SEO: 71/100
+- Design & technology age: 74/100
+- On-page SEO: 71/100
+- Accessibility (ADA): 92/100
+- Local SEO: 89/100
+- AI search readiness: 100/100
+
+THE 5 BIGGEST PROBLEMS
+
+1. No call or booking button on the first phone screen
+   When the page opens on a phone, there's no tap-to-call, 'book' or 'get a quote' button in view; the first one is 5.5 screens down.
+   What it costs you: Most local searches happen on phones; if the next step isn't visible, visitors bounce.
+
+2. 2 oversized image files (1.5 MB)
+   2 images are over 300 KB each, 1.5 MB in total, on the homepage alone.
+   What it costs you: Big images are the most common reason a page loads slowly on a phone.
+
+3. Main content takes 7.3s to appear on a phone
+   Largest Contentful Paint measured at 7.3s on a mid-range phone with slow 4G (Google's 'good' is under 2.5s).
+   What it costs you: Over half of mobile visitors leave a page that takes more than 3 seconds to show anything useful.
+
+4. No pages for 4 of the 8 areas you mention
+   The site mentions Brooklyn, Queens, Manhattan, Bronx, Staten Island, Long Island but has no page built to rank in Manhattan, Bronx, Staten Island, Suffolk.
+   What it costs you: Google ranks pages, not businesses. Without a page for an area, you rarely show up when people there search.
+
+5. 2 pages hidden from Google (noindex)
+   These pages are excluded from Google.
+
+Full report with all 30 issues: 
+
+WHY WE'D BUILD YOU A NEW SITE INSTEAD OF PATCHING THIS ONE
+
+- The problems aren't in one place: 3 of 11 areas score below 70 (Conversion & trust, Speed & Core Web Vitals, Security & privacy). Fixing them one by one means touching almost every page and template.
+- The site is built on outdated foundations (an outdated CMS, heavy page-builder code). Patching old code usually costs more than building new, and the result still looks dated.
+- We found 3 security and privacy gaps. A modern build closes them by default instead of one at a time.
+- 4 conversion problems mean visitors who find you are leaving without calling or booking. A new site can be designed around turning visitors into customers.
+- Accessibility gaps create ADA lawsuit risk. A new build can meet WCAG 2.1 AA from day one.
+
+
+WHAT YOUR NEW SITE WOULD INCLUDE
+- Designed mobile-first and built to load fast
+- Secure by default: HTTPS, security headers and up-to-date code
+- Built to convert: click-to-call, online booking, reviews and clear calls to action
+- Accessible (WCAG 2.1 AA) to reduce ADA risk
+- Ready for Google and AI search tools from day one
+- An easy editor so you can change text and photos yourself
+
+SEE YOUR NEW SITE BEFORE YOU DECIDE
+Reply to this email and we'll design 2-3 free homepage concepts for scaleupmediagroup.com, no strings attached.
+Or book a 15-minute call: https://plendev.com/book
+
+Questions? Reply here or write to info@plendev.com.
+
+Alex H
+Sales, Plen Dev
+https://plendev.com
+
+--
+You received this because you requested a website audit at https://plendev.com. Reply "unsubscribe" and we won't email you again.
+Plen Dev · info@plendev.com

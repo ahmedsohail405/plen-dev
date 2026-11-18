@@ -1,0 +1,1479 @@
+{
+  "generated_at": "2026-11-18T03:48:52+00:00",
+  "url": "https://scaleupmediagroup.com/",
+  "site_host": "scaleupmediagroup.com",
+  "pages_crawled": 15,
+  "score": {
+    "overall": 73,
+    "average": 73,
+    "cap_reason": "",
+    "categories": {
+      "conversion": 63,
+      "performance": 53,
+      "mobile": 92,
+      "security": 64,
+      "seo_structure": 76,
+      "technical": 71,
+      "design": 74,
+      "on_page": 71,
+      "accessibility": 92,
+      "local_seo": 89,
+      "ai_readiness": 100
+    }
+  },
+  "pagespeed": {
+    "mobile": {
+      "error": "HTTP 429"
+    },
+    "desktop": {
+      "error": "HTTP 429"
+    }
+  },
+  "speed_measured": true,
+  "visual": {
+    "legend": [
+      {
+        "n": 1,
+        "text": "Tap target 20x20px",
+        "id": "tap_targets_small",
+        "where": "close-up"
+      }
+    ],
+    "clips": [
+      {
+        "file": "clip-1-marked.jpg",
+        "marks": [
+          1
+        ]
+      }
+    ],
+    "mobile": "shot-mobile-marked.jpg",
+    "desktop": "shot-desktop-marked.jpg",
+    "measured": {
+      "lcp_s": 7.3,
+      "cls": 0.01,
+      "bytes": 2983757,
+      "requests": 108,
+      "timed_out": false
+    }
+  },
+  "seo": {
+    "service": "digital marketing agency",
+    "areas": [
+      "brooklyn",
+      "queens",
+      "manhattan",
+      "bronx",
+      "staten island",
+      "long island",
+      "nassau",
+      "suffolk",
+      "new york city",
+      "williamsburg",
+      "park slope",
+      "bay ridge"
+    ],
+    "searches": [
+      {
+        "query": "digital marketing agency brooklyn",
+        "page": "https://scaleupmediagroup.com/digital-marketing-agency-brooklyn-ny/"
+      },
+      {
+        "query": "digital marketing agency in brooklyn",
+        "page": "https://scaleupmediagroup.com/digital-marketing-agency-brooklyn-ny/"
+      },
+      {
+        "query": "digital marketing agency queens",
+        "page": "https://scaleupmediagroup.com/digital-marketing-agency-queens-ny/"
+      },
+      {
+        "query": "digital marketing agency manhattan",
+        "page": ""
+      }
+    ],
+    "page_count": 20,
+    "area_pages": {
+      "brooklyn": [
+        "https://scaleupmediagroup.com/google-ads-management-new-york/",
+        "https://scaleupmediagroup.com/ctv-advertising-new-york/",
+        "https://scaleupmediagroup.com/digital-marketing-agency-brooklyn-ny/"
+      ],
+      "queens": [
+        "https://scaleupmediagroup.com/digital-marketing-agency-queens-ny/"
+      ],
+      "manhattan": [],
+      "bronx": [],
+      "staten island": [],
+      "long island": [
+        "https://scaleupmediagroup.com/google-ads-management-new-york/",
+        "https://scaleupmediagroup.com/ctv-advertising-new-york/",
+        "https://scaleupmediagroup.com/local-seo-agency-long-island-new-york/"
+      ],
+      "nassau": [
+        "https://scaleupmediagroup.com/digital-marketing-agency-nassau-county-ny/"
+      ],
+      "suffolk": []
+    }
+  },
+  "checklist": [
+    {
+      "id": "no_https",
+      "label": "Secure HTTPS connection",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_http_redirect",
+      "label": "Redirects http to https",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_hsts",
+      "label": "Forces HTTPS (HSTS)",
+      "ok": false,
+      "severity": "medium"
+    },
+    {
+      "id": "no_csp",
+      "label": "Content Security Policy",
+      "ok": false,
+      "severity": "medium"
+    },
+    {
+      "id": "no_clickjack_protection",
+      "label": "Clickjacking protection",
+      "ok": false,
+      "severity": "medium"
+    },
+    {
+      "id": "outdated_cms",
+      "label": "Up-to-date CMS",
+      "ok": false,
+      "severity": "low"
+    },
+    {
+      "id": "outdated_js_libs",
+      "label": "No outdated JavaScript libraries",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_privacy_policy",
+      "label": "Privacy policy",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_viewport",
+      "label": "Mobile viewport set",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "mobile_overflow",
+      "label": "No sideways scrolling on phones",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "small_text_mobile",
+      "label": "Readable text size on phones",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "tap_targets_small",
+      "label": "Tap targets big enough",
+      "ok": false,
+      "severity": "medium"
+    },
+    {
+      "id": "mobile_overlay",
+      "label": "No pop-up covering the phone screen",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_cta_first_screen_mobile",
+      "label": "Call/book button on the first phone screen",
+      "ok": false,
+      "severity": "high"
+    },
+    {
+      "id": "no_cta_first_screen_desktop",
+      "label": "Call/book button on the first desktop screen",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "lcp_measured",
+      "label": "Main content shows within 2.5s on a phone",
+      "ok": false,
+      "severity": "high"
+    },
+    {
+      "id": "cls_measured",
+      "label": "Page doesn't jump while loading",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "page_weight",
+      "label": "Homepage under 2.5 MB",
+      "ok": false,
+      "severity": "medium"
+    },
+    {
+      "id": "heavy_images",
+      "label": "No oversized image files",
+      "ok": false,
+      "severity": "high"
+    },
+    {
+      "id": "broken_images",
+      "label": "No broken images",
+      "ok": false,
+      "severity": "high"
+    },
+    {
+      "id": "stretched_images",
+      "label": "No stretched images",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "blurry_images",
+      "label": "No blurry images",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "stock_photos",
+      "label": "Real photos, not stock",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "js_errors",
+      "label": "No JavaScript errors",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_robots",
+      "label": "robots.txt present",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_sitemap",
+      "label": "XML sitemap",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "broken_pages",
+      "label": "No broken internal links",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "noindex",
+      "label": "No pages accidentally hidden from Google",
+      "ok": false,
+      "severity": "high"
+    },
+    {
+      "id": "no_canonical",
+      "label": "Canonical tags",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "mixed_content",
+      "label": "No insecure resources",
+      "ok": false,
+      "severity": "medium"
+    },
+    {
+      "id": "no_analytics",
+      "label": "Analytics installed",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "dup_titles",
+      "label": "Unique page titles",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_og",
+      "label": "Social sharing tags",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_location_pages",
+      "label": "Pages for each area served",
+      "ok": false,
+      "severity": "high"
+    },
+    {
+      "id": "keyword_gaps",
+      "label": "Pages for what customers search",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "home_no_location",
+      "label": "Area named in homepage title",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "too_few_pages",
+      "label": "Enough pages to rank",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "heading_hierarchy",
+      "label": "Headings in order",
+      "ok": false,
+      "severity": "low"
+    },
+    {
+      "id": "near_duplicate_pages",
+      "label": "No duplicate pages",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "cannibalization",
+      "label": "No pages competing for one keyword",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "orphan_pages",
+      "label": "All pages linked internally",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "ugly_urls",
+      "label": "Search-friendly page addresses",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_localbusiness_schema",
+      "label": "LocalBusiness schema",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_phone",
+      "label": "Phone number on homepage",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_address",
+      "label": "Street address on site",
+      "ok": false,
+      "severity": "medium"
+    },
+    {
+      "id": "no_map",
+      "label": "Google Map",
+      "ok": false,
+      "severity": "low"
+    },
+    {
+      "id": "no_cta",
+      "label": "Clear call to action",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_form",
+      "label": "Contact or quote form",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_reviews",
+      "label": "Reviews or testimonials",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_verified_reviews",
+      "label": "Verifiable reviews (Google, Yelp)",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_online_booking",
+      "label": "Online booking",
+      "ok": false,
+      "severity": "medium"
+    },
+    {
+      "id": "no_trust_badges",
+      "label": "Trust signals",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "inputs_no_labels",
+      "label": "Form fields labeled",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "links_no_text",
+      "label": "Links have readable names",
+      "ok": false,
+      "severity": "medium"
+    },
+    {
+      "id": "zoom_disabled",
+      "label": "Zoom allowed on phones",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "old_copyright_year",
+      "label": "Content kept up to date",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "legacy_tech",
+      "label": "Modern code",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_llms_txt",
+      "label": "llms.txt for AI search",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "ai_bots_blocked",
+      "label": "AI search engines allowed",
+      "ok": true,
+      "severity": null
+    },
+    {
+      "id": "no_structured_data",
+      "label": "Structured data",
+      "ok": true,
+      "severity": null
+    }
+  ],
+  "counts": {
+    "critical": 0,
+    "high": 7,
+    "medium": 12,
+    "low": 11
+  },
+  "findings": [
+    {
+      "category": "conversion",
+      "id": "no_cta_first_screen_mobile",
+      "severity": "high",
+      "title": "No call or booking button on the first phone screen",
+      "detail": "When the page opens on a phone, there's no tap-to-call, 'book' or 'get a quote' button in view; the first one is 5.5 screens down.",
+      "fix": "Put a sticky call/book button in the mobile header.",
+      "pages": [],
+      "impact": "Most local searches happen on phones; if the next step isn't visible, visitors bounce.",
+      "evidence": null
+    },
+    {
+      "category": "performance",
+      "id": "heavy_images",
+      "severity": "high",
+      "title": "2 oversized image files (1.5 MB)",
+      "detail": "2 images are over 300 KB each, 1.5 MB in total, on the homepage alone.",
+      "fix": "Compress and serve responsive WebP/AVIF.",
+      "pages": [
+        "https://scaleupmediagroup.com/wp-content/uploads/2026/06/Ahmed-Sohail-digital-marketing-agency-New-York-Scale-Up-Media-Group.png",
+        "https://scaleupmediagroup.com/wp-content/uploads/2026/06/Ahmed-Sohail-digital-marketing-agency-New-York-Scale-Up-Media-Group-768x791.png"
+      ],
+      "impact": "Big images are the most common reason a page loads slowly on a phone.",
+      "evidence": null
+    },
+    {
+      "category": "performance",
+      "id": "lcp_measured",
+      "severity": "high",
+      "title": "Main content takes 7.3s to appear on a phone",
+      "detail": "Largest Contentful Paint measured at 7.3s on a mid-range phone with slow 4G (Google's 'good' is under 2.5s).",
+      "fix": "Rebuild with optimized images, fonts and fewer scripts.",
+      "pages": [],
+      "impact": "Over half of mobile visitors leave a page that takes more than 3 seconds to show anything useful.",
+      "evidence": null
+    },
+    {
+      "category": "seo_structure",
+      "id": "no_location_pages",
+      "severity": "high",
+      "title": "No pages for 4 of the 8 areas you mention",
+      "detail": "The site mentions Brooklyn, Queens, Manhattan, Bronx, Staten Island, Long Island but has no page built to rank in Manhattan, Bronx, Staten Island, Suffolk.",
+      "fix": "Create one location page per area with unique content, map, reviews and LocalBusiness schema.",
+      "pages": [],
+      "impact": "Google ranks pages, not businesses. Without a page for an area, you rarely show up when people there search.",
+      "evidence": null
+    },
+    {
+      "category": "technical",
+      "id": "noindex",
+      "severity": "high",
+      "title": "2 pages hidden from Google (noindex)",
+      "detail": "These pages are excluded from Google.",
+      "fix": "Remove noindex from pages that should rank.",
+      "pages": [
+        "https://scaleupmediagroup.com/dental-implant-marketing-new-york/",
+        "https://scaleupmediagroup.com/commercial-cleaning-marketing-nyc/"
+      ],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "design",
+      "id": "broken_images",
+      "severity": "high",
+      "title": "5 broken images",
+      "detail": "These images fail to load and show as empty boxes or broken icons.",
+      "fix": "Replace or remove them.",
+      "pages": [
+        "https://richwarepro.com/wp-content/uploads/2025/08/HubSpot-CRM-.png",
+        "https://richwarepro.com/wp-content/uploads/2025/08/QuickBooks-.png",
+        "https://richwarepro.com/wp-content/uploads/2025/08/Salesforce.png",
+        "https://richwarepro.com/wp-content/uploads/2025/08/TaxAct-Professional.png",
+        "https://richwarepro.com/wp-content/uploads/2025/08/Xero.png"
+      ],
+      "impact": "Broken images make a business look closed or careless.",
+      "evidence": null
+    },
+    {
+      "category": "on_page",
+      "id": "missing_h1",
+      "severity": "high",
+      "title": "Pages with no H1 heading (1)",
+      "detail": "Search engines use the H1 to understand the topic.",
+      "fix": "Add one descriptive H1 per page.",
+      "pages": [
+        "https://scaleupmediagroup.com/blogs/"
+      ],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "conversion",
+      "id": "no_online_booking",
+      "severity": "medium",
+      "title": "No way to book online",
+      "detail": "Visitors can't pick a time or request an appointment directly on the site.",
+      "fix": "Add an online booking or appointment-request flow.",
+      "pages": [],
+      "impact": "People searching at night or on weekends can't book, so they book with whoever lets them.",
+      "evidence": null
+    },
+    {
+      "category": "conversion",
+      "id": "form_too_long",
+      "severity": "medium",
+      "title": "Lead forms ask for too much",
+      "detail": "Some forms have more than 6 fields.",
+      "fix": "Cut forms to name, phone/email and one question.",
+      "pages": [
+        "https://scaleupmediagroup.com/",
+        "https://scaleupmediagroup.com/google-ads-management-new-york/",
+        "https://scaleupmediagroup.com/facebook-ads-management-new-york/",
+        "https://scaleupmediagroup.com/ctv-advertising-new-york/",
+        "https://scaleupmediagroup.com/chatgpt-ads-management-new-york/",
+        "https://scaleupmediagroup.com/local-seo-agency-long-island-new-york/",
+        "https://scaleupmediagroup.com/seo-agency-new-york/",
+        "https://scaleupmediagroup.com/home-health-care-marketing-new-york/",
+        "https://scaleupmediagroup.com/med-spa-marketing-new-york/",
+        "https://scaleupmediagroup.com/dental-implant-marketing-new-york/"
+      ],
+      "impact": "Every extra field lowers the number of people who finish the form.",
+      "evidence": null
+    },
+    {
+      "category": "mobile",
+      "id": "tap_targets_small",
+      "severity": "medium",
+      "title": "9 buttons or links are too small to tap",
+      "detail": "9 tappable elements are smaller than 24x24px, the minimum in the accessibility standard (WCAG 2.2).",
+      "fix": "Make every tap target at least 44x44px.",
+      "pages": [],
+      "impact": "People tap the wrong thing or give up, especially on menus and phone links.",
+      "evidence": {
+        "marker": 1,
+        "where": "close-up"
+      }
+    },
+    {
+      "category": "performance",
+      "id": "page_weight",
+      "severity": "medium",
+      "title": "The homepage downloads 3.0 MB on a phone",
+      "detail": "108 files, 3.0 MB in total (1.8 MB of images). A fast page is usually under 1.5 MB.",
+      "fix": "Cut page weight: compress images, drop unused scripts and plugins.",
+      "pages": [],
+      "impact": "Heavy pages are slow on mobile data and cost visitors money on limited plans.",
+      "evidence": null
+    },
+    {
+      "category": "security",
+      "id": "no_hsts",
+      "severity": "medium",
+      "title": "No HSTS header",
+      "detail": "The site doesn't force browsers to always use the secure connection.",
+      "fix": "Add Strict-Transport-Security: max-age=31536000; includeSubDomains.",
+      "pages": [],
+      "impact": "Visitors on public Wi-Fi can be silently downgraded to an insecure connection.",
+      "evidence": null
+    },
+    {
+      "category": "security",
+      "id": "no_csp",
+      "severity": "medium",
+      "title": "No Content Security Policy",
+      "detail": "Nothing limits which scripts can run on the site.",
+      "fix": "Add a Content-Security-Policy header.",
+      "pages": [],
+      "impact": "If a plugin or ad script is compromised, it can inject spam, redirects or card skimmers.",
+      "evidence": null
+    },
+    {
+      "category": "security",
+      "id": "no_clickjack_protection",
+      "severity": "medium",
+      "title": "No clickjacking protection",
+      "detail": "Any other website can load this site inside a hidden frame.",
+      "fix": "Add X-Frame-Options: SAMEORIGIN or CSP frame-ancestors.",
+      "pages": [],
+      "impact": "Attackers can trick visitors into clicking buttons on your site without knowing it.",
+      "evidence": null
+    },
+    {
+      "category": "technical",
+      "id": "mixed_content",
+      "severity": "medium",
+      "title": "Insecure (http://) resources on HTTPS pages",
+      "detail": "Can trigger browser security warnings.",
+      "fix": "Load every asset over https.",
+      "pages": [
+        "https://scaleupmediagroup.com/"
+      ],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "design",
+      "id": "page_builder_bloat",
+      "severity": "medium",
+      "title": "Heavy page-builder code (Elementor)",
+      "detail": "The site is built with Elementor, which adds a lot of extra code to every page.",
+      "fix": "Rebuild with lean, custom components.",
+      "pages": [],
+      "impact": "Page-builder sites are typically much slower and harder to rank than custom-built ones.",
+      "evidence": null
+    },
+    {
+      "category": "on_page",
+      "id": "img_alt",
+      "severity": "medium",
+      "title": "Images missing alt text (15)",
+      "detail": "Hurts accessibility and image search visibility.",
+      "fix": "Add short descriptive alt text to every meaningful image.",
+      "pages": [
+        "https://scaleupmediagroup.com/",
+        "https://scaleupmediagroup.com/google-ads-management-new-york/",
+        "https://scaleupmediagroup.com/facebook-ads-management-new-york/",
+        "https://scaleupmediagroup.com/ctv-advertising-new-york/",
+        "https://scaleupmediagroup.com/chatgpt-ads-management-new-york/",
+        "https://scaleupmediagroup.com/local-seo-agency-long-island-new-york/",
+        "https://scaleupmediagroup.com/seo-agency-new-york/",
+        "https://scaleupmediagroup.com/home-health-care-marketing-new-york/",
+        "https://scaleupmediagroup.com/med-spa-marketing-new-york/",
+        "https://scaleupmediagroup.com/dental-implant-marketing-new-york/"
+      ],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "accessibility",
+      "id": "links_no_text",
+      "severity": "medium",
+      "title": "Links and buttons with no readable name",
+      "detail": "Icon-only links/buttons have no text a screen reader can announce.",
+      "fix": "Add aria-labels to icon links and buttons.",
+      "pages": [
+        "https://scaleupmediagroup.com/",
+        "https://scaleupmediagroup.com/google-ads-management-new-york/",
+        "https://scaleupmediagroup.com/facebook-ads-management-new-york/",
+        "https://scaleupmediagroup.com/ctv-advertising-new-york/",
+        "https://scaleupmediagroup.com/chatgpt-ads-management-new-york/",
+        "https://scaleupmediagroup.com/local-seo-agency-long-island-new-york/",
+        "https://scaleupmediagroup.com/seo-agency-new-york/",
+        "https://scaleupmediagroup.com/home-health-care-marketing-new-york/",
+        "https://scaleupmediagroup.com/med-spa-marketing-new-york/",
+        "https://scaleupmediagroup.com/dental-implant-marketing-new-york/"
+      ],
+      "impact": "Blind visitors hear 'link, link, button' and can't navigate, which is a common ADA complaint.",
+      "evidence": null
+    },
+    {
+      "category": "local_seo",
+      "id": "no_address",
+      "severity": "medium",
+      "title": "No street address found on the site",
+      "detail": "Google needs to match your site to your Google Business Profile.",
+      "fix": "Add the full address in the footer and on a contact page.",
+      "pages": [],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "conversion",
+      "id": "no_favicon",
+      "severity": "low",
+      "title": "No favicon",
+      "detail": "Looks unfinished in browser tabs and Google results.",
+      "fix": "Add a favicon and apple-touch-icon.",
+      "pages": [],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "performance",
+      "id": "old_image_formats",
+      "severity": "low",
+      "title": "8 images use old JPEG/PNG formats",
+      "detail": "Modern WebP/AVIF files are typically 25-50% smaller for the same quality.",
+      "fix": "Convert images to WebP/AVIF.",
+      "pages": [
+        "https://scaleupmediagroup.com/wp-content/uploads/2025/12/Scale-Up-Media-Group-main-logo.png",
+        "https://scaleupmediagroup.com/wp-content/uploads/2026/06/ChatGPT-ads-management-agency-Ne.png",
+        "https://scaleupmediagroup.com/wp-content/uploads/2026/06/Ahmed-Sohail-digital-marketing-agency-New-York-Scale-Up-Media-Group.png",
+        "https://scaleupmediagroup.com/wp-content/uploads/2026/07/Ahmed-Sohail-Digital-Marketing-Agency-New-York-Scale-Up-Media-Group-1024x682.jpg",
+        "https://scaleupmediagroup.com/wp-content/uploads/2026/07/featured-brooklyn-ctv-768x403.png",
+        "https://scaleupmediagroup.com/wp-content/uploads/2025/12/cropped-Scale-Up-Media-Group.png",
+        "https://scaleupmediagroup.com/wp-content/uploads/2026/06/Ahmed-Sohail-digital-marketing-agency-New-York-Scale-Up-Media-Group-768x791.png",
+        "https://scaleupmediagroup.com/wp-content/uploads/2026/07/Ahmed-Sohail-Digital-Marketing-Agency-New-York-Scale-Up-Media-Group-768x512.jpg"
+      ],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "security",
+      "id": "no_xcto",
+      "severity": "low",
+      "title": "Missing X-Content-Type-Options header",
+      "detail": "Browsers may guess file types, which opens the door to some script attacks.",
+      "fix": "Add X-Content-Type-Options: nosniff.",
+      "pages": [],
+      "impact": "A small but easy-to-close security gap.",
+      "evidence": null
+    },
+    {
+      "category": "security",
+      "id": "server_version_exposed",
+      "severity": "low",
+      "title": "Server software versions are public",
+      "detail": "The server announces exactly what it runs (x-powered-by: PHP/8.5.12).",
+      "fix": "Hide version numbers in server config.",
+      "pages": [],
+      "impact": "Attackers use these version numbers to find known exploits for your server.",
+      "evidence": null
+    },
+    {
+      "category": "security",
+      "id": "outdated_cms",
+      "severity": "low",
+      "title": "WordPress version is publicly visible",
+      "detail": "The page code announces 'WordPress 7.0.2'.",
+      "fix": "Remove the generator meta tag.",
+      "pages": [],
+      "impact": "Makes it easier for automated bots to target the site.",
+      "evidence": null
+    },
+    {
+      "category": "security",
+      "id": "no_cookie_consent",
+      "severity": "low",
+      "title": "Tracking runs with no cookie notice",
+      "detail": "Analytics or ad pixels load without any cookie notice or consent option.",
+      "fix": "Add a consent banner wired to Google Consent Mode.",
+      "pages": [],
+      "impact": "A growing legal risk under state privacy laws, and Google now limits ad data without consent.",
+      "evidence": null
+    },
+    {
+      "category": "seo_structure",
+      "id": "heading_hierarchy",
+      "severity": "low",
+      "title": "Heading structure is out of order on 11 pages",
+      "detail": "Headings skip levels (for example H1 straight to H4), which is usually headings used for styling rather than structure.",
+      "fix": "Use H1 > H2 > H3 in order.",
+      "pages": [
+        "https://scaleupmediagroup.com/google-ads-management-new-york/",
+        "https://scaleupmediagroup.com/facebook-ads-management-new-york/",
+        "https://scaleupmediagroup.com/ctv-advertising-new-york/",
+        "https://scaleupmediagroup.com/chatgpt-ads-management-new-york/",
+        "https://scaleupmediagroup.com/local-seo-agency-long-island-new-york/",
+        "https://scaleupmediagroup.com/home-health-care-marketing-new-york/",
+        "https://scaleupmediagroup.com/med-spa-marketing-new-york/",
+        "https://scaleupmediagroup.com/dental-implant-marketing-new-york/",
+        "https://scaleupmediagroup.com/commercial-cleaning-marketing-nyc/",
+        "https://scaleupmediagroup.com/digital-marketing-agency-queens-ny/"
+      ],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "seo_structure",
+      "id": "no_service_schema",
+      "severity": "low",
+      "title": "No Service schema",
+      "detail": "Structured data describing each service helps Google and AI search match you to service queries.",
+      "fix": "Add Service schema to each service page.",
+      "pages": [],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "technical",
+      "id": "dead_menu_links",
+      "severity": "low",
+      "title": "Menu items that go nowhere",
+      "detail": "2 link(s) in the header menu point to '#' and don't open a page.",
+      "fix": "Point every menu item to a real page.",
+      "pages": [
+        "https://scaleupmediagroup.com/",
+        "https://scaleupmediagroup.com/google-ads-management-new-york/",
+        "https://scaleupmediagroup.com/facebook-ads-management-new-york/",
+        "https://scaleupmediagroup.com/ctv-advertising-new-york/",
+        "https://scaleupmediagroup.com/chatgpt-ads-management-new-york/",
+        "https://scaleupmediagroup.com/local-seo-agency-long-island-new-york/",
+        "https://scaleupmediagroup.com/seo-agency-new-york/",
+        "https://scaleupmediagroup.com/home-health-care-marketing-new-york/",
+        "https://scaleupmediagroup.com/med-spa-marketing-new-york/",
+        "https://scaleupmediagroup.com/dental-implant-marketing-new-york/"
+      ],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "on_page",
+      "id": "title_length",
+      "severity": "low",
+      "title": "Title tags too long or too short (4)",
+      "detail": "Titles over ~60 chars get cut off in Google.",
+      "fix": "Keep titles between 30 and 60 characters.",
+      "pages": [
+        "https://scaleupmediagroup.com/",
+        "https://scaleupmediagroup.com/google-ads-management-new-york/",
+        "https://scaleupmediagroup.com/ctv-advertising-new-york/",
+        "https://scaleupmediagroup.com/blogs/"
+      ],
+      "impact": "",
+      "evidence": null
+    },
+    {
+      "category": "local_seo",
+      "id": "no_map",
+      "severity": "low",
+      "title": "No Google Map embedded",
+      "detail": "A map on the contact page reinforces your location.",
+      "fix": "Embed your Google Business Profile map.",
+      "pages": [],
+      "impact": "",
+      "evidence": null
+    }
+  ],
+  "top_issues": [
+    {
+      "category": "conversion",
+      "id": "no_cta_first_screen_mobile",
+      "severity": "high",
+      "title": "No call or booking button on the first phone screen",
+      "detail": "When the page opens on a phone, there's no tap-to-call, 'book' or 'get a quote' button in view; the first one is 5.5 screens down.",
+      "fix": "Put a sticky call/book button in the mobile header.",
+      "pages": [],
+      "impact": "Most local searches happen on phones; if the next step isn't visible, visitors bounce.",
+      "evidence": null
+    },
+    {
+      "category": "performance",
+      "id": "heavy_images",
+      "severity": "high",
+      "title": "2 oversized image files (1.5 MB)",
+      "detail": "2 images are over 300 KB each, 1.5 MB in total, on the homepage alone.",
+      "fix": "Compress and serve responsive WebP/AVIF.",
+      "pages": [
+        "https://scaleupmediagroup.com/wp-content/uploads/2026/06/Ahmed-Sohail-digital-marketing-agency-New-York-Scale-Up-Media-Group.png",
+        "https://scaleupmediagroup.com/wp-content/uploads/2026/06/Ahmed-Sohail-digital-marketing-agency-New-York-Scale-Up-Media-Group-768x791.png"
+      ],
+      "impact": "Big images are the most common reason a page loads slowly on a phone.",
+      "evidence": null
+    },
+    {
+      "category": "performance",
+      "id": "lcp_measured",
+      "severity": "high",
+      "title": "Main content takes 7.3s to appear on a phone",
+      "detail": "Largest Contentful Paint measured at 7.3s on a mid-range phone with slow 4G (Google's 'good' is under 2.5s).",
+      "fix": "Rebuild with optimized images, fonts and fewer scripts.",
+      "pages": [],
+      "impact": "Over half of mobile visitors leave a page that takes more than 3 seconds to show anything useful.",
+      "evidence": null
+    },
+    {
+      "category": "seo_structure",
+      "id": "no_location_pages",
+      "severity": "high",
+      "title": "No pages for 4 of the 8 areas you mention",
+      "detail": "The site mentions Brooklyn, Queens, Manhattan, Bronx, Staten Island, Long Island but has no page built to rank in Manhattan, Bronx, Staten Island, Suffolk.",
+      "fix": "Create one location page per area with unique content, map, reviews and LocalBusiness schema.",
+      "pages": [],
+      "impact": "Google ranks pages, not businesses. Without a page for an area, you rarely show up when people there search.",
+      "evidence": null
+    },
+    {
+      "category": "technical",
+      "id": "noindex",
+      "severity": "high",
+      "title": "2 pages hidden from Google (noindex)",
+      "detail": "These pages are excluded from Google.",
+      "fix": "Remove noindex from pages that should rank.",
+      "pages": [
+        "https://scaleupmediagroup.com/dental-implant-marketing-new-york/",
+        "https://scaleupmediagroup.com/commercial-cleaning-marketing-nyc/"
+      ],
+      "impact": "",
+      "evidence": null
+    }
+  ],
+  "rebuild_case": [
+    "The problems aren't in one place: 3 of 11 areas score below 70 (Conversion & trust, Speed & Core Web Vitals, Security & privacy). Fixing them one by one means touching almost every page and template.",
+    "The site is built on outdated foundations (an outdated CMS, heavy page-builder code). Patching old code usually costs more than building new, and the result still looks dated.",
+    "We found 3 security and privacy gaps. A modern build closes them by default instead of one at a time.",
+    "4 conversion problems mean visitors who find you are leaving without calling or booking. A new site can be designed around turning visitors into customers.",
+    "Accessibility gaps create ADA lawsuit risk. A new build can meet WCAG 2.1 AA from day one."
+  ],
+  "total_issues": 30,
+  "pages": [
+    {
+      "url": "https://scaleupmediagroup.com/",
+      "status": 200,
+      "title": "Digital Marketing Agency New York | Google Ads, CTV, ChatGPT Ads | Scale Up Media Group",
+      "meta_description": "Scale Up Media Group is a performance marketing agency in New York helping businesses in Long Island, Brooklyn, and Nassau County grow with Google Ads, Facebook Ads, CTV, ChatGPT Ads, and SEO.",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/",
+      "h1": [
+        "New York's Performance Marketing Agency That Actually Moves the Needle"
+      ],
+      "h2_count": 12,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "Place",
+        "LocalBusiness",
+        "Organization",
+        "WebSite",
+        "ImageObject",
+        "WebPage"
+      ],
+      "img_total": 34,
+      "img_no_alt": 5,
+      "word_count": 1499,
+      "mixed_content": true,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 1107,
+      "bytes": 184586
+    },
+    {
+      "url": "https://scaleupmediagroup.com/google-ads-management-new-york/",
+      "status": 200,
+      "title": "Google Ads Management Agency New York | Long Island & Brooklyn | Scale Up Media Group",
+      "meta_description": "Scale Up Media Group manages Google Ads campaigns for businesses across New York, Long Island, Brooklyn, and Nassau County. Data-driven PPC management built to generate real leads and measurable ROI.",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/google-ads-management-new-york/",
+      "h1": [
+        "Google Ads Management Agency in New York That Turns Clicks Into Customers"
+      ],
+      "h2_count": 6,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 14,
+      "img_no_alt": 5,
+      "word_count": 931,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 601,
+      "bytes": 149423
+    },
+    {
+      "url": "https://scaleupmediagroup.com/facebook-ads-management-new-york/",
+      "status": 200,
+      "title": "Facebook Ads Management - Scale Up Media Group",
+      "meta_description": "Facebook and Instagram are still two of the most powerful advertising platforms available to New York businesses, but only when campaigns are built with the",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/facebook-ads-management-new-york/",
+      "h1": [
+        "Facebook Ads Management Agency in New York Built for Lead Generation"
+      ],
+      "h2_count": 6,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 14,
+      "img_no_alt": 6,
+      "word_count": 856,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 579,
+      "bytes": 148298
+    },
+    {
+      "url": "https://scaleupmediagroup.com/ctv-advertising-new-york/",
+      "status": 200,
+      "title": "CTV Advertising Agency New York | Connected TV Ads Long Island & Brooklyn | Scale Up Media Group",
+      "meta_description": "Scale Up Media Group runs connected TV advertising campaigns for businesses across New York, Long Island, Brooklyn, and Nassau County. Reach streaming audiences on Hulu, Roku, and Amazon Fire TV with precision targeting.",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/ctv-advertising-new-york/",
+      "h1": [
+        "CTV Advertising Agency in New York Putting Local Businesses on Streaming TV"
+      ],
+      "h2_count": 6,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 14,
+      "img_no_alt": 5,
+      "word_count": 887,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 574,
+      "bytes": 150361
+    },
+    {
+      "url": "https://scaleupmediagroup.com/chatgpt-ads-management-new-york/",
+      "status": 200,
+      "title": "ChatGPT Ads Management - Scale Up Media Group",
+      "meta_description": "ChatGPT advertising launched in 2026 and right now most local businesses in New York have no idea it exists. That is the opportunity. OpenAI's self-serve Ads",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/chatgpt-ads-management-new-york/",
+      "h1": [
+        "ChatGPT Ads Management Agency in New York for Businesses Ready to Move First"
+      ],
+      "h2_count": 7,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 15,
+      "img_no_alt": 5,
+      "word_count": 1113,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 592,
+      "bytes": 152938
+    },
+    {
+      "url": "https://scaleupmediagroup.com/local-seo-agency-long-island-new-york/",
+      "status": 200,
+      "title": "Local SEO - Scale Up Media Group",
+      "meta_description": "When someone in your neighborhood searches for the service you offer on Google, your business needs to be one of the first three results they see. That is the",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/local-seo-agency-long-island-new-york/",
+      "h1": [
+        "Local SEO Agency on Long Island That Gets Your Business to the Top of Google Maps"
+      ],
+      "h2_count": 6,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 14,
+      "img_no_alt": 5,
+      "word_count": 894,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 562,
+      "bytes": 149027
+    },
+    {
+      "url": "https://scaleupmediagroup.com/seo-agency-new-york/",
+      "status": 200,
+      "title": "SEO Agency - Scale Up Media Group",
+      "meta_description": "We identify the highest-value search terms your New York customers use and build a roadmap around ranking for them. This includes both broad industry terms",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/seo-agency-new-york/",
+      "h1": [
+        "SEO Agency in New York That Builds Organic Traffic That Actually Converts"
+      ],
+      "h2_count": 7,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 14,
+      "img_no_alt": 5,
+      "word_count": 862,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 568,
+      "bytes": 149701
+    },
+    {
+      "url": "https://scaleupmediagroup.com/home-health-care-marketing-new-york/",
+      "status": 200,
+      "title": "Home Health Care Marketing Agency in New York | Scale Up",
+      "meta_description": "Scale Up Media Group runs Google Ads, Local SEO, and ChatGPT Ads for home health care agencies in New York. CDPAP, Medicaid, and private pay lead generation.",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/home-health-care-marketing-new-york/",
+      "h1": [
+        "Home Health Care Marketing Agency for New York Agencies"
+      ],
+      "h2_count": 7,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 14,
+      "img_no_alt": 6,
+      "word_count": 1234,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 570,
+      "bytes": 152814
+    },
+    {
+      "url": "https://scaleupmediagroup.com/med-spa-marketing-new-york/",
+      "status": 200,
+      "title": "Med Spa Marketing Agency New York | Scale Up Media",
+      "meta_description": "Scale Up Media Group runs Google Ads, Meta Ads, and Local SEO for med spas and aesthetic clinics in New York. Compliant campaigns that fill treatment calendars.",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/med-spa-marketing-new-york/",
+      "h1": [
+        "Med Spa Marketing Agency for New York Aesthetic Practices"
+      ],
+      "h2_count": 7,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 14,
+      "img_no_alt": 5,
+      "word_count": 1147,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 591,
+      "bytes": 155339
+    },
+    {
+      "url": "https://scaleupmediagroup.com/dental-implant-marketing-new-york/",
+      "status": 200,
+      "title": "Dental Implant Marketing - Scale Up Media Group",
+      "meta_description": "Hygiene patient",
+      "robots": "follow, noindex",
+      "canonical": "",
+      "h1": [
+        "Dental Implant Marketing for New York Practices"
+      ],
+      "h2_count": 7,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 14,
+      "img_no_alt": 5,
+      "word_count": 1149,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 562,
+      "bytes": 161399
+    },
+    {
+      "url": "https://scaleupmediagroup.com/commercial-cleaning-marketing-nyc/",
+      "status": 200,
+      "title": "Commercial Cleaning Marketing - Scale Up Media Group",
+      "meta_description": "One office cleaning contract can be worth $30,000 to $150,000 a year, recurring. That math changes everything about how a cleaning company should market.",
+      "robots": "follow, noindex",
+      "canonical": "",
+      "h1": [
+        "Commercial Cleaning Marketing That Wins Contracts, Not One-Time Jobs"
+      ],
+      "h2_count": 8,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 14,
+      "img_no_alt": 6,
+      "word_count": 1127,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 591,
+      "bytes": 154557
+    },
+    {
+      "url": "https://scaleupmediagroup.com/blogs/",
+      "status": 200,
+      "title": "Blogs - Scale Up Media Group",
+      "meta_description": "All Blogs",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/blogs/",
+      "h1": [],
+      "h2_count": 6,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 13,
+      "img_no_alt": 5,
+      "word_count": 501,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": false,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 598,
+      "bytes": 111800
+    },
+    {
+      "url": "https://scaleupmediagroup.com/digital-marketing-agency-brooklyn-ny/",
+      "status": 200,
+      "title": "Brooklyn Digital Marketing Agency | Google Ads & SEO",
+      "meta_description": "Need more qualified leads in Brooklyn? Explore Google Ads, Meta Ads and SEO with Scale Up Media Group. Request a free marketing audit.",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/digital-marketing-agency-brooklyn-ny/",
+      "h1": [
+        "Digital Marketing Agency in Brooklyn, NY"
+      ],
+      "h2_count": 13,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList",
+        "FAQPage"
+      ],
+      "img_total": 20,
+      "img_no_alt": 9,
+      "word_count": 1278,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 579,
+      "bytes": 201767
+    },
+    {
+      "url": "https://scaleupmediagroup.com/digital-marketing-agency-queens-ny/",
+      "status": 200,
+      "title": "Digital Marketing Agency Queens NY | Scale Up Media Group",
+      "meta_description": "Scale Up Media Group serves local businesses in Queens, NY with Google Ads, Facebook Ads, CTV, ChatGPT Ads, and SEO. Performance marketing built for the Queens market and NYC businesses that want measurable growth.",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/digital-marketing-agency-queens-ny/",
+      "h1": [
+        "Digital Marketing Agency Serving Queens NY Businesses Ready to Grow"
+      ],
+      "h2_count": 4,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList",
+        "FAQPage"
+      ],
+      "img_total": 16,
+      "img_no_alt": 5,
+      "word_count": 1029,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 567,
+      "bytes": 151809
+    },
+    {
+      "url": "https://scaleupmediagroup.com/digital-marketing-agency-nassau-county-ny/",
+      "status": 200,
+      "title": "Digital Marketing Agency Nassau County NY | Scale Up Media",
+      "meta_description": "Scale Up Media Group is a digital marketing agency in Nassau County NY. Google Ads, Facebook Ads, CTV, and SEO for local businesses across Long Island.",
+      "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+      "canonical": "https://scaleupmediagroup.com/digital-marketing-agency-nassau-county-ny/",
+      "h1": [
+        "Digital Marketing Agency in Nassau County, NY"
+      ],
+      "h2_count": 5,
+      "lang": "en-US",
+      "viewport": true,
+      "og": true,
+      "jsonld": [
+        "BreadcrumbList"
+      ],
+      "img_total": 14,
+      "img_no_alt": 5,
+      "word_count": 1100,
+      "mixed_content": false,
+      "tel_link": true,
+      "phone_text": true,
+      "form": true,
+      "cta": true,
+      "analytics": true,
+      "favicon": false,
+      "address_text": false,
+      "dead_nav_links": 2,
+      "maps_embed": false,
+      "elapsed_ms": 591,
+      "bytes": 175585
+    }
+  ]
+}
