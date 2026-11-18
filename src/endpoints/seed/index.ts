@@ -4,6 +4,7 @@ import type { CollectionSlug, Payload, PayloadRequest } from 'payload'
 
 import { PACKAGES, PAGES, POSTS, PROJECTS, type PageSeed } from './content'
 import { mdToLexical } from './mdToLexical'
+import { put } from '@vercel/blob'
 
 const ctx = { disableRevalidate: true }
 
@@ -44,7 +45,18 @@ const uploadShowcaseMedia = async (
   } catch (err) {
     // Don't let one media upload stop the whole content load
     payload.logger.error({ err, message: `Seed: could not upload ${file}` })
-    mediaErrors.push(`${file}: ${err instanceof Error ? err.message : String(err)}`)
+    const cause = (err as { cause?: unknown })?.cause
+    const detail = err instanceof Error ? err.message : String(err)
+    mediaErrors.push(`${file}: ${detail}${cause instanceof Error ? ` (${cause.message})` : ''}`)
+    // Payload hides the storage error behind a generic message, so test Blob directly once
+    if (process.env.BLOB_READ_WRITE_TOKEN && !mediaErrors.some((m) => m.startsWith('Blob check'))) {
+      try {
+        await put('plen-blob-check.txt', 'ok', { access: 'public', allowOverwrite: true, token: process.env.BLOB_READ_WRITE_TOKEN })
+        mediaErrors.push('Blob check: a direct test upload worked')
+      } catch (e) {
+        mediaErrors.push(`Blob check failed: ${e instanceof Error ? e.message : String(e)}`)
+      }
+    }
     return undefined
   }
 }
