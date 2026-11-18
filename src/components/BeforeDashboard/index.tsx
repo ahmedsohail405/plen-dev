@@ -1,67 +1,41 @@
-import { Banner } from '@payloadcms/ui/elements/Banner'
+import configPromise from '@payload-config'
+import { getPayload } from 'payload'
 import React from 'react'
 
-import { SeedButton } from './SeedButton'
 import './index.scss'
 
 const baseClass = 'before-dashboard'
 
-const BeforeDashboard: React.FC = () => {
+/** Plen CMS welcome panel: new leads at a glance and quick links. */
+const BeforeDashboard = async () => {
+  const payload = await getPayload({ config: configPromise })
+  const [newLeads, audits] = await Promise.all([
+    payload.count({ collection: 'leads', where: { status: { equals: 'new' } }, overrideAccess: true }),
+    payload.count({ collection: 'leads', where: { audit_status: { equals: 'awaiting_approval' } }, overrideAccess: true }),
+  ])
+  const card = { padding: '18px 20px', borderRadius: 12, border: '1px solid var(--theme-elevation-150)', textDecoration: 'none', color: 'inherit', display: 'block' }
   return (
     <div className={baseClass}>
-      <Banner className={`${baseClass}__banner`} type="success">
-        <h4>Welcome to your dashboard!</h4>
-      </Banner>
-      Here&apos;s what to do next:
-      <ul className={`${baseClass}__instructions`}>
-        <li>
-          <SeedButton />
-          {' with a few pages, posts, and projects to jump-start your new site, then '}
-          <a href="/" target="_blank">
-            visit your website
-          </a>
-          {' to see the results.'}
-        </li>
-        <li>
-          {'Modify your '}
-          <a
-            href="https://payloadcms.com/docs/configuration/collections"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            collections
-          </a>
-          {' and add more '}
-          <a
-            href="https://payloadcms.com/docs/fields/overview"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            fields
-          </a>
-          {' as needed. If you are new to Payload, we also recommend you check out the '}
-          <a
-            href="https://payloadcms.com/docs/getting-started/what-is-payload"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Getting Started
-          </a>
-          {' docs.'}
-        </li>
-        <li>
-          Commit and push your changes to the repository to trigger a redeployment of your project.
-        </li>
-      </ul>
-      {'Pro Tip: This block is a '}
-      <a
-        href="https://payloadcms.com/docs/custom-components/overview"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        custom component
-      </a>
-      , you can remove it at any time by updating your <strong>payload.config</strong>.
+      <h2 style={{ marginBottom: 6 }}>Welcome to the Plen CMS</h2>
+      <p style={{ opacity: 0.7, marginTop: 0 }}>Edit any page with live preview, follow up on leads and manage SEO and tracking code from here.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, marginTop: 16 }}>
+        <a href="/admin/collections/leads?where[status][equals]=new" style={card}>
+          <strong style={{ fontSize: 28 }}>{newLeads.totalDocs}</strong>
+          <div>new leads</div>
+        </a>
+        <a href="/admin/collections/leads?where[audit_status][equals]=awaiting_approval" style={card}>
+          <strong style={{ fontSize: 28 }}>{audits.totalDocs}</strong>
+          <div>audits awaiting your approval</div>
+        </a>
+        <a href="/admin/collections/pages" style={card}>
+          <strong style={{ fontSize: 18 }}>Edit pages →</strong>
+          <div>Open a page, then click the eye icon for live preview</div>
+        </a>
+        <a href="/admin/globals/site-settings" style={card}>
+          <strong style={{ fontSize: 18 }}>Site settings →</strong>
+          <div>Business info, header code, analytics, AI crawlers</div>
+        </a>
+      </div>
     </div>
   )
 }

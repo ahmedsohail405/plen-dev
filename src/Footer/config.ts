@@ -25,6 +25,33 @@ export const Footer: GlobalConfig = {
         },
       },
     },
+    {
+      name: 'bigLine',
+      type: 'text',
+      defaultValue: "Let's build *something.*",
+      admin: { description: 'Huge closing line. Wrap words in *asterisks* to highlight.' },
+    },
+    {
+      name: 'columns',
+      type: 'array',
+      maxRows: 4,
+      fields: [
+        { name: 'title', type: 'text', required: true },
+        {
+          name: 'links',
+          type: 'array',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                { name: 'label', type: 'text', required: true },
+                { name: 'href', type: 'text', required: true },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ],
   hooks: {
     afterChange: [revalidateFooter],

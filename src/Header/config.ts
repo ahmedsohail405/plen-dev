@@ -17,13 +17,27 @@ export const Header: GlobalConfig = {
           appearances: false,
         }),
       ],
-      maxRows: 6,
+      maxRows: 8,
       admin: {
         initCollapsed: true,
         components: {
           RowLabel: '@/Header/RowLabel#RowLabel',
         },
       },
+    },
+    {
+      name: 'cta',
+      type: 'group',
+      label: 'Header button',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'label', type: 'text', defaultValue: 'Free website audit' },
+            { name: 'href', type: 'text', defaultValue: '/website-audit' },
+          ],
+        },
+      ],
     },
   ],
   hooks: {

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Relaywave · Workflow automation for operations teams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07070b;--bg2:#0e0e15;--card:#12121b;--line:rgba(255,255,255,.08);--text:#ecebf5;--muted:#8d8ba3;--violet:#6d5dfc;--violet2:#a49bff;--cyan:#38e1d3;--pink:#ff5fa2}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter Tight',system-ui,sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}.wrap{max-width:1200px;margin:0 auto;padding:0 28px}.mono{font-family:'JetBrains Mono',monospace}
+.bar{background:linear-gradient(90deg,var(--violet),var(--pink));color:#fff;text-align:center;font-size:14px;padding:9px}
+nav{position:sticky;top:0;z-index:20;background:rgba(7,7,11,.7);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:700;font-size:20px;letter-spacing:-.03em}.logo i{width:28px;height:28px;border-radius:8px;background:conic-gradient(from 90deg,var(--violet),var(--cyan),var(--pink),var(--violet));display:block;position:relative}.logo i::after{content:"";position:absolute;inset:7px;border-radius:3px;background:var(--bg)}
+.links{display:flex;gap:28px;font-size:15px;color:var(--muted)}.links a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;font-weight:600;font-size:15px;transition:.25s;border:1px solid var(--line)}
+.btn.primary{background:#fff;color:#000;border-color:#fff}.btn.primary:hover{box-shadow:0 0 0 4px rgba(255,255,255,.15)}
+.btn.glow{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 10px 40px -10px var(--violet)}
+.hero{padding:110px 0 60px;text-align:center;position:relative}
+.hero::before{content:"";position:absolute;left:50%;top:-200px;width:1100px;height:700px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(109,93,252,.35),transparent),radial-gradient(closest-side at 70% 60%,rgba(56,225,211,.15),transparent);pointer-events:none}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 70%);pointer-events:none}
+.chip{display:inline-flex;gap:10px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:999px;padding:6px 14px 6px 6px;font-size:14px;color:var(--muted);position:relative}.chip b{background:rgba(109,93,252,.2);color:var(--violet2);padding:3px 10px;border-radius:999px;font-weight:600}
+.hero h1{position:relative;font-size:clamp(48px,7.4vw,96px);line-height:.98;letter-spacing:-.05em;margin:26px auto 22px;max-width:12em;font-weight:600}
+.hero h1 span{background:linear-gradient(92deg,#fff 10%,var(--violet2) 45%,var(--cyan) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{position:relative;font-size:20px;color:var(--muted);max-width:36em;margin:0 auto 34px}
+.ctas{display:flex;gap:12px;justify-content:center;position:relative}
+.app{position:relative;margin:70px auto 0;max-width:1100px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(180deg,#13131d,#0b0b11);box-shadow:0 60px 120px -40px rgba(109,93,252,.45),0 0 0 1px rgba(255,255,255,.03) inset;overflow:hidden;text-align:left}
+.app .top{display:flex;gap:7px;padding:14px 16px;border-bottom:1px solid var(--line);align-items:center}.app .top i{width:11px;height:11px;border-radius:50%;background:#2a2a36}.app .top span{margin-left:14px;font-size:13px;color:var(--muted)}
+.app .body{display:grid;grid-template-columns:210px 1fr 280px;min-height:460px}
+.side{border-right:1px solid var(--line);padding:16px;font-size:14px;color:var(--muted);display:grid;align-content:start;gap:4px}.side div{padding:8px 10px;border-radius:8px;display:flex;gap:10px;align-items:center}.side .on{background:rgba(255,255,255,.06);color:#fff}
+.canvas{position:relative;background-image:radial-gradient(rgba(255,255,255,.08) 1px,transparent 1px);background-size:22px 22px}
+.node{position:absolute;width:210px;background:#171722;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;box-shadow:0 20px 40px -20px #000}
+.node .h{display:flex;gap:8px;align-items:center;font-weight:600;font-size:14px}.node .h i{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-style:normal}
+.node small{color:var(--muted);display:block;margin-top:4px}.node.active{border-color:var(--violet);box-shadow:0 0 0 3px rgba(109,93,252,.25),0 20px 40px -20px #000}
+.wire{position:absolute;inset:0;width:100%;height:100%}
+.wire path{fill:none;stroke:url(#gw);stroke-width:2;stroke-dasharray:6 6;animation:flow 1.2s linear infinite}@keyframes flow{to{stroke-dashoffset:-24}}
+.panel{border-left:1px solid var(--line);padding:18px;font-size:13px}.panel h4{margin:0 0 12px;font-size:14px}.log{display:grid;gap:8px}.log div{display:flex;justify-content:space-between;padding:9px 10px;border-radius:8px;background:rgba(255,255,255,.03)}.ok{color:var(--cyan)}
+.logos{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:center;padding:60px 0;color:#5f5d73;font-weight:700;font-size:22px;letter-spacing:-.02em}
+section{padding:110px 0}.kick{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet2)}
+h2{font-size:clamp(36px,4.6vw,60px);letter-spacing:-.045em;line-height:1;margin:14px 0 18px;font-weight:600}.lead{color:var(--muted);font-size:19px;max-width:34em}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:50px}
+.b{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;position:relative;overflow:hidden;min-height:260px}
+.b h3{margin:0 0 8px;font-size:22px;letter-spacing:-.03em}.b p{margin:0;color:var(--muted);font-size:15px}
+.b.c4{grid-column:span 4}.b.c2{grid-column:span 2}.b.c3{grid-column:span 3}
+.b .viz{position:absolute;left:28px;right:28px;bottom:24px}
+.bars{display:flex;gap:8px;align-items:end;height:110px}.bars span{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--violet),rgba(109,93,252,.2))}
+.code{background:#0a0a10;border:1px solid var(--line);border-radius:12px;padding:16px;font-size:13px;color:#b9b6d3;line-height:1.7}.code .k{color:var(--pink)}.code .s{color:var(--cyan)}.code .c{color:#5a586e}
+.ints{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;margin-top:40px}.ints div{aspect-ratio:1;border:1px solid var(--line);border-radius:16px;display:grid;place-items:center;background:var(--card);font-weight:700;color:#c9c6e4;font-size:15px;transition:.3s}.ints div:hover{border-color:var(--violet);transform:translateY(-4px)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}.metrics div{padding:40px;border-right:1px solid var(--line)}.metrics div:last-child{border:0}.metrics b{display:block;font-size:64px;letter-spacing:-.05em;line-height:1;background:linear-gradient(90deg,#fff,var(--violet2));-webkit-background-clip:text;color:transparent}.metrics span{color:var(--muted)}
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:50px}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px;display:flex;flex-direction:column;gap:16px}.plan.pop{border-color:var(--violet);background:linear-gradient(180deg,rgba(109,93,252,.14),var(--card) 40%)}
+.plan .p{font-size:52px;font-weight:600;letter-spacing:-.05em}.plan .p small{font-size:16px;color:var(--muted);font-weight:400;letter-spacing:0}
+.plan ul{list-style:none;padding:0;margin:0;display:grid;gap:10px;color:#c6c4da;font-size:15px}.plan li{display:flex;gap:10px}.plan li svg{color:var(--cyan);flex:none;margin-top:3px}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:4px;margin-top:20px}.toggle span{padding:8px 16px;border-radius:999px;font-size:14px;color:var(--muted)}.toggle .on{background:#fff;color:#000}
+.cl{display:grid;gap:0;border-left:1px solid var(--line);margin-left:8px}.cl div{padding:0 0 34px 30px;position:relative}.cl div::before{content:"";position:absolute;left:-6px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--violet);box-shadow:0 0 0 5px rgba(109,93,252,.2)}.cl b{font-size:19px}.cl p{margin:6px 0 0;color:var(--muted)}
+.cta{border-radius:28px;padding:80px 40px;text-align:center;background:radial-gradient(circle at 50% 0,rgba(109,93,252,.45),transparent 60%),var(--card);border:1px solid var(--line)}
+footer{border-top:1px solid var(--line);padding:60px 0;color:var(--muted);font-size:14px}footer .wrap{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:30px}footer h5{color:#fff;margin:0 0 12px;font-size:14px}footer a{display:block;margin-bottom:8px}
+[data-r]{opacity:0;transform:translateY(30px);transition:1s cubic-bezier(.2,.7,.1,1)}[data-r].in{opacity:1;transform:none}
+@media(max-width:960px){.links{display:none}.app .body{grid-template-columns:1fr}.side,.panel{display:none}.bento{grid-template-columns:1fr}.b.c4,.b.c2,.b.c3{grid-column:auto}.pricing,.metrics{grid-template-columns:1fr}.ints{grid-template-columns:repeat(4,1fr)}footer .wrap{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="bar">Relaywave raises $18M Series A to bring AI agents to operations teams → <u>Read the announcement</u></div>
+<nav><div class="wrap"><a class="logo" href="#"><i></i>relaywave</a><div class="links"><a href="#product">Product</a><a href="#integrations">Integrations</a><a href="#pricing">Pricing</a><a href="#changelog">Changelog</a><a href="#">Docs</a></div><div style="display:flex;gap:10px"><a class="btn" href="#">Sign in</a><a class="btn primary" href="#pricing">Start free</a></div></div></nav>
+
+<header class="hero"><div class="grid-bg"></div><div class="wrap">
+  <span class="chip"><b>New</b> AI agents that work across 120+ apps</span>
+  <h1>Automate the busywork. <span>Keep the judgment.</span></h1>
+  <p>Relaywave connects your tools and lets AI agents handle the repetitive steps in onboarding, billing and support, with a human approval wherever it matters.</p>
+  <div class="ctas"><a class="btn glow" href="#pricing">Start free for 14 days</a><a class="btn" href="#product">{{i:play:16}} Watch the 2-min demo</a></div>
+  <div class="app" data-r>
+    <div class="top"><i></i><i></i><i></i><span>Workflows / New customer onboarding</span></div>
+    <div class="body">
+      <div class="side"><div class="on">{{i:workflow:16}} Workflows</div><div>{{i:bot:16}} Agents</div><div>{{i:plug:16}} Connections</div><div>{{i:check-circle:16}} Approvals <span class="mono" style="margin-left:auto;color:var(--pink)">3</span></div><div>{{i:activity:16}} Runs</div><div>{{i:settings:16}} Settings</div></div>
+      <div class="canvas">
+        <svg class="wire" viewBox="0 0 610 460" preserveAspectRatio="none"><defs><linearGradient id="gw" x1="0" x2="1"><stop offset="0" stop-color="#6d5dfc"/><stop offset="1" stop-color="#38e1d3"/></linearGradient></defs><path d="M140 90 C 200 90, 200 200, 300 200"/><path d="M300 230 C 220 230, 220 330, 150 350"/><path d="M400 230 C 470 230, 470 340, 450 360"/></svg>
+        <div class="node" style="left:30px;top:50px"><div class="h"><i style="background:#1f3b2f;color:#4ade80">{{i:credit-card:14}}</i>Stripe</div><small>When a subscription is created</small></div>
+        <div class="node active" style="left:200px;top:170px"><div class="h"><i style="background:rgba(109,93,252,.25);color:var(--violet2)">{{i:sparkles:14}}</i>Onboarding agent</div><small>Create workspace, draft welcome email, assign CSM</small></div>
+        <div class="node" style="left:40px;top:330px"><div class="h"><i style="background:#3a2433;color:var(--pink)">{{i:mail:14}}</i>Gmail</div><small>Send welcome email (needs approval)</small></div>
+        <div class="node" style="left:360px;top:340px"><div class="h"><i style="background:#1d3236;color:var(--cyan)">{{i:message-square:14}}</i>Slack</div><small>Post in #new-customers</small></div>
+      </div>
+      <div class="panel"><h4>Live runs</h4><div class="log mono"><div><span>acme.io</span><span class="ok">✓ done</span></div><div><span>northpeak.co</span><span class="ok">✓ done</span></div><div><span>Fernway Health</span><span style="color:var(--pink)">● approval</span></div><div><span>Lumen Labs</span><span class="ok">✓ done</span></div><div><span>Orbitly</span><span style="color:var(--violet2)">◌ running</span></div></div><h4 style="margin-top:22px">This week</h4><div class="bars" style="height:80px"><span style="height:40%"></span><span style="height:62%"></span><span style="height:55%"></span><span style="height:80%"></span><span style="height:72%"></span><span style="height:95%"></span><span style="height:88%"></span></div></div>
+    </div>
+  </div>
+</div></header>
+
+<div class="wrap logos"><span>Northpeak</span><span>FERNWAY</span><span>orbitly</span><span>Lumen Labs</span><span>Castellan</span><span>BRIGHTLINE</span></div>
+
+<section id="product"><div class="wrap">
+  <span class="kick">Product</span><h2>Agents that ask before they act</h2><p class="lead">Every workflow mixes deterministic steps with AI agents. You decide which actions need a human sign-off.</p>
+  <div class="bento">
+    <div class="b c4" data-r><h3>Visual workflow builder</h3><p>Drag in triggers, agents and actions. Branch, loop and retry without code.</p><div class="viz"><div class="bars"><span style="height:30%"></span><span style="height:45%"></span><span style="height:38%"></span><span style="height:60%"></span><span style="height:52%"></span><span style="height:75%"></span><span style="height:68%"></span><span style="height:90%"></span><span style="height:84%"></span><span style="height:100%"></span></div></div></div>
+    <div class="b c2" data-r><h3>Human approvals</h3><p>Approve, edit or reject an agent’s action from Slack or email.</p><div class="viz"><div style="display:flex;gap:8px"><span class="btn" style="background:var(--cyan);color:#000;border:0">Approve</span><span class="btn">Edit</span></div></div></div>
+    <div class="b c3" data-r><h3>Write steps in code when you want to</h3><p>TypeScript steps with full type safety and versioning.</p><div class="viz code mono"><span class="c">// enrich new lead</span><br><span class="k">export default</span> step(<span class="s">'enrich'</span>, <span class="k">async</span> ({ lead }) =&gt; {<br>&nbsp;&nbsp;<span class="k">return</span> clearbit.find(lead.email)<br>})</div></div>
+    <div class="b c3" data-r><h3>SOC 2 Type II & SSO</h3><p>Audit logs, SAML SSO, data residency in the US or EU and role-based access.</p><div class="viz" style="display:flex;gap:10px;font-weight:700;color:#c9c6e4">{{i:shield-check:40}}{{i:lock:40}}{{i:key-round:40}}</div></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap"><div class="metrics" data-r><div><b>11 hrs</b><span>saved per ops person, per week</span></div><div><b>4.2M</b><span>workflow runs every month</span></div><div><b>99.98%</b><span>uptime over the last 12 months</span></div></div></div></section>
+
+<section id="integrations" style="padding-top:20px"><div class="wrap">
+  <span class="kick">Integrations</span><h2>Works with the tools you already pay for</h2><p class="lead">120+ native integrations, plus webhooks and a REST API for everything else.</p>
+  <div class="ints" data-r><div>Stripe</div><div>Slack</div><div>HubSpot</div><div>Gmail</div><div>Notion</div><div>Linear</div><div>Zendesk</div><div>Airtable</div><div>Jira</div><div>Shopify</div><div>Asana</div><div>Intercom</div><div>Salesforce</div><div>GitHub</div><div>Xero</div><div>+108</div></div>
+</div></section>
+
+<section id="pricing"><div class="wrap" style="text-align:center">
+  <span class="kick">Pricing</span><h2>Simple pricing that scales with runs</h2><div class="toggle"><span>Monthly</span><span class="on">Yearly · save 20%</span></div>
+  <div class="pricing" style="text-align:left">
+    <div class="plan" data-r><b>Starter</b><div class="p">$0<small> /month</small></div><p style="margin:0;color:var(--muted)">For trying things out.</p><ul><li>{{i:check:16}}1,000 runs / month</li><li>{{i:check:16}}5 workflows</li><li>{{i:check:16}}Community support</li></ul><a class="btn" href="#">Start free</a></div>
+    <div class="plan pop" data-r><b>Team <span class="mono" style="font-size:11px;color:var(--violet2);margin-left:6px">MOST POPULAR</span></b><div class="p">$49<small> /seat /month</small></div><p style="margin:0;color:var(--muted)">For operations teams.</p><ul><li>{{i:check:16}}50,000 runs / month</li><li>{{i:check:16}}Unlimited workflows</li><li>{{i:check:16}}AI agents & approvals</li><li>{{i:check:16}}Priority support</li></ul><a class="btn glow" href="#">Start 14-day trial</a></div>
+    <div class="plan" data-r><b>Enterprise</b><div class="p">Custom</div><p style="margin:0;color:var(--muted)">For security-conscious orgs.</p><ul><li>{{i:check:16}}Unlimited runs</li><li>{{i:check:16}}SAML SSO & SCIM</li><li>{{i:check:16}}Data residency</li><li>{{i:check:16}}Dedicated CSM</li></ul><a class="btn" href="#">Talk to sales</a></div>
+  </div>
+</div></section>
+
+<section id="changelog" style="padding-top:0"><div class="wrap" style="display:grid;grid-template-columns:1fr 1.3fr;gap:60px">
+  <div><span class="kick">Changelog</span><h2>Shipping every week</h2><p class="lead">See what’s new in Relaywave.</p></div>
+  <div class="cl" data-r><div><span class="mono" style="color:var(--muted);font-size:13px">Nov 12, 2026</span><br><b>Agent memory across runs</b><p>Agents can now remember context from previous runs of the same workflow.</p></div><div><span class="mono" style="color:var(--muted);font-size:13px">Nov 4, 2026</span><br><b>Approvals in Microsoft Teams</b><p>Approve agent actions without leaving Teams.</p></div><div><span class="mono" style="color:var(--muted);font-size:13px">Oct 28, 2026</span><br><b>EU data residency</b><p>Run workflows entirely in our Frankfurt region.</p></div></div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap"><div class="cta" data-r><h2 style="margin-top:0">Give your ops team their week back</h2><p class="lead" style="margin:0 auto 30px">Free for 14 days. No credit card required.</p><div class="ctas"><a class="btn glow" href="#">Start free</a><a class="btn" href="#">Book a demo</a></div></div></div></section>
+
+<footer><div class="wrap"><div><a class="logo" href="#"><i></i>relaywave</a><p style="max-width:22em">Workflow automation with AI agents and human approvals. Made in New York.</p></div><div><h5>Product</h5><a href="#">Workflows</a><a href="#">Agents</a><a href="#">Integrations</a><a href="#">Pricing</a></div><div><h5>Developers</h5><a href="#">Docs</a><a href="#">API</a><a href="#">Status</a></div><div><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Blog</a></div><div><h5>Legal</h5><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a></div></div></footer>
+<script>const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.1});document.querySelectorAll('[data-r]').forEach((el,i)=>{el.style.transitionDelay=(i%3)*100+'ms';io.observe(el)});</script>
+</body>
+</html>

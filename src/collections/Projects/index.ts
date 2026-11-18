@@ -3,6 +3,7 @@ import { slugField } from 'payload'
 
 import { anyone } from '../../access/anyone'
 import { authenticated } from '../../access/authenticated'
+import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { revalidateTagHook } from '@/hooks/revalidateTagHook'
 
 export const Projects: CollectionConfig<'projects'> = {
@@ -14,11 +15,11 @@ export const Projects: CollectionConfig<'projects'> = {
     group: 'Content',
     defaultColumns: ['title', 'industry', 'featured', 'order'],
     livePreview: {
-      url: ({ data }) => `/work/${data?.slug || ''}`,
+      url: ({ data, req }) => generatePreviewPath({ collection: 'projects', slug: data?.slug, req }),
     },
   },
   defaultSort: 'order',
-  defaultPopulate: { title: true, slug: true, industry: true, summary: true, cover: true, accent: true, video: true, liveUrl: true },
+  defaultPopulate: { title: true, slug: true, industry: true, summary: true, cover: true, accent: true, video: true, liveUrl: true, domain: true, location: true, year: true, results: true, featured: true },
   fields: [
     { name: 'title', type: 'text', required: true, admin: { description: 'Client / brand name' } },
     {
@@ -41,6 +42,7 @@ export const Projects: CollectionConfig<'projects'> = {
       type: 'row',
       fields: [
         { name: 'liveUrl', type: 'text', admin: { description: 'Link to the live site' } },
+        { name: 'domain', type: 'text', admin: { description: 'Shown in the browser bar on cards, e.g. brightdental.com' } },
         { name: 'accent', type: 'text', defaultValue: '#7c5cff', admin: { description: 'Brand colour used on cards' } },
       ],
     },
@@ -80,4 +82,5 @@ export const Projects: CollectionConfig<'projects'> = {
     slugField(),
   ],
   hooks: { afterChange: [revalidateTagHook('projects')] },
+  versions: { drafts: { autosave: { interval: 200 } } },
 }

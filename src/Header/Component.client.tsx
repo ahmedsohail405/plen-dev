@@ -1,42 +1,75 @@
 'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 import type { Header } from '@/payload-types'
+import { docHref } from '@/utilities/docHref'
+import { Arrow } from '@/components/studio/Icon'
 
-import { Logo } from '@/components/Logo/Logo'
-import { HeaderNav } from './Nav'
+export const Logo = () => (
+  <Link href="/" className="logo" aria-label="Plen Dev home">
+    plen<span className="dot" aria-hidden />
+    <em>dev</em>
+  </Link>
+)
 
-interface HeaderClientProps {
-  data: Header
-}
+const hrefOf = (link: NonNullable<Header['navItems']>[number]['link']) =>
+  link.type === 'reference' && link.reference && typeof link.reference.value === 'object'
+    ? docHref(link.reference.relationTo, link.reference.value as { slug?: string; path?: string })
+    : link.url
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-  /* Storing the value in a useState to avoid hydration errors */
-  const [theme, setTheme] = useState<string | null>(null)
-  const { headerTheme, setHeaderTheme } = useHeaderTheme()
+export const HeaderClient: React.FC<{ data: Header }> = ({ data }) => {
   const pathname = usePathname()
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
+  useEffect(() => setOpen(false), [pathname])
   useEffect(() => {
-    setHeaderTheme(null)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
+    const on = () => setScrolled(window.scrollY > 20)
+    on()
+    window.addEventListener('scroll', on, { passive: true })
+    return () => window.removeEventListener('scroll', on)
+  }, [])
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+  }, [open])
 
-  useEffect(() => {
-    if (headerTheme && headerTheme !== theme) setTheme(headerTheme)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [headerTheme])
+  const items = (data?.navItems || []).map(({ link }) => ({ label: link.label, href: hrefOf(link) || '#' }))
+  const cta = data?.cta?.href ? data.cta : { label: 'Free website audit', href: '/website-audit' }
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+    <>
+      <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`}>
+        <div className="wrap">
+          <div className="bar">
+            <Logo />
+            <nav className="nav" aria-label="Main">
+              {items.map((it) => (
+                <Link key={it.href} href={it.href} aria-current={pathname === it.href || (it.href !== '/' && pathname.startsWith(it.href + '/')) ? 'page' : undefined}>
+                  {it.label}
+                </Link>
+              ))}
+              <Link href={cta.href || '/website-audit'} className="btn btn--lime nav-cta">
+                {cta.label} <Arrow />
+              </Link>
+            </nav>
+            <button className="menu-toggle" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(!open)}>
+              {open ? 'Close' : 'Menu'}
+            </button>
+          </div>
+        </div>
+      </header>
+      <div id="mobile-menu" className={`mobile-menu ${open ? 'open' : ''}`} aria-hidden={!open}>
+        {items.map((it) => (
+          <Link key={it.href} href={it.href} tabIndex={open ? 0 : -1}>
+            {it.label}
+          </Link>
+        ))}
+        <Link href={cta.href || '/website-audit'} className="btn btn--lime" style={{ marginTop: 24, alignSelf: 'flex-start', fontSize: 18 }} tabIndex={open ? 0 : -1}>
+          {cta.label} <Arrow />
         </Link>
-        <HeaderNav data={data} />
       </div>
-    </header>
+    </>
   )
 }

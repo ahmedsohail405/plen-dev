@@ -1,5 +1,7 @@
-import PageTemplate, { generateMetadata } from './[slug]/page'
+import PageTemplate, { generateMetadata as gm } from './[...slug]/page'
 
-export default PageTemplate
+export default function Home() {
+  return <PageTemplate params={Promise.resolve({ slug: [] })} />
+}
 
-export { generateMetadata }
+export const generateMetadata = () => gm({ params: Promise.resolve({ slug: [] }) })

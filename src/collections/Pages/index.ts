@@ -59,6 +59,7 @@ export const Pages: CollectionConfig<'pages'> = {
       url: ({ data, req }) =>
         generatePreviewPath({
           slug: data?.slug,
+          path: data?.path,
           collection: 'pages',
           req,
         }),
@@ -66,6 +67,7 @@ export const Pages: CollectionConfig<'pages'> = {
     preview: (data, { req }) =>
       generatePreviewPath({
         slug: data?.slug as string,
+        path: data?.path as string,
         collection: 'pages',
         req,
       }),
@@ -157,7 +159,8 @@ export const Pages: CollectionConfig<'pages'> = {
         position: 'sidebar',
       },
     },
-    slugField(),
+    // Slugs may repeat under different parents (/services/ecommerce vs /industries/ecommerce); the full path is unique.
+    slugField({ disableUnique: true }),
     {
       name: 'parent',
       type: 'relationship',
@@ -168,7 +171,7 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       name: 'path',
       type: 'text',
-      index: true,
+      unique: true,
       admin: { position: 'sidebar', readOnly: true, description: 'Public URL, built from parent + slug.' },
     },
   ],

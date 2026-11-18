@@ -118,7 +118,6 @@ export const SiteSettings: GlobalConfig = {
               label: 'Key facts for AI answers',
               fields: [{ name: 'fact', type: 'text', required: true }],
             },
-            { name: 'robotsExtra', type: 'textarea', label: 'Extra robots.txt rules' },
           ],
         },
         {
@@ -137,5 +136,5 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
   ],
-  hooks: { afterChange: [revalidateTagHook('site-settings')] },
+  hooks: { afterChange: [revalidateTagHook('global_site-settings')] },
 }

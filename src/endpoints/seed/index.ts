@@ -1,298 +1,207 @@
-import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
+import fs from 'fs'
+import path from 'path'
+import type { CollectionSlug, Payload, PayloadRequest } from 'payload'
 
-import { contactForm as contactFormData } from './contact-form'
-import { contact as contactPageData } from './contact-page'
-import { home } from './home'
-import { image1 } from './image-1'
-import { image2 } from './image-2'
-import { imageHero1 } from './image-hero-1'
-import { post1 } from './post-1'
-import { post2 } from './post-2'
-import { post3 } from './post-3'
+import { PACKAGES, PAGES, POSTS, PROJECTS, type PageSeed } from './content'
+import { mdToLexical } from './mdToLexical'
 
-const collections: CollectionSlug[] = [
-  'categories',
-  'media',
-  'pages',
-  'posts',
-  'forms',
-  'form-submissions',
-  'search',
-]
+const ctx = { disableRevalidate: true }
 
-const globals: GlobalSlug[] = ['header', 'footer']
+/**
+ * Seeds Plen Dev content. Safe to re-run: it clears pages, posts, projects and
+ * packages (never leads or users) and recreates them.
+ * Portfolio media is read from /public/showcase-media/<slug>.{jpg,mp4} if present.
+ */
+export const seed = async ({ payload, req }: { payload: Payload; req: PayloadRequest }): Promise<void> => {
+  payload.logger.info('Seeding Plen Dev…')
 
-const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
+  const clear: CollectionSlug[] = ['pages', 'posts', 'projects', 'packages', 'categories', 'search', 'redirects']
+  for (const c of clear) {
+    await payload.db.deleteMany({ collection: c, req, where: {} })
+    if (payload.collections[c]?.config.versions) await payload.db.deleteVersions({ collection: c, req, where: {} })
+  }
+  // media: only remove portfolio media we created before
+  await payload.delete({ collection: 'media', where: { alt: { like: '[showcase]' } }, req, context: ctx, overrideAccess: true })
 
-// Next.js revalidation errors are normal when seeding the database without a server running
-// i.e. running `yarn seed` locally instead of using the admin UI within an active app
-// The app is not running to revalidate the pages and so the API routes are not available
-// These error messages can be ignored: `Error hitting revalidate route for...`
-export const seed = async ({
-  payload,
-  req,
-}: {
-  payload: Payload
-  req: PayloadRequest
-}): Promise<void> => {
-  payload.logger.info('Seeding database...')
-
-  // we need to clear the media directory before seeding
-  // as well as the collections and globals
-  // this is because while `yarn seed` drops the database
-  // the custom `/api/seed` endpoint does not
-  payload.logger.info(`— Clearing collections and globals...`)
-
-  // clear the database
-  await Promise.all(
-    globals.map((global) =>
-      payload.updateGlobal({
-        slug: global,
-        data: {
-          navItems: [],
-        },
-        depth: 0,
-        context: {
-          disableRevalidate: true,
-        },
-      }),
-    ),
-  )
-
-  await Promise.all(
-    collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
-  )
-
-  await Promise.all(
-    collections
-      .filter((collection) => Boolean(payload.collections[collection].config.versions))
-      .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
-  )
-
-  payload.logger.info(`— Seeding demo author and user...`)
-
-  await payload.delete({
-    collection: 'users',
-    depth: 0,
-    where: {
-      email: {
-        equals: 'demo-author@example.com',
-      },
-    },
-  })
-
-  payload.logger.info(`— Seeding media...`)
-
-  const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post1.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post2.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post3.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-hero1.webp',
-    ),
-  ])
-
-  const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
-    payload.create({
-      collection: 'users',
-      data: {
-        name: 'Demo Author',
-        email: 'demo-author@example.com',
-        password: 'password',
-      },
-    }),
-    payload.create({
-      collection: 'media',
-      data: image1,
-      file: image1Buffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: image2,
-      file: image2Buffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: image2,
-      file: image3Buffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: imageHero1,
-      file: hero1Buffer,
-    }),
-    categories.map((category) =>
-      payload.create({
-        collection: 'categories',
-        data: {
-          title: category,
-          slug: category,
-        },
-      }),
-    ),
-  ])
-
-  payload.logger.info(`— Seeding posts...`)
-
-  // Do not create posts with `Promise.all` because we want the posts to be created in order
-  // This way we can sort them by `createdAt` or `publishedAt` and they will be in the expected order
-  const post1Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: {
-      disableRevalidate: true,
-    },
-    data: post1({ heroImage: image1Doc, blockImage: image2Doc, author: demoAuthor }),
-  })
-
-  const post2Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: {
-      disableRevalidate: true,
-    },
-    data: post2({ heroImage: image2Doc, blockImage: image3Doc, author: demoAuthor }),
-  })
-
-  const post3Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: {
-      disableRevalidate: true,
-    },
-    data: post3({ heroImage: image3Doc, blockImage: image1Doc, author: demoAuthor }),
-  })
-
-  // update each post with related posts
-  await payload.update({
-    id: post1Doc.id,
-    collection: 'posts',
+  /* ---------- settings & navigation ---------- */
+  await payload.updateGlobal({
+    slug: 'site-settings',
+    req,
+    context: ctx,
     data: {
-      relatedPosts: [post2Doc.id, post3Doc.id],
+      businessName: 'Plen Dev',
+      tagline: 'Web design & development studio in New York',
+      description:
+        'Plen Dev is a New York web design and development company. We design and build custom websites, ecommerce stores, custom CMS platforms and web apps for businesses in Brooklyn, Queens, New York City and Long Island. Every site includes the Plen CMS with live-preview editing, a lead inbox and SEO controls.',
+      email: 'info@plendev.com',
+      phone: '',
+      address: { city: 'Brooklyn', region: 'NY', hideStreet: true },
+      areasServed: ['Brooklyn', 'Queens', 'Manhattan', 'New York City', 'Long Island', 'Nassau County', 'Suffolk County'].map((area) => ({ area })),
+      hours: 'Mo-Fr 09:00-18:00',
+      titleSuffix: ' | Plen Dev',
+      defaultDescription:
+        'Plen Dev builds fast, creative websites with an easy custom CMS for businesses in Brooklyn, Queens, NYC and Long Island. Websites from $1,499.',
+      allowAiCrawlers: true,
+      llmsIntro:
+        'Plen Dev is a web design and development studio in New York (Brooklyn, Queens, NYC and Long Island). It builds custom Next.js websites, online stores, custom CMS platforms and web apps, with fixed published prices starting at $1,499.',
+      llmsFacts: [
+        'Services: custom web development, website design, custom CMS development, ecommerce development, web apps and client portals, website maintenance (care plans).',
+        'Plen Dev does not sell SEO or marketing retainers; every website includes on-page SEO, schema markup and AI-readable structure.',
+        'Every website includes the Plen CMS: live-preview editing of text and images, a lead inbox, per-page SEO fields and site-wide or per-page header code snippets.',
+        'Typical launch time: 2 weeks (5 pages) to 4–8 weeks (custom sites).',
+        'Free website audits are available at /website-audit.',
+      ].map((fact) => ({ fact })),
+      integrations: { leadWebhookEnabled: true },
     },
   })
-  await payload.update({
-    id: post2Doc.id,
-    collection: 'posts',
-    data: {
-      relatedPosts: [post1Doc.id, post3Doc.id],
-    },
-  })
-  await payload.update({
-    id: post3Doc.id,
-    collection: 'posts',
-    data: {
-      relatedPosts: [post1Doc.id, post2Doc.id],
-    },
-  })
 
-  payload.logger.info(`— Seeding contact form...`)
-
-  const contactForm = await payload.create({
-    collection: 'forms',
-    depth: 0,
-    data: contactFormData,
-  })
-
-  payload.logger.info(`— Seeding pages...`)
-
-  const [_, contactPage] = await Promise.all([
-    payload.create({
-      collection: 'pages',
-      depth: 0,
-      data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
-    }),
-    payload.create({
-      collection: 'pages',
-      depth: 0,
-      data: contactPageData({ contactForm: contactForm }),
-    }),
-  ])
-
-  payload.logger.info(`— Seeding globals...`)
-
-  await Promise.all([
-    payload.updateGlobal({
-      slug: 'header',
-      data: {
-        navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Posts',
-              url: '/posts',
-            },
-          },
-          {
-            link: {
-              type: 'reference',
-              label: 'Contact',
-              reference: {
-                relationTo: 'pages',
-                value: contactPage.id,
-              },
-            },
-          },
-        ],
-      },
-    }),
-    payload.updateGlobal({
-      slug: 'footer',
-      data: {
-        navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Admin',
-              url: '/admin',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/3.x/templates/website',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Payload',
-              newTab: true,
-              url: 'https://payloadcms.com/',
-            },
-          },
-        ],
-      },
-    }),
-  ])
-
-  payload.logger.info('Seeded database successfully!')
-}
-
-async function fetchFileByURL(url: string): Promise<File> {
-  const res = await fetch(url, {
-    credentials: 'include',
-    method: 'GET',
-  })
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch file from ${url}, status: ${res.status}`)
+  /* ---------- packages ---------- */
+  for (const p of PACKAGES) {
+    await payload.create({
+      collection: 'packages',
+      req,
+      context: ctx,
+      data: { ...p, features: ((p as { features?: string[] }).features || []).map((feature) => ({ feature })) } as never,
+    })
   }
 
-  const data = await res.arrayBuffer()
-
-  return {
-    name: url.split('/').pop() || `file-${Date.now()}`,
-    data: Buffer.from(data),
-    mimetype: `image/${url.split('.').pop()}`,
-    size: data.byteLength,
+  /* ---------- portfolio ---------- */
+  const mediaDir = path.resolve(process.cwd(), 'public/showcase-media')
+  const projectIds: Record<string, number | string> = {}
+  for (const pr of PROJECTS) {
+    const upload = async (file: string, alt: string) => {
+      const full = path.join(mediaDir, file)
+      if (!fs.existsSync(full)) return undefined
+      const doc = await payload.create({ collection: 'media', req, context: ctx, data: { alt: `[showcase] ${alt}` }, filePath: full })
+      return doc.id
+    }
+    const cover = await upload(`${pr.slug}.jpg`, `${pr.title} website homepage`)
+    const video = await upload(`${pr.slug}.mp4`, `${pr.title} website walkthrough video`)
+    const doc = await payload.create({
+      collection: 'projects',
+      req,
+      context: ctx,
+      data: {
+        ...pr,
+        featured: true,
+        cover,
+        video,
+        liveUrl: `/showcase/${pr.slug}/`,
+        services: pr.services.map((service) => ({ service })),
+        meta: { title: `${pr.title}: ${pr.industry} Website Design`, description: pr.summary },
+        _status: 'published',
+      } as never,
+    })
+    projectIds[pr.slug] = doc.id
   }
+
+  /* ---------- pages (parents first) ---------- */
+  const ids: Record<string, number | string> = {}
+  const pending = [...PAGES]
+  let guard = 0
+  while (pending.length && guard++ < 200) {
+    const page = pending.shift() as PageSeed
+    if (page.parent && !ids[page.parent]) {
+      pending.push(page)
+      continue
+    }
+    const hero = { ...page.hero }
+    if (hero.type === 'studio') hero.showcase = Object.values(projectIds).slice(0, 5)
+    const layout = page.layout.map((b) => {
+      if (b.blockType === 'work' && Array.isArray(b.projects)) return { ...b, projects: (b.projects as string[]).map((s) => projectIds[s]).filter(Boolean) }
+      return b
+    })
+    const doc = await payload.create({
+      collection: 'pages',
+      req,
+      context: ctx,
+      data: {
+        title: page.title,
+        slug: page.slug,
+        parent: page.parent ? ids[page.parent] : undefined,
+        hero,
+        layout,
+        meta: page.meta,
+        _status: 'published',
+      } as never,
+    })
+    ids[page.slug] = doc.id
+  }
+
+  /* ---------- blog ---------- */
+  const cat = await payload.create({ collection: 'categories', req, context: ctx, data: { title: 'Web development', slug: 'web-development' } as never })
+  for (const p of POSTS) {
+    await payload.create({
+      collection: 'posts',
+      req,
+      context: ctx,
+      data: {
+        title: p.title,
+        slug: p.slug,
+        content: mdToLexical(p.body),
+        categories: [cat.id],
+        meta: { title: p.title, description: p.description },
+        publishedAt: new Date().toISOString(),
+        _status: 'published',
+      } as never,
+    })
+  }
+
+  /* ---------- header & footer ---------- */
+  const ref = (slug: string, label: string) => ({ link: { type: 'reference', label, reference: { relationTo: 'pages', value: ids[slug] } } })
+  await payload.updateGlobal({
+    slug: 'header',
+    req,
+    context: ctx,
+    data: {
+      navItems: [ref('services', 'Services'), ref('work', 'Work'), ref('packages', 'Packages'), ref('industries', 'Industries'), ref('about', 'About'), ref('contact', 'Contact')],
+      cta: { label: 'Free website audit', href: '/website-audit' },
+    } as never,
+  })
+  await payload.updateGlobal({
+    slug: 'footer',
+    req,
+    context: ctx,
+    data: {
+      bigLine: "Let's build *something.*",
+      columns: [
+        {
+          title: 'Services',
+          links: [
+            ['Web development', '/services/web-development'],
+            ['Website design', '/services/web-design'],
+            ['Custom CMS', '/services/custom-cms'],
+            ['Ecommerce', '/services/ecommerce'],
+            ['Web apps', '/services/web-apps'],
+            ['Care plans', '/services/website-maintenance'],
+          ].map(([label, href]) => ({ label, href })),
+        },
+        {
+          title: 'Locations',
+          links: [
+            ['Brooklyn', '/locations/brooklyn'],
+            ['Queens', '/locations/queens'],
+            ['New York City', '/locations/new-york-city'],
+            ['Long Island', '/locations/long-island'],
+            ['Nassau County', '/locations/long-island/nassau-county'],
+            ['Suffolk County', '/locations/long-island/suffolk-county'],
+          ].map(([label, href]) => ({ label, href })),
+        },
+        {
+          title: 'Studio',
+          links: [
+            ['Work', '/work'],
+            ['Packages', '/packages'],
+            ['Free website audit', '/website-audit'],
+            ['Industries', '/industries'],
+            ['Blog', '/blog'],
+            ['About', '/about'],
+            ['Contact', '/contact'],
+          ].map(([label, href]) => ({ label, href })),
+        },
+      ],
+    } as never,
+  })
+
+  payload.logger.info(`Seeded ${PAGES.length} pages, ${PACKAGES.length} packages, ${PROJECTS.length} projects, ${POSTS.length} posts.`)
 }

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Saltgrain Ceramics · Handmade stoneware from Red Hook, Brooklyn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{--bone:#f1ece4;--bone2:#e7dfd3;--clay:#c2410c;--char:#1c1917;--muted:#78716c;--line:rgba(28,25,23,.14)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bone);color:var(--char);font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}.wrap{max-width:1360px;margin:0 auto;padding:0 32px}.it{font-family:Newsreader,Georgia,serif;font-style:italic;font-weight:400}
+.ann{background:var(--char);color:var(--bone);font-size:13px;letter-spacing:.06em;text-align:center;padding:10px;overflow:hidden;white-space:nowrap}
+nav{position:sticky;top:0;z-index:30;background:rgba(241,236,228,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}nav .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:76px}
+.menu{display:flex;gap:26px;font-size:15px;font-weight:500}.menu a:hover{color:var(--clay)}
+.logo{font-size:28px;font-weight:700;letter-spacing:-.04em;display:flex;align-items:center;gap:8px}.logo span{width:14px;height:14px;border-radius:50%;background:var(--clay);display:inline-block;box-shadow:inset -3px -3px 0 rgba(0,0,0,.2)}
+.icons{display:flex;justify-content:flex-end;gap:18px;align-items:center}.cart-btn{position:relative;display:flex;align-items:center;gap:8px;font-weight:600;background:none;border:0;font:inherit;font-weight:600;cursor:pointer;color:inherit}.cart-btn b{background:var(--clay);color:#fff;border-radius:999px;font-size:12px;min-width:22px;height:22px;display:grid;place-items:center;padding:0 6px;transition:.3s}
+.hero{display:grid;grid-template-columns:1fr 1.1fr;min-height:calc(100vh - 116px);border-bottom:1px solid var(--line)}
+.hero .copy{padding:80px 60px 60px 0;display:flex;flex-direction:column;justify-content:space-between;padding-left:max(32px,calc((100vw - 1360px)/2 + 32px))}
+.hero h1{font-size:clamp(56px,7.4vw,118px);line-height:.9;letter-spacing:-.055em;font-weight:600;margin:0}.hero h1 .it{letter-spacing:-.02em;color:var(--clay)}
+.hero p{font-size:19px;max-width:28em;color:#57534e}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 28px;border-radius:999px;background:var(--char);color:var(--bone);font-weight:600;transition:.3s;border:0;cursor:pointer;font:inherit;font-weight:600}.btn:hover{background:var(--clay)}.btn.line{background:transparent;color:var(--char);border:1.5px solid var(--char)}
+.hero .art{position:relative;background:#d9c6b0;overflow:hidden}
+.hero .art .vessel-scene{position:absolute;inset:0}
+.hero .badge{position:absolute;left:30px;bottom:30px;background:var(--bone);border-radius:18px;padding:16px 20px;display:flex;gap:14px;align-items:center;font-size:14px;box-shadow:0 20px 40px -20px rgba(0,0,0,.4)}
+.hero .badge .sw{width:48px;height:48px;border-radius:12px;overflow:hidden}
+.rot{position:absolute;right:30px;top:30px;width:120px;height:120px;animation:spin 18s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.marq{display:flex;gap:50px;padding:22px 0;border-bottom:1px solid var(--line);font-size:22px;white-space:nowrap;overflow:hidden}.marq div{display:flex;gap:50px;animation:mq 30s linear infinite}.marq span::after{content:"✺";margin-left:50px;color:var(--clay)}@keyframes mq{to{transform:translateX(-50%)}}
+section{padding:100px 0}.sh{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:40px}.sh h2{font-size:clamp(40px,5vw,72px);letter-spacing:-.05em;line-height:.95;margin:0;font-weight:600}
+.tabs{display:flex;gap:8px}.tabs button{font:inherit;font-size:15px;padding:10px 18px;border-radius:999px;border:1.5px solid var(--line);background:transparent;cursor:pointer}.tabs button.on{background:var(--char);color:var(--bone);border-color:var(--char)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px 22px}
+.prod .ph{position:relative;aspect-ratio:4/5;border-radius:6px;overflow:hidden;background:var(--bg,#e4d8c8)}
+.prod .ph svg{position:absolute;inset:0;width:100%;height:100%;transition:transform 1s cubic-bezier(.2,.7,.1,1)}.prod:hover .ph svg{transform:scale(1.06) rotate(-1deg)}
+.prod .add{position:absolute;left:12px;right:12px;bottom:12px;background:var(--bone);border:0;border-radius:999px;padding:12px;font:inherit;font-weight:600;cursor:pointer;transform:translateY(130%);transition:.4s}.prod:hover .add{transform:none}
+.prod .lbl{position:absolute;top:12px;left:12px;background:var(--bone);font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px}
+.prod .row{display:flex;justify-content:space-between;margin-top:14px;font-weight:600;font-size:17px}.prod .sub{color:var(--muted);font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.dots{display:flex;gap:5px}.dots i{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+.feature{display:grid;grid-template-columns:1.1fr 1fr;background:var(--char);color:var(--bone);border-radius:8px;overflow:hidden}
+.feature .art{min-height:560px;position:relative;background:#3b2a20}
+.feature .copy{padding:70px}.feature h2{font-size:clamp(40px,4.6vw,68px);letter-spacing:-.05em;line-height:.95;margin:14px 0 20px;font-weight:600}
+.ws{display:grid;gap:12px;margin:30px 0}.ws div{display:flex;justify-content:space-between;padding:16px 0;border-bottom:1px solid rgba(241,236,228,.18)}.ws b{font-weight:600}
+.proc{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}.proc div{border-top:1.5px solid var(--char);padding-top:18px}.proc b{font-size:22px;letter-spacing:-.03em}.proc p{color:var(--muted);margin:6px 0 0}
+.rv{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.rv div{background:#fff8ef;border-radius:8px;padding:30px}.rv p{font-family:Newsreader;font-style:italic;font-size:24px;line-height:1.3;margin:12px 0 18px}.rv small{color:var(--muted)}
+.news{text-align:center;padding:110px 0;border-top:1px solid var(--line)}.news h2{font-size:clamp(44px,6vw,90px);letter-spacing:-.055em;line-height:.9;margin:0 0 20px;font-weight:600}.news form{display:flex;max-width:520px;margin:30px auto 0;border:1.5px solid var(--char);border-radius:999px;padding:6px}.news input{flex:1;border:0;background:transparent;padding:0 20px;font:inherit;font-size:16px;outline:0}
+footer{background:var(--char);color:#a8a29e;padding:70px 0 30px;font-size:15px}footer .g{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px}footer h5{color:var(--bone);margin:0 0 14px;font-size:15px}footer a{display:block;margin-bottom:8px}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:420px;background:var(--bone);z-index:50;transform:translateX(100%);transition:.6s cubic-bezier(.2,.7,.1,1);padding:28px;display:flex;flex-direction:column}.drawer.open{transform:none;box-shadow:-30px 0 60px -30px rgba(0,0,0,.4)}
+.drawer h3{margin:0;font-size:26px;letter-spacing:-.03em;display:flex;justify-content:space-between}.drawer .item{display:grid;grid-template-columns:84px 1fr auto;gap:14px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}.drawer .item .th{aspect-ratio:1;border-radius:6px;overflow:hidden;position:relative;background:#e4d8c8}.drawer .item svg{width:100%;height:100%}
+.drawer .ship{background:#fff8ef;border-radius:8px;padding:14px;font-size:14px;margin:16px 0}.drawer .bar{height:6px;background:var(--line);border-radius:9px;margin-top:8px;overflow:hidden}.drawer .bar i{display:block;height:100%;background:var(--clay);width:72%}
+.scrim{position:fixed;inset:0;background:rgba(28,25,23,.35);z-index:40;opacity:0;pointer-events:none;transition:.4s}.scrim.open{opacity:1;pointer-events:auto}
+[data-r]{opacity:0;transform:translateY(30px);transition:1s cubic-bezier(.2,.7,.1,1)}[data-r].in{opacity:1;transform:none}
+@media(max-width:960px){.menu{display:none}nav .wrap{grid-template-columns:1fr 1fr}.hero,.feature{grid-template-columns:1fr}.hero .art{min-height:520px}.grid{grid-template-columns:1fr 1fr}.proc,.rv{grid-template-columns:1fr}footer .g{grid-template-columns:1fr 1fr}.drawer{width:100%}}
+</style>
+</head>
+<body>
+<div class="ann">Free shipping on orders over $120 · New “Tidepool” glaze is here · Holiday orders ship by Dec 16</div>
+<nav><div class="wrap"><div class="menu"><a href="#shop">Shop</a><a href="#shop">Collections</a><a href="#workshops">Workshops</a><a href="#story">Studio</a></div><a class="logo" href="#"><span></span>saltgrain</a><div class="icons"><a href="#"><svg aria-hidden="true"
+  class="lucide lucide-search"
+  xmlns="http://www.w3.org/2000/svg"
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m21 21-4.34-4.34" />
+  <circle cx="11" cy="11" r="8" />
+</svg></a><a href="#"><svg aria-hidden="true"
+  class="lucide lucide-user"
+  xmlns="http://www.w3.org/2000/svg"
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+  <circle cx="12" cy="7" r="4" />
+</svg></a><button class="cart-btn" onclick="openCart()"><svg aria-hidden="true"
+  class="lucide lucide-shopping-bag"
+  xmlns="http://www.w3.org/2000/svg"
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M16 10a4 4 0 0 1-8 0" />
+  <path d="M3.103 6.034h17.794" />
+  <path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z" />
+</svg> Cart <b id="count">0</b></button></div></div></nav>
+
+<header class="hero">
+  <div class="copy">
+    <div><span class="it" style="font-size:22px;color:var(--muted)">Handmade stoneware from Red Hook, Brooklyn</span>
+    <h1 style="margin-top:24px">Made slowly, <span class="it">by hand,</span> for every day.</h1></div>
+    <div><p>Wheel-thrown mugs, bowls and vases, glazed in small batches with clay dug from upstate New York. Every piece is a little different, and that’s the point.</p><div style="display:flex;gap:12px;margin-top:26px"><a class="btn" href="#shop">Shop the collection <svg aria-hidden="true"
+  class="lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg></a><a class="btn line" href="#workshops">Book a workshop</a></div></div>
+  </div>
+  <div class="art"><div class="vessel-scene" data-scene="hero"></div>
+    <svg class="rot" viewBox="0 0 120 120"><defs><path id="c" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><text font-size="11.5" letter-spacing="3" fill="#1c1917" font-family="Bricolage Grotesque"><textPath href="#c">HANDMADE · SMALL BATCH · BROOKLYN · </textPath></text><circle cx="60" cy="60" r="7" fill="#c2410c"/></svg>
+    <div class="badge"><div class="sw" data-swatch="tidepool"></div><div><b>New glaze: Tidepool</b><br><span style="color:var(--muted)">Sea-glass green over speckled clay</span></div></div>
+  </div>
+</header>
+<div class="marq"><div><span>Mugs</span><span class="it">Bowls</span><span>Vases</span><span class="it">Planters</span><span>Plates</span><span class="it">Workshops</span><span>Mugs</span><span class="it">Bowls</span><span>Vases</span><span class="it">Planters</span><span>Plates</span><span class="it">Workshops</span></div></div>
+
+<section id="shop"><div class="wrap">
+  <div class="sh"><h2>The everyday <span class="it">collection</span></h2><div class="tabs"><button class="on">All</button><button>Mugs</button><button>Bowls</button><button>Vases</button><button>Plates</button></div></div>
+  <div class="grid" id="grid"></div>
+</div></section>
+
+<section id="workshops" style="padding-top:0"><div class="wrap"><div class="feature" data-r>
+  <div class="art"><div class="vessel-scene" data-scene="wheel"></div></div>
+  <div class="copy"><span class="it" style="font-size:22px;color:#d6b89c">Studio workshops</span><h2>Get your hands <span class="it">muddy.</span></h2><p style="color:#d6d3d1;font-size:18px">Two-hour wheel classes for total beginners. Make two pieces, we glaze and fire them, you pick them up two weeks later.</p>
+    <div class="ws"><div><b>Intro to the wheel</b><span>Sat · 10am · $95</span></div><div><b>Date night on the wheel</b><span>Fri · 7pm · $180 for two</span></div><div><b>Hand-building mugs</b><span>Sun · 1pm · $85</span></div></div>
+    <a class="btn" href="#" style="background:var(--clay)">See all dates <svg aria-hidden="true"
+  class="lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg></a></div>
+</div></div></section>
+
+<section id="story" style="padding-top:0"><div class="wrap"><div class="sh"><h2>From clay <span class="it">to your table</span></h2></div>
+  <div class="proc"><div data-r><b>01 · Thrown</b><p>Every piece is shaped on the wheel in our Red Hook studio.</p></div><div data-r><b>02 · Trimmed</b><p>Feet and handles are carved by hand once the clay is leather-hard.</p></div><div data-r><b>03 · Glazed</b><p>Our glazes are mixed in-house in batches of twenty.</p></div><div data-r><b>04 · Fired</b><p>Fired to cone 6 so it’s dishwasher and microwave safe.</p></div></div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap"><div class="rv"><div data-r><span style="color:var(--clay)">★★★★★</span><p>“My morning coffee tastes better in this mug. I don’t make the rules.”</p><small>Hannah · Tidepool Mug</small></div><div data-r><span style="color:var(--clay)">★★★★★</span><p>“Packed beautifully, arrived in two days and looks even better in person.”</p><small>Theo · Dune Serving Bowl</small></div><div data-r><span style="color:var(--clay)">★★★★★</span><p>“The workshop was the best Saturday we’ve had in months.”</p><small>Ana & Jo · Date night class</small></div></div></div></section>
+
+<div class="news"><div class="wrap"><h2>Get first dibs on <span class="it">kiln drops.</span></h2><p style="color:var(--muted)">One email a month. New glazes, restocks and workshop dates.</p><form onsubmit="return false"><input placeholder="your@email.com"><button class="btn">Subscribe</button></form></div></div>
+
+<footer><div class="wrap"><div class="g"><div><a class="logo" href="#" style="color:var(--bone)"><span></span>saltgrain</a><p style="max-width:22em">A small ceramics studio at 52 Van Brunt St, Red Hook, Brooklyn. Open Saturdays 11–5.</p></div><div><h5>Shop</h5><a href="#">Mugs</a><a href="#">Bowls</a><a href="#">Vases</a><a href="#">Gift cards</a></div><div><h5>Help</h5><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Care guide</a><a href="#">Wholesale</a></div><div><h5>Studio</h5><a href="#">Workshops</a><a href="#">Our story</a><a href="#">Instagram</a><a href="#">hello@saltgrain.shop</a></div></div><p style="margin-top:50px;font-size:13px">© 2026 Saltgrain Ceramics</p></div></footer>
+
+<div class="scrim" id="scrim" onclick="closeCart()"></div>
+<aside class="drawer" id="drawer"><h3>Your cart <button onclick="closeCart()" style="background:none;border:0;cursor:pointer"><svg aria-hidden="true"
+  class="lucide lucide-x"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M18 6 6 18" />
+  <path d="m6 6 12 12" />
+</svg></button></h3><div class="ship">You’re <b>$34</b> away from free shipping<div class="bar"><i></i></div></div><div id="items"></div><div style="margin-top:auto"><div style="display:flex;justify-content:space-between;font-size:20px;font-weight:600;padding:16px 0">Subtotal <span id="sub">$0</span></div><button class="btn" style="width:100%;justify-content:center">Checkout <svg aria-hidden="true"
+  class="lucide lucide-lock"
+  xmlns="http://www.w3.org/2000/svg"
+  width="16"
+  height="16"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+</svg></button><p style="text-align:center;color:var(--muted);font-size:13px">Shop Pay · Apple Pay · Cards</p></div></aside>
+
+<script>
+// Generated "product photography": wheel-thrown vessel silhouettes with glaze gradients,
+// speckle and soft studio shadows. Replace with real product photos in the CMS.
+const glazes={tidepool:['#a9c7b8','#6f9a8b','#3e6b62'],dune:['#efe2cc','#d9c2a0','#b39470'],ember:['#e98b5a','#c2410c','#7a2a0a'],ink:['#5b6170','#2e3240','#161922'],milk:['#fbf8f2','#ece5d8','#cfc5b4'],moss:['#b9bf8e','#8a9160','#5b6140'],rose:['#efc3b6','#d8998a','#a96757']};
+const bgs=['#e4d8c8','#dccfbd','#e9dfd2','#d6c7b3','#ece4d8','#d9cbb8'];
+let uid=0;
+function vessel(kind,glaze,bg,{w=400,h=500,scale=1,cx=.5,base=.82,shadow=true}={}){const id='v'+(uid++),g=glazes[glaze];
+const W=w*scale*.5,X=w*cx,B=h*base;let p,handle='';
+if(kind==='mug'){const mw=W*.62,mh=h*.36*scale;p=`M${X-mw/2} ${B-mh} C${X-mw/2-4} ${B-mh*.4} ${X-mw/2+2} ${B-6} ${X-mw/2+10} ${B} L${X+mw/2-10} ${B} C${X+mw/2-2} ${B-6} ${X+mw/2+4} ${B-mh*.4} ${X+mw/2} ${B-mh} Z`;
+ handle=`<path d="M${X+mw/2-4} ${B-mh*.78} C${X+mw/2+mw*.42} ${B-mh*.8} ${X+mw/2+mw*.42} ${B-mh*.2} ${X+mw/2-6} ${B-mh*.25}" fill="none" stroke="url(#g${id})" stroke-width="${mw*.11}" stroke-linecap="round"/>`}
+else if(kind==='bowl'){const bw=W*1.15,bh=h*.2*scale;p=`M${X-bw/2} ${B-bh} C${X-bw/2+bw*.04} ${B-bh*.1} ${X-bw*.2} ${B} ${X-bw*.14} ${B} L${X+bw*.14} ${B} C${X+bw*.2} ${B} ${X+bw/2-bw*.04} ${B-bh*.1} ${X+bw/2} ${B-bh} Z`}
+else if(kind==='plate'){const pw=W*1.3,ph=h*.045*scale;p=`M${X-pw/2} ${B-ph} Q${X} ${B-ph*2.4} ${X+pw/2} ${B-ph} L${X+pw*.3} ${B} L${X-pw*.3} ${B} Z`}
+else{const vh=h*.6*scale,vw=W*.8;p=`M${X-vw*.18} ${B-vh} C${X-vw*.2} ${B-vh*.8} ${X-vw*.72} ${B-vh*.62} ${X-vw*.6} ${B-vh*.3} C${X-vw*.5} ${B-vh*.06} ${X-vw*.3} ${B} ${X-vw*.24} ${B} L${X+vw*.24} ${B} C${X+vw*.3} ${B} ${X+vw*.5} ${B-vh*.06} ${X+vw*.6} ${B-vh*.3} C${X+vw*.72} ${B-vh*.62} ${X+vw*.2} ${B-vh*.8} ${X+vw*.18} ${B-vh} Z`}
+return `<defs><linearGradient id="g${id}" x1="0" x2="1"><stop offset="0" stop-color="${g[2]}"/><stop offset=".35" stop-color="${g[1]}"/><stop offset=".6" stop-color="${g[0]}"/><stop offset="1" stop-color="${g[2]}"/></linearGradient><linearGradient id="d${id}" x1="0" y1="0" x2="0" y2="1"><stop offset=".7" stop-opacity="0"/><stop offset="1" stop-color="#7a6248" stop-opacity=".9"/></linearGradient><filter id="n${id}"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="${uid}"/><feColorMatrix values="0 0 0 0 .15  0 0 0 0 .1  0 0 0 0 .08  0 0 0 -2.2 1.2"/><feComposite in2="SourceGraphic" operator="in"/></filter><radialGradient id="s${id}"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs>
+${shadow?`<ellipse cx="${X+W*.12}" cy="${B+4}" rx="${W*.8}" ry="${h*.035}" fill="url(#s${id})"/>`:''}<g>${handle}<path d="${p}" fill="url(#g${id})"/><path d="${p}" fill="url(#d${id})" opacity=".5"/><path d="${p}" filter="url(#n${id})" opacity=".55"/></g>`}
+const scene=(content,bg,w=400,h=500)=>`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><rect width="${w}" height="${h}" fill="${bg}"/><rect y="${h*.8}" width="${w}" height="${h*.2}" fill="#000" opacity=".05"/>${content}</svg>`;
+const products=[['Tidepool Mug','mug','tidepool',42,'New'],['Dune Serving Bowl','bowl','dune',78],['Ember Bud Vase','vase','ember',64,'Bestseller'],['Milk Dinner Plate','plate','milk',38],['Ink Tall Vase','vase','ink',96],['Moss Ramen Bowl','bowl','moss',58,'Low stock'],['Rose Latte Mug','mug','rose',44],['Dune Bud Vase','vase','dune',62]];
+document.getElementById('grid').innerHTML=products.map(([n,k,g,pr,l],i)=>`<div class="prod" data-r><div class="ph" style="--bg:${bgs[i%bgs.length]}">${scene(vessel(k,g,bgs[i%bgs.length],{scale:k==='plate'?1.2:1}),bgs[i%bgs.length])}${l?`<span class="lbl">${l}</span>`:''}<button class="add" onclick="add(${i})">Add to cart · $${pr}</button></div><div class="row"><span>${n}</span><span>$${pr}</span></div><div class="sub"><span>${k[0].toUpperCase()+k.slice(1)} · Stoneware</span><span class="dots">${Object.keys(glazes).slice(i%4,i%4+3).map(c=>`<i style="background:${glazes[c][1]}"></i>`).join('')}</span></div></div>`).join('');
+document.querySelector('[data-scene=hero]').innerHTML=scene(vessel('vase','ink','',{w:800,h:900,scale:1.25,cx:.36,base:.78})+vessel('mug','tidepool','',{w:800,h:900,scale:1.15,cx:.68,base:.8})+vessel('bowl','dune','',{w:800,h:900,scale:.9,cx:.62,base:.9}),'#d9c6b0',800,900);
+document.querySelector('[data-scene=wheel]').innerHTML=scene(`<circle cx="300" cy="420" r="210" fill="#2a1d16"/><ellipse cx="300" cy="420" rx="210" ry="56" fill="#4a3528"/>`+vessel('vase','dune','',{w:600,h:560,scale:1.1,cx:.5,base:.74,shadow:false}),'#3b2a20',600,560);
+document.querySelector('[data-swatch]').innerHTML=scene(vessel('mug','tidepool','',{scale:1.6,base:.95,shadow:false}),'#efe7db');
+let cart=[];function add(i){cart.push(products[i]);render();openCart()}
+function render(){document.getElementById('count').textContent=cart.length;document.getElementById('items').innerHTML=cart.map(([n,k,g,pr])=>`<div class="item"><div class="th">${scene(vessel(k,g,'',{scale:1.3,base:.9}),'#e4d8c8')}</div><div><b>${n}</b><br><span style="color:var(--muted);font-size:14px">Qty 1</span></div><b>$${pr}</b></div>`).join('');document.getElementById('sub').textContent='$'+cart.reduce((a,p)=>a+p[3],0)}
+function openCart(){document.getElementById('drawer').classList.add('open');document.getElementById('scrim').classList.add('open')}function closeCart(){document.getElementById('drawer').classList.remove('open');document.getElementById('scrim').classList.remove('open')}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on')});
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.1});document.querySelectorAll('[data-r]').forEach((el,i)=>{el.style.transitionDelay=(i%4)*90+'ms';io.observe(el)});
+</script>
+</body>
+</html>

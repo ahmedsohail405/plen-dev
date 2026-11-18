@@ -1,4 +1,5 @@
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -9,6 +10,10 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
+import { Leads } from './collections/Leads'
+import { Packages } from './collections/Packages'
+import { Projects } from './collections/Projects'
+import { SiteSettings } from './globals/SiteSettings/config'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -21,17 +26,19 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
-      beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
       beforeDashboard: ['@/components/BeforeDashboard'],
+      graphics: {
+        Logo: '@/components/Admin/Graphics#AdminLogo',
+        Icon: '@/components/Admin/Graphics#AdminIcon',
+      },
     },
     importMap: {
       baseDir: path.resolve(dirname),
     },
     user: Users.slug,
+    meta: {
+      titleSuffix: ' · Plen CMS',
+    },
     livePreview: {
       breakpoints: [
         {
@@ -57,14 +64,13 @@ export default buildConfig({
   },
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URL || '',
-    },
-  }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  // SQLite locally (file:./plen.db), Postgres in production (postgres://…)
+  db: (process.env.DATABASE_URL || '').startsWith('postgres')
+    ? postgresAdapter({ pool: { connectionString: process.env.DATABASE_URL } })
+    : sqliteAdapter({ client: { url: process.env.DATABASE_URL || 'file:./plen.db' } }),
+  collections: [Leads, Pages, Projects, Packages, Posts, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [SiteSettings, Header, Footer],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

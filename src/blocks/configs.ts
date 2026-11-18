@@ -166,3 +166,8 @@ export const StatementBlock: Block = {
     linkGroup({ overrides: { maxRows: 2 } }),
   ],
 }
+
+// Every studio block can switch to the dark (ink) section style.
+for (const b of [MarqueeBlock, ServicesBlock, WorkBlock, PackagesBlockConfig, ProcessBlock, StatsBlock, TestimonialsBlock, FaqBlock, LeadFormBlock, AreasBlock, StatementBlock]) {
+  b.fields.push({ name: 'dark', type: 'checkbox', label: 'Dark section', admin: { description: 'Show this section on the dark background.' } })
+}

@@ -8,7 +8,6 @@ export const PACKAGE_GROUPS = [
   { label: 'Websites', value: 'websites' },
   { label: 'Ecommerce', value: 'ecommerce' },
   { label: 'Custom CMS & Web Apps', value: 'cms-apps' },
-  { label: 'SEO', value: 'seo' },
   { label: 'Care Plans', value: 'care' },
   { label: 'Add-ons', value: 'addons' },
 ]

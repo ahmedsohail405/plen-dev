@@ -67,7 +67,10 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    leads: Lead;
     pages: Page;
+    projects: Project;
+    packages: Package;
     posts: Post;
     media: Media;
     categories: Category;
@@ -89,7 +92,10 @@ export interface Config {
     };
   };
   collectionsSelect: {
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    packages: PackagesSelect<false> | PackagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -106,14 +112,16 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
   globals: {
+    'site-settings': SiteSetting;
     header: Header;
     footer: Footer;
   };
   globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
@@ -152,29 +160,65 @@ export interface UserAuthOperations {
   };
 }
 /**
+ * Every form submission on the website lands here. Website-audit requests are sent to the audit agent automatically.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  type: 'website_audit' | 'contact' | 'quote';
+  status?: ('new' | 'contacted' | 'proposal' | 'won' | 'lost') | null;
+  name: string;
+  email: string;
+  phone?: string | null;
+  company?: string | null;
+  website_url?: string | null;
+  industry?: string | null;
+  /**
+   * Package the visitor picked, if any.
+   */
+  package?: string | null;
+  budget?: string | null;
+  message?: string | null;
+  consent_marketing?: boolean | null;
+  source_page?: string | null;
+  utm?: {
+    source?: string | null;
+    medium?: string | null;
+    campaign?: string | null;
+  };
+  referrer?: string | null;
+  ip?: string | null;
+  webhook_delivered_at?: string | null;
+  audit_status?: ('none' | 'queued' | 'auditing' | 'awaiting_approval' | 'approved' | 'sent' | 'failed') | null;
+  audit_score?: number | null;
+  audit_report_url?: string | null;
+  audit_sent_at?: string | null;
+  audit_notes?: string | null;
+  internal_notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
-  id: string;
+  id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
-    richText?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
+    type: 'studio' | 'page' | 'none';
+    eyebrow?: string | null;
+    /**
+     * Wrap words in *asterisks* to give them the highlighted creative style. Leave empty to use the page title.
+     */
+    title?: string | null;
+    subtitle?: string | null;
+    /**
+     * One or two plain sentences that directly answer what this page is about. Shown under the header and read by AI tools.
+     */
+    answer?: string | null;
     links?:
       | {
           link: {
@@ -183,11 +227,11 @@ export interface Page {
             reference?:
               | ({
                   relationTo: 'pages';
-                  value: string | Page;
+                  value: number | Page;
                 } | null)
               | ({
                   relationTo: 'posts';
-                  value: string | Post;
+                  value: number | Post;
                 } | null);
             url?: string | null;
             label: string;
@@ -199,23 +243,367 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    media?: (string | null) | Media;
+    /**
+     * Optional image on the right of the page header.
+     */
+    media?: (number | null) | Media;
+    /**
+     * Portfolio pieces floating in the hero.
+     */
+    showcase?: (number | Project)[] | null;
+    badges?:
+      | {
+          value: string;
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | {
+        items: {
+          text: string;
+          id?: string | null;
+        }[];
+        style?: ('outline' | 'solid' | 'small') | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'marquee';
+      }
+    | {
+        eyebrow?: string | null;
+        /**
+         * Wrap words in *asterisks* to highlight them.
+         */
+        heading?: string | null;
+        intro?: string | null;
+        items?:
+          | {
+              icon?:
+                | (
+                    | 'code'
+                    | 'palette'
+                    | 'database'
+                    | 'cart'
+                    | 'search'
+                    | 'sparkles'
+                    | 'shield'
+                    | 'gauge'
+                    | 'layout'
+                    | 'smartphone'
+                    | 'map'
+                    | 'bot'
+                    | 'chart'
+                    | 'wrench'
+                    | 'tooth'
+                    | 'home'
+                    | 'heart'
+                    | 'cpu'
+                  )
+                | null;
+              title: string;
+              text?: string | null;
+              /**
+               * Link, e.g. /services/custom-cms
+               */
+              href?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        columns?: ('2' | '3' | '4') | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'services';
+      }
+    | {
+        eyebrow?: string | null;
+        /**
+         * Wrap words in *asterisks* to highlight them.
+         */
+        heading?: string | null;
+        intro?: string | null;
+        source?: ('featured' | 'all' | 'pick') | null;
+        projects?: (number | Project)[] | null;
+        style?: ('stack' | 'grid') | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'work';
+      }
+    | {
+        eyebrow?: string | null;
+        /**
+         * Wrap words in *asterisks* to highlight them.
+         */
+        heading?: string | null;
+        intro?: string | null;
+        /**
+         * Leave empty to show all groups as tabs.
+         */
+        groups?: ('websites' | 'ecommerce' | 'cms-apps' | 'care' | 'addons')[] | null;
+        /**
+         * Small print under the packages (payment terms etc.)
+         */
+        note?: string | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'packagesBlock';
+      }
+    | {
+        eyebrow?: string | null;
+        /**
+         * Wrap words in *asterisks* to highlight them.
+         */
+        heading?: string | null;
+        intro?: string | null;
+        steps?:
+          | {
+              title: string;
+              text?: string | null;
+              duration?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'process';
+      }
+    | {
+        eyebrow?: string | null;
+        /**
+         * Wrap words in *asterisks* to highlight them.
+         */
+        heading?: string | null;
+        intro?: string | null;
+        items?:
+          | {
+              value: string;
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'stats';
+      }
+    | {
+        eyebrow?: string | null;
+        /**
+         * Wrap words in *asterisks* to highlight them.
+         */
+        heading?: string | null;
+        intro?: string | null;
+        items?:
+          | {
+              quote: string;
+              name: string;
+              role?: string | null;
+              company?: string | null;
+              rating?: number | null;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'testimonials';
+      }
+    | {
+        eyebrow?: string | null;
+        /**
+         * Wrap words in *asterisks* to highlight them.
+         */
+        heading?: string | null;
+        intro?: string | null;
+        /**
+         * Automatically published as FAQPage schema for Google and AI answers.
+         */
+        items?:
+          | {
+              question: string;
+              answer: string;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'faq';
+      }
+    | {
+        formType: 'website_audit' | 'contact' | 'quote';
+        eyebrow?: string | null;
+        /**
+         * Wrap words in *asterisks* to highlight them.
+         */
+        heading?: string | null;
+        intro?: string | null;
+        bullets?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        submitLabel?: string | null;
+        successMessage?: string | null;
+        /**
+         * Optional id so buttons can link to #anchor
+         */
+        anchor?: string | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'leadForm';
+      }
+    | {
+        eyebrow?: string | null;
+        /**
+         * Wrap words in *asterisks* to highlight them.
+         */
+        heading?: string | null;
+        intro?: string | null;
+        areas?:
+          | {
+              name: string;
+              href?: string | null;
+              /**
+               * Comma separated
+               */
+              neighborhoods?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'areas';
+      }
+    | {
+        /**
+         * Large display text. Wrap words in *asterisks* to highlight.
+         */
+        text: string;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Show this section on the dark background.
+         */
+        dark?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'statement';
+      }
+    | ContentBlock
+    | CallToActionBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
+    /**
+     * Leave empty to use this page’s own URL.
+     */
+    canonical?: string | null;
+    noindex?: boolean | null;
+    /**
+     * Primary keyword first, comma separated. Used for internal tracking and the llms.txt summary (not a ranking factor).
+     */
+    keywords?: string | null;
+    schemaType?: ('WebPage' | 'Service' | 'AboutPage' | 'ContactPage' | 'CollectionPage' | 'FAQPage') | null;
+    /**
+     * Optional extra structured data. Paste a JSON object or array, without <script> tags.
+     */
+    schemaJson?: string | null;
   };
+  codeSnippets?:
+    | {
+        label: string;
+        placement: 'head' | 'bodyStart' | 'bodyEnd';
+        enabled?: boolean | null;
+        /**
+         * Paste the full snippet including <script>, <meta>, <link> or <noscript> tags.
+         */
+        code: string;
+        id?: string | null;
+      }[]
+    | null;
   publishedAt?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
+  /**
+   * Nest this page, e.g. Brooklyn under Locations → /locations/brooklyn
+   */
+  parent?: (number | null) | Page;
+  /**
+   * Public URL, built from parent + slug.
+   */
+  path?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -225,9 +613,9 @@ export interface Page {
  * via the `definition` "posts".
  */
 export interface Post {
-  id: string;
+  id: number;
   title: string;
-  heroImage?: (string | null) | Media;
+  heroImage?: (number | null) | Media;
   content: {
     root: {
       type: string;
@@ -243,18 +631,44 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  relatedPosts?: (string | Post)[] | null;
-  categories?: (string | Category)[] | null;
+  relatedPosts?: (number | Post)[] | null;
+  categories?: (number | Category)[] | null;
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
+    /**
+     * Leave empty to use this page’s own URL.
+     */
+    canonical?: string | null;
+    noindex?: boolean | null;
+    /**
+     * Primary keyword first, comma separated. Used for internal tracking and the llms.txt summary (not a ranking factor).
+     */
+    keywords?: string | null;
+    schemaType?: ('WebPage' | 'Service' | 'AboutPage' | 'ContactPage' | 'CollectionPage' | 'FAQPage') | null;
+    /**
+     * Optional extra structured data. Paste a JSON object or array, without <script> tags.
+     */
+    schemaJson?: string | null;
   };
+  codeSnippets?:
+    | {
+        label: string;
+        placement: 'head' | 'bodyStart' | 'bodyEnd';
+        enabled?: boolean | null;
+        /**
+         * Paste the full snippet including <script>, <meta>, <link> or <noscript> tags.
+         */
+        code: string;
+        id?: string | null;
+      }[]
+    | null;
   publishedAt?: string | null;
-  authors?: (string | User)[] | null;
+  authors?: (number | User)[] | null;
   populatedAuthors?:
     | {
         id?: string | null;
@@ -275,7 +689,7 @@ export interface Post {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt?: string | null;
   caption?: {
     root: {
@@ -292,7 +706,7 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
-  folder?: (string | null) | FolderInterface;
+  folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -368,18 +782,18 @@ export interface Media {
  * via the `definition` "payload-folders".
  */
 export interface FolderInterface {
-  id: string;
+  id: number;
   name: string;
-  folder?: (string | null) | FolderInterface;
+  folder?: (number | null) | FolderInterface;
   documentsAndFolders?: {
     docs?: (
       | {
           relationTo?: 'payload-folders';
-          value: string | FolderInterface;
+          value: number | FolderInterface;
         }
       | {
           relationTo?: 'media';
-          value: string | Media;
+          value: number | Media;
         }
     )[];
     hasNextPage?: boolean;
@@ -394,17 +808,17 @@ export interface FolderInterface {
  * via the `definition` "categories".
  */
 export interface Category {
-  id: string;
+  id: number;
   title: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
-  parent?: (string | null) | Category;
+  parent?: (number | null) | Category;
   breadcrumbs?:
     | {
-        doc?: (string | null) | Category;
+        doc?: (number | null) | Category;
         url?: string | null;
         label?: string | null;
         id?: string | null;
@@ -418,8 +832,9 @@ export interface Category {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   name?: string | null;
+  role: 'admin' | 'editor' | 'service';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -442,51 +857,64 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock".
+ * via the `definition` "projects".
  */
-export interface CallToActionBlock {
-  richText?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  links?:
+export interface Project {
+  id: number;
+  /**
+   * Client / brand name
+   */
+  title: string;
+  industry: string;
+  location?: string | null;
+  year?: string | null;
+  summary: string;
+  cover?: (number | null) | Media;
+  /**
+   * Screen-recorded walkthrough (mp4/webm)
+   */
+  video?: (number | null) | Media;
+  /**
+   * Link to the live site
+   */
+  liveUrl?: string | null;
+  /**
+   * Shown in the browser bar on cards, e.g. brightdental.com
+   */
+  domain?: string | null;
+  /**
+   * Brand colour used on cards
+   */
+  accent?: string | null;
+  services?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
+        service?: string | null;
         id?: string | null;
       }[]
     | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cta';
+  results?:
+    | {
+        value: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  challenge?: string | null;
+  solution?: string | null;
+  featured?: boolean | null;
+  order?: number | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -518,11 +946,11 @@ export interface ContentBlock {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -540,10 +968,58 @@ export interface ContentBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CallToActionBlock".
+ */
+export interface CallToActionBlock {
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: string | Media;
+  media: number | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -570,12 +1046,12 @@ export interface ArchiveBlock {
   } | null;
   populateBy?: ('collection' | 'selection') | null;
   relationTo?: 'posts' | null;
-  categories?: (string | Category)[] | null;
+  categories?: (number | Category)[] | null;
   limit?: number | null;
   selectedDocs?:
     | {
         relationTo: 'posts';
-        value: string | Post;
+        value: number | Post;
       }[]
     | null;
   id?: string | null;
@@ -587,7 +1063,7 @@ export interface ArchiveBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
-  form: string | Form;
+  form: number | Form;
   enableIntro?: boolean | null;
   introContent?: {
     root: {
@@ -613,7 +1089,7 @@ export interface FormBlock {
  * via the `definition` "forms".
  */
 export interface Form {
-  id: string;
+  id: number;
   title: string;
   fields?:
     | (
@@ -774,11 +1250,46 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Shown on the Packages page and any Packages block. Drag order with the "Order" number.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "packages".
+ */
+export interface Package {
+  id: number;
+  name: string;
+  group: 'websites' | 'ecommerce' | 'cms-apps' | 'care' | 'addons';
+  order?: number | null;
+  /**
+   * In USD. Leave empty for "Custom quote".
+   */
+  price?: number | null;
+  pricePrefix?: string | null;
+  billing?: ('one-time' | 'monthly' | 'each' | 'per-page') | null;
+  priceNote?: string | null;
+  /**
+   * Short line, e.g. "Best for new businesses"
+   */
+  tagline?: string | null;
+  scope?: string | null;
+  timeline?: string | null;
+  features?:
+    | {
+        feature: string;
+        id?: string | null;
+      }[]
+    | null;
+  highlighted?: boolean | null;
+  ctaLabel?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
-  id: string;
+  id: number;
   /**
    * You will need to rebuild the website when changing this field.
    */
@@ -788,11 +1299,15 @@ export interface Redirect {
     reference?:
       | ({
           relationTo: 'pages';
-          value: string | Page;
+          value: number | Page;
         } | null)
       | ({
           relationTo: 'posts';
-          value: string | Post;
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'projects';
+          value: number | Project;
         } | null);
     url?: string | null;
   };
@@ -804,8 +1319,8 @@ export interface Redirect {
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
-  id: string;
-  form: string | Form;
+  id: number;
+  form: number | Form;
   submissionData?:
     | {
         field: string;
@@ -823,18 +1338,18 @@ export interface FormSubmission {
  * via the `definition` "search".
  */
 export interface Search {
-  id: string;
+  id: number;
   title?: string | null;
   priority?: number | null;
   doc: {
     relationTo: 'posts';
-    value: string | Post;
+    value: number | Post;
   };
   slug?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
   };
   categories?:
     | {
@@ -852,7 +1367,7 @@ export interface Search {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -869,7 +1384,7 @@ export interface PayloadKv {
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
-  id: string;
+  id: number;
   /**
    * Input data provided to the job
    */
@@ -961,52 +1476,64 @@ export interface PayloadJob {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
+        relationTo: 'leads';
+        value: number | Lead;
+      } | null)
+    | ({
         relationTo: 'pages';
-        value: string | Page;
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'packages';
+        value: number | Package;
       } | null)
     | ({
         relationTo: 'posts';
-        value: string | Post;
+        value: number | Post;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'categories';
-        value: string | Category;
+        value: number | Category;
       } | null)
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'redirects';
-        value: string | Redirect;
+        value: number | Redirect;
       } | null)
     | ({
         relationTo: 'forms';
-        value: string | Form;
+        value: number | Form;
       } | null)
     | ({
         relationTo: 'form-submissions';
-        value: string | FormSubmission;
+        value: number | FormSubmission;
       } | null)
     | ({
         relationTo: 'search';
-        value: string | Search;
+        value: number | Search;
       } | null)
     | ({
         relationTo: 'payload-folders';
-        value: string | FolderInterface;
+        value: number | FolderInterface;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -1016,10 +1543,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -1039,11 +1566,48 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  type?: T;
+  status?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  company?: T;
+  website_url?: T;
+  industry?: T;
+  package?: T;
+  budget?: T;
+  message?: T;
+  consent_marketing?: T;
+  source_page?: T;
+  utm?:
+    | T
+    | {
+        source?: T;
+        medium?: T;
+        campaign?: T;
+      };
+  referrer?: T;
+  ip?: T;
+  webhook_delivered_at?: T;
+  audit_status?: T;
+  audit_score?: T;
+  audit_report_url?: T;
+  audit_sent_at?: T;
+  audit_notes?: T;
+  internal_notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1055,7 +1619,10 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
-        richText?: T;
+        eyebrow?: T;
+        title?: T;
+        subtitle?: T;
+        answer?: T;
         links?:
           | T
           | {
@@ -1072,12 +1639,212 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        showcase?: T;
+        badges?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
       };
   layout?:
     | T
     | {
-        cta?: T | CallToActionBlockSelect<T>;
+        marquee?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              style?: T;
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
+        services?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              items?:
+                | T
+                | {
+                    icon?: T;
+                    title?: T;
+                    text?: T;
+                    href?: T;
+                    id?: T;
+                  };
+              columns?: T;
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
+        work?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              source?: T;
+              projects?: T;
+              style?: T;
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
+        packagesBlock?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              groups?: T;
+              note?: T;
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
+        process?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    duration?: T;
+                    id?: T;
+                  };
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              items?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    id?: T;
+                  };
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    company?: T;
+                    rating?: T;
+                    id?: T;
+                  };
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
+        leadForm?:
+          | T
+          | {
+              formType?: T;
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              bullets?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              submitLabel?: T;
+              successMessage?: T;
+              anchor?: T;
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
+        areas?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              areas?:
+                | T
+                | {
+                    name?: T;
+                    href?: T;
+                    neighborhoods?: T;
+                    id?: T;
+                  };
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
+        statement?:
+          | T
+          | {
+              text?: T;
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                          appearance?: T;
+                        };
+                    id?: T;
+                  };
+              dark?: T;
+              id?: T;
+              blockName?: T;
+            };
         content?: T | ContentBlockSelect<T>;
+        cta?: T | CallToActionBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
@@ -1088,23 +1855,41 @@ export interface PagesSelect<T extends boolean = true> {
         title?: T;
         image?: T;
         description?: T;
+        canonical?: T;
+        noindex?: T;
+        keywords?: T;
+        schemaType?: T;
+        schemaJson?: T;
+      };
+  codeSnippets?:
+    | T
+    | {
+        label?: T;
+        placement?: T;
+        enabled?: T;
+        code?: T;
+        id?: T;
       };
   publishedAt?: T;
   generateSlug?: T;
   slug?: T;
+  parent?: T;
+  path?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock_select".
+ * via the `definition` "ContentBlock_select".
  */
-export interface CallToActionBlockSelect<T extends boolean = true> {
-  richText?: T;
-  links?:
+export interface ContentBlockSelect<T extends boolean = true> {
+  columns?:
     | T
     | {
+        size?: T;
+        richText?: T;
+        enableLink?: T;
         link?:
           | T
           | {
@@ -1122,15 +1907,13 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock_select".
+ * via the `definition` "CallToActionBlock_select".
  */
-export interface ContentBlockSelect<T extends boolean = true> {
-  columns?:
+export interface CallToActionBlockSelect<T extends boolean = true> {
+  richText?: T;
+  links?:
     | T
     | {
-        size?: T;
-        richText?: T;
-        enableLink?: T;
         link?:
           | T
           | {
@@ -1182,6 +1965,76 @@ export interface FormBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  industry?: T;
+  location?: T;
+  year?: T;
+  summary?: T;
+  cover?: T;
+  video?: T;
+  liveUrl?: T;
+  domain?: T;
+  accent?: T;
+  services?:
+    | T
+    | {
+        service?: T;
+        id?: T;
+      };
+  results?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
+      };
+  challenge?: T;
+  solution?: T;
+  featured?: T;
+  order?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "packages_select".
+ */
+export interface PackagesSelect<T extends boolean = true> {
+  name?: T;
+  group?: T;
+  order?: T;
+  price?: T;
+  pricePrefix?: T;
+  billing?: T;
+  priceNote?: T;
+  tagline?: T;
+  scope?: T;
+  timeline?: T;
+  features?:
+    | T
+    | {
+        feature?: T;
+        id?: T;
+      };
+  highlighted?: T;
+  ctaLabel?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1196,6 +2049,20 @@ export interface PostsSelect<T extends boolean = true> {
         title?: T;
         image?: T;
         description?: T;
+        canonical?: T;
+        noindex?: T;
+        keywords?: T;
+        schemaType?: T;
+        schemaJson?: T;
+      };
+  codeSnippets?:
+    | T
+    | {
+        label?: T;
+        placement?: T;
+        enabled?: T;
+        code?: T;
+        id?: T;
       };
   publishedAt?: T;
   authors?: T;
@@ -1331,6 +2198,7 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1626,10 +2494,112 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  businessName: string;
+  legalName?: string | null;
+  tagline?: string | null;
+  /**
+   * One plain-language paragraph about the company. AI tools quote this.
+   */
+  description?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  address?: {
+    street?: string | null;
+    city?: string | null;
+    region?: string | null;
+    postalCode?: string | null;
+    hideStreet?: boolean | null;
+  };
+  /**
+   * Listed in schema as areaServed.
+   */
+  areasServed?:
+    | {
+        area: string;
+        id?: string | null;
+      }[]
+    | null;
+  hours?: string | null;
+  social?:
+    | {
+        platform: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  logo?: (number | null) | Media;
+  /**
+   * Appended to every page title.
+   */
+  titleSuffix?: string | null;
+  defaultDescription?: string | null;
+  defaultOgImage?: (number | null) | Media;
+  googleVerification?: string | null;
+  bingVerification?: string | null;
+  ga4Id?: string | null;
+  gtmId?: string | null;
+  metaPixelId?: string | null;
+  noindexSite?: boolean | null;
+  codeSnippets?:
+    | {
+        label: string;
+        placement: 'head' | 'bodyStart' | 'bodyEnd';
+        enabled?: boolean | null;
+        scope: 'all' | 'include' | 'exclude';
+        pages?:
+          | (
+              | {
+                  relationTo: 'pages';
+                  value: number | Page;
+                }
+              | {
+                  relationTo: 'posts';
+                  value: number | Post;
+                }
+            )[]
+          | null;
+        /**
+         * Optional: extra URL paths, comma separated. Use * as a wildcard, e.g. /services/*, /contact
+         */
+        paths?: string | null;
+        /**
+         * Paste the full snippet including <script>, <meta>, <link> or <noscript> tags.
+         */
+        code: string;
+        id?: string | null;
+      }[]
+    | null;
+  allowAiCrawlers?: boolean | null;
+  /**
+   * A short summary placed at the top of /llms.txt.
+   */
+  llmsIntro?: string | null;
+  llmsFacts?:
+    | {
+        fact: string;
+        id?: string | null;
+      }[]
+    | null;
+  integrations?: {
+    leadWebhookEnabled?: boolean | null;
+    /**
+     * Leave empty to use the AUDIT_WEBHOOK_URL environment variable. Requests are signed with AUDIT_WEBHOOK_SECRET.
+     */
+    leadWebhookUrl?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
 export interface Header {
-  id: string;
+  id: number;
   navItems?:
     | {
         link: {
@@ -1638,11 +2608,11 @@ export interface Header {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -1650,6 +2620,10 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  cta?: {
+    label?: string | null;
+    href?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1658,7 +2632,7 @@ export interface Header {
  * via the `definition` "footer".
  */
 export interface Footer {
-  id: string;
+  id: number;
   navItems?:
     | {
         link: {
@@ -1667,11 +2641,11 @@ export interface Footer {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -1679,8 +2653,99 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Huge closing line. Wrap words in *asterisks* to highlight.
+   */
+  bigLine?: string | null;
+  columns?:
+    | {
+        title: string;
+        links?:
+          | {
+              label: string;
+              href: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  businessName?: T;
+  legalName?: T;
+  tagline?: T;
+  description?: T;
+  phone?: T;
+  email?: T;
+  address?:
+    | T
+    | {
+        street?: T;
+        city?: T;
+        region?: T;
+        postalCode?: T;
+        hideStreet?: T;
+      };
+  areasServed?:
+    | T
+    | {
+        area?: T;
+        id?: T;
+      };
+  hours?: T;
+  social?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  logo?: T;
+  titleSuffix?: T;
+  defaultDescription?: T;
+  defaultOgImage?: T;
+  googleVerification?: T;
+  bingVerification?: T;
+  ga4Id?: T;
+  gtmId?: T;
+  metaPixelId?: T;
+  noindexSite?: T;
+  codeSnippets?:
+    | T
+    | {
+        label?: T;
+        placement?: T;
+        enabled?: T;
+        scope?: T;
+        pages?: T;
+        paths?: T;
+        code?: T;
+        id?: T;
+      };
+  allowAiCrawlers?: T;
+  llmsIntro?: T;
+  llmsFacts?:
+    | T
+    | {
+        fact?: T;
+        id?: T;
+      };
+  integrations?:
+    | T
+    | {
+        leadWebhookEnabled?: T;
+        leadWebhookUrl?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1700,6 +2765,12 @@ export interface HeaderSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  cta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1721,6 +2792,20 @@ export interface FooterSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
+            };
+        id?: T;
+      };
+  bigLine?: T;
+  columns?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              id?: T;
             };
         id?: T;
       };
@@ -1749,16 +2834,16 @@ export interface TaskSchedulePublish {
     doc?:
       | ({
           relationTo: 'pages';
-          value: string | Page;
+          value: number | Page;
         } | null)
       | ({
           relationTo: 'posts';
-          value: string | Post;
+          value: number | Post;
         } | null);
     global?: string | null;
     user?: {
       relationTo: 'users';
-      value: string | User;
+      value: number | User;
     } | null;
   };
   output?: unknown;
