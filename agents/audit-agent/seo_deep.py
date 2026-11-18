@@ -104,7 +104,7 @@ def autocomplete(q: str) -> list[str]:
     return []
 
 
-def run(pages, facts, extras, lead: dict, add) -> dict:
+def run(pages, facts, extras, lead: dict, add, ind: dict | None = None) -> dict:
     ok = [(p, BeautifulSoup(p.html, "lxml")) for p in pages if p.html and p.status < 400]
     if not ok:
         return {}
@@ -116,7 +116,7 @@ def run(pages, facts, extras, lead: dict, add) -> dict:
     for (p, s), f in zip(ok, facts):
         page_meta.append({"url": p.final_url, "path": urlparse(p.final_url).path.lower(), "title": f.get("title", ""),
                           "h1": (f.get("h1") or [""])[0] if f.get("h1") else "", "words": f.get("word_count", 0)})
-    service = _service_term(lead, ok)
+    service = _service_term(lead, ok) or (ind or {}).get("search_term", "")
     areas = _areas(full_text, home)
     out = {"service": service, "areas": areas, "searches": [], "page_count": len(set(extras.get("sitemap_urls", [])) | {m["url"] for m in page_meta})}
 

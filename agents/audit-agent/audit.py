@@ -36,6 +36,7 @@ TIMEOUT = 20
 URL_FILTER = None
 CRAWL_DELAY = 0.0
 HERE = Path(__file__).resolve().parent
+ENGINE_VERSION = "2026-11-18.3-industry"  # shown on /healthz so the live version can be checked
 
 # Category weights for the overall score (sum = 100)
 WEIGHTS = {
@@ -499,15 +500,25 @@ def run_checks(pages: list[Page], extras: dict, psi: dict, lead: dict | None = N
             "Looks unfinished in browser tabs and Google results.", "Add a favicon and apple-touch-icon.")
 
     import deep_checks
-    deep_checks.run(pages, facts, psi, add)
+    import industry
     more = more if more is not None else {}
+    ind = {"key": "general", "label": "General business", "search_term": "", "source": "none"}
+    if home:
+        home_soup = BeautifulSoup(html_pages[0].html, "lxml")
+        ind = industry.detect(lead or {}, home_soup.get_text(" ").lower(),
+                              (home["title"] + " " + " ".join(home["h1"])).lower(),
+                              [t for f in facts for t in f["jsonld"]])
+    more["industry"] = ind
+    deep_checks.run(pages, facts, psi, add, ind)
     if facts:
         import seo_deep
-        more["seo"] = seo_deep.run(pages, facts, extras, lead or {}, add)
+        more["seo"] = seo_deep.run(pages, facts, extras, lead or {}, add, ind)
     if vis and vis.get("ok") and out is not None:
         import visual
-        more["visual"] = visual.findings(vis, out, add)
+        more["visual"] = visual.findings(vis, out, add, ind)
     F[:] = dedupe(F, psi, bool(vis and vis.get("ok")))
+    for f in F:  # industry wording for "what it costs you"
+        f.impact = industry.IMPACT.get(ind["key"], {}).get(f.id, f.impact)
     return F, facts
 
 
@@ -555,7 +566,7 @@ CHECKLIST = [
     ("no_address", "Street address on site", None), ("no_map", "Google Map", None),
     ("no_cta", "Clear call to action", None), ("no_form", "Contact or quote form", None),
     ("no_reviews", "Reviews or testimonials", None), ("no_verified_reviews", "Verifiable reviews (Google, Yelp)", None),
-    ("no_online_booking", "Online booking", None), ("no_trust_badges", "Trust signals", None),
+    ("no_trust_badges", "Trust signals", None),
     ("inputs_no_labels", "Form fields labeled", None), ("links_no_text", "Links have readable names", None),
     ("zoom_disabled", "Zoom allowed on phones", None), ("old_copyright_year", "Content kept up to date", None),
     ("legacy_tech", "Modern code", None), ("no_llms_txt", "llms.txt for AI search", None),
@@ -563,7 +574,8 @@ CHECKLIST = [
 ]
 
 
-def checklist(findings: list[dict], have: set) -> list[dict]:
+def checklist(findings: list[dict], have: set, industry_key: str = "general") -> list[dict]:
+    import industry
     failed = {f["id"]: f["severity"] for f in findings}
     alias = {"no_cta_first_screen_mobile": "no_cta", "no_cta_first_screen_desktop": "no_cta"}
     # checks that can't run when another one failed (no HTTPS -> no redirect/HSTS to test)
@@ -571,7 +583,7 @@ def checklist(findings: list[dict], have: set) -> list[dict]:
     if "home_unreachable" in failed:
         return []
     rows = []
-    for fid, label, needs in CHECKLIST:
+    for fid, label, needs in CHECKLIST + industry.checklist_rows(industry_key):
         if (needs and needs not in have) or fid in blocked:
             continue
         sev = failed.get(fid) or (failed.get(alias[fid]) if fid in alias else None)
@@ -693,8 +705,10 @@ def run_audit(url: str, lead: dict, out: Path, max_pages: int = 15, psi_key: str
         "speed_measured": speed_measured,
         "visual": more.get("visual") or ({"error": vis.get("error")} if vis else {}),
         "seo": more.get("seo") or {},
+        "industry": more.get("industry") or {},
         "checklist": checklist(fd, ({"visual"} if vis.get("ok") else set()) | ({"speed"} if speed_measured else set())
-                               | ({"service"} if (more.get("seo") or {}).get("searches") else set())),
+                               | ({"service"} if (more.get("seo") or {}).get("searches") else set()),
+                               (more.get("industry") or {}).get("key", "general")),
         "counts": {s: sum(1 for f in findings if f.severity == s) for s in order},
         "findings": fd,
         "top_issues": fd[:5],

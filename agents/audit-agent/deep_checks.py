@@ -36,7 +36,7 @@ def ssl_days_left(host: str, port: int = 443) -> int | None:
         return None
 
 
-def run(pages, facts, psi, add) -> None:
+def run(pages, facts, psi, add, ind: dict | None = None) -> None:
     html_pages = [p for p in pages if p.html and p.status == 200]
     if not html_pages:
         return
@@ -181,16 +181,14 @@ def run(pages, facts, psi, add) -> None:
             "The site shows testimonials, but no Google, Yelp, Clutch or Trustpilot reviews and no review rating data.",
             "Embed live Google reviews and add AggregateRating schema.",
             impact="Visitors trust reviews they can check on Google far more than quotes on your own site, and Google can't show star ratings for you.")
-    booking_kw = ("calendly", "acuityscheduling", "zocdoc", "squareup.com/appointments", "booksy", "vagaro",
-                  "mindbody", "opentable", "resy.com", "setmore", "localmed", "nexhealth", "jane.app",
-                  "simplybook", "book online", "book now", "schedule online", "book an appointment", "request appointment")
-    if not any(k in all_html for k in booking_kw):
-        add("conversion", "no_online_booking", "medium", "No way to book online",
-            "Visitors can't pick a time or request an appointment directly on the site.",
-            "Add an online booking or appointment-request flow.",
-            impact="People searching at night or on weekends can't book, so they book with whoever lets them.")
+    # The right next step depends on the business (booking for a dentist, care request for home care,
+    # quote for a contractor...). Unknown industry: no assumption is made.
+    import industry
+    industry.checks(ind or {"key": "general"}, all_html, soups, add)
     trust_kw = ("licensed", "insured", "certified", "accredited", "award", "bbb", "years of experience",
                 "family-owned", "family owned", "board-certified", "guarantee", r"since 19", r"since 20")
+    import industry as _ind
+    trust_kw = trust_kw + tuple(re.escape(k) for k in _ind.trust_keywords((ind or {}).get("key", "")))
     if not any(re.search(k, all_html) for k in trust_kw):
         add("conversion", "no_trust_badges", "low", "No trust signals",
             "No licenses, certifications, awards, guarantees or 'years in business' anywhere on the site.",

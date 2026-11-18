@@ -1,6 +1,7 @@
 # Plen Dev agents: inbound audit server + Alex outbound sales agent, one container.
 # Railway: service root directory = /agents, volume mounted at /data.
-FROM python:3.12-slim
+# Debian 12: the Chromium system packages Playwright installs are published for it (not yet for Debian 13)
+FROM python:3.12-slim-bookworm
 ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 TZ=America/New_York
 RUN apt-get update && apt-get install -y --no-install-recommends tzdata ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
