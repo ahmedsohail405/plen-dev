@@ -472,8 +472,6 @@ def findings(v: dict, out: Path, add) -> dict:
             + (f"; the first one is {round(mob['cta_any']['box'][1] / mob['vh'], 1)} screens down." if mob["cta_any"] else "."),
             "Put a sticky call/book button in the mobile header.", evidence=ev,
             impact="Most local searches happen on phones; if the next step isn't visible, visitors bounce.")
-    elif mob["cta_first_screen"]:
-        mark("mobile", mob["cta_first_screen"]["box"], f"First call to action: \"{mob['cta_first_screen']['text'][:30]}\"", "ok_cta")
     if mob["h1"] and mob["h1"]["box"][1] > mob["vh"]:
         add("mobile", "headline_below_fold_mobile", "medium", "The main headline is below the first phone screen",
             f"The H1 headline starts {mob['h1']['box'][1]}px down, past the {mob['vh']}px screen.",
@@ -483,8 +481,6 @@ def findings(v: dict, out: Path, add) -> dict:
         add("conversion", "no_cta_first_screen_desktop", "medium", "No call or booking button on the first desktop screen",
             "Nothing like 'call', 'book' or 'get a quote' is visible before scrolling on a laptop screen.",
             "Add a primary call-to-action button in the hero.")
-    else:
-        mark("desktop", desk["cta_first_screen"]["box"], f"First call to action: \"{desk['cta_first_screen']['text'][:30]}\"", "ok_cta")
     if desk["doc_w"] > desk["vw"] + 4:
         add("design", "desktop_overflow", "medium", "Page scrolls sideways on a laptop",
             f"At 1366px wide the page is {desk['doc_w']}px wide.", "Fix the layout container.")
