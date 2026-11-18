@@ -7,6 +7,74 @@ import { mdToLexical } from './mdToLexical'
 
 const ctx = { disableRevalidate: true }
 
+const mediaDir = () => path.resolve(process.cwd(), 'public/showcase-media')
+
+/** Uploads one demo file (cover jpg or walkthrough mp4). Returns the media id, or undefined on failure. */
+const uploadShowcaseMedia = async (
+  payload: Payload,
+  req: PayloadRequest,
+  file: string,
+  alt: string,
+  mediaErrors: string[],
+): Promise<number | string | undefined> => {
+  try {
+    if (process.env.VERCEL && !process.env.BLOB_READ_WRITE_TOKEN) {
+      throw new Error('BLOB_READ_WRITE_TOKEN is not set for this deployment (connect Vercel Blob with a read-write token, then redeploy)')
+    }
+    // On disk locally; on Vercel public/ isn't in the function bundle, so fetch it from the site itself
+    const full = path.join(mediaDir(), file)
+    let data: Buffer | undefined
+    if (fs.existsSync(full)) data = fs.readFileSync(full)
+    else {
+      const base = process.env.NEXT_PUBLIC_SERVER_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '')
+      if (!base) return undefined
+      const res = await fetch(`${base}/showcase-media/${file}`)
+      if (!res.ok) throw new Error(`fetch ${file}: ${res.status}`)
+      data = Buffer.from(await res.arrayBuffer())
+    }
+    const mimetype = file.endsWith('.mp4') ? 'video/mp4' : 'image/jpeg'
+    const doc = await payload.create({
+      collection: 'media',
+      req,
+      context: ctx,
+      data: { alt: `[showcase] ${alt}` },
+      file: { data, mimetype, name: file, size: data.length },
+    })
+    return doc.id
+  } catch (err) {
+    // Don't let one media upload stop the whole content load
+    payload.logger.error({ err, message: `Seed: could not upload ${file}` })
+    mediaErrors.push(`${file}: ${err instanceof Error ? err.message : String(err)}`)
+    return undefined
+  }
+}
+
+/** Adds only the missing portfolio covers/videos to existing projects. Touches nothing else. */
+export const seedMissingMedia = async ({ payload, req }: { payload: Payload; req: PayloadRequest }) => {
+  const mediaErrors: string[] = []
+  let added = 0
+  for (const pr of PROJECTS) {
+    const found = await payload.find({ collection: 'projects', where: { slug: { equals: pr.slug } }, limit: 1, depth: 0, req, overrideAccess: true })
+    const doc = found.docs[0] as { id: number | string; cover?: unknown; video?: unknown } | undefined
+    if (!doc) continue
+    const data: Record<string, unknown> = {}
+    if (!doc.cover) data.cover = await uploadShowcaseMedia(payload, req, `${pr.slug}.jpg`, `${pr.title} website homepage`, mediaErrors)
+    if (!doc.video) data.video = await uploadShowcaseMedia(payload, req, `${pr.slug}.mp4`, `${pr.title} website walkthrough video`, mediaErrors)
+    for (const k of Object.keys(data)) if (!data[k]) delete data[k]
+    if (Object.keys(data).length) {
+      await payload.update({ collection: 'projects', id: doc.id, req, context: ctx, overrideAccess: true, data: { ...data, _status: 'published' } as never })
+      added += Object.keys(data).length
+    }
+  }
+  return { mediaErrors, added }
+}
+
+/** True when the portfolio exists but some covers/videos are missing. */
+export const hasMissingMedia = async (payload: Payload) => {
+  const res = await payload.find({ collection: 'projects', limit: 50, depth: 0, overrideAccess: true })
+  return res.docs.some((d) => !(d as { cover?: unknown }).cover || !(d as { video?: unknown }).video)
+}
+
 /**
  * Seeds Plen Dev content. Safe to re-run: it clears pages, posts, projects and
  * packages (never leads or users) and recreates them.
@@ -66,39 +134,10 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
   }
 
   /* ---------- portfolio ---------- */
-  const mediaDir = path.resolve(process.cwd(), 'public/showcase-media')
   const projectIds: Record<string, number | string> = {}
   const mediaErrors: string[] = []
   for (const pr of PROJECTS) {
-    const upload = async (file: string, alt: string) => {
-      try {
-        // On disk locally; on Vercel public/ isn't in the function bundle, so fetch it from the site itself
-        const full = path.join(mediaDir, file)
-        let data: Buffer | undefined
-        if (fs.existsSync(full)) data = fs.readFileSync(full)
-        else {
-          const base = process.env.NEXT_PUBLIC_SERVER_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '')
-          if (!base) return undefined
-          const res = await fetch(`${base}/showcase-media/${file}`)
-          if (!res.ok) throw new Error(`fetch ${file}: ${res.status}`)
-          data = Buffer.from(await res.arrayBuffer())
-        }
-        const mimetype = file.endsWith('.mp4') ? 'video/mp4' : 'image/jpeg'
-        const doc = await payload.create({
-          collection: 'media',
-          req,
-          context: ctx,
-          data: { alt: `[showcase] ${alt}` },
-          file: { data, mimetype, name: file, size: data.length },
-        })
-        return doc.id
-      } catch (err) {
-        // Don't let one media upload stop the whole content load
-        payload.logger.error({ err, message: `Seed: could not upload ${file}` })
-        mediaErrors.push(`${file}: ${err instanceof Error ? err.message : String(err)}`)
-        return undefined
-      }
-    }
+    const upload = (file: string, alt: string) => uploadShowcaseMedia(payload, req, file, alt, mediaErrors)
     const cover = await upload(`${pr.slug}.jpg`, `${pr.title} website homepage`)
     const video = await upload(`${pr.slug}.mp4`, `${pr.title} website walkthrough video`)
     const doc = await payload.create({

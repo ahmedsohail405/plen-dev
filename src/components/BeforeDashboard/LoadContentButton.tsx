@@ -2,14 +2,14 @@
 import React, { useState } from 'react'
 
 /** One-time button that loads the Plen Dev pages, packages and portfolio into an empty database. */
-export const LoadContentButton: React.FC = () => {
+export const LoadContentButton: React.FC<{ mode?: 'all' | 'media' }> = ({ mode = 'all' }) => {
   const [state, setState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
   const [msg, setMsg] = useState('')
   const run = async () => {
     if (state === 'loading') return
     setState('loading')
     try {
-      const res = await fetch('/next/seed', { method: 'POST', credentials: 'include' })
+      const res = await fetch(mode === 'media' ? '/next/seed?mode=media' : '/next/seed', { method: 'POST', credentials: 'include' })
       if (!res.ok) throw new Error(await res.text())
       const json = (await res.json()) as { mediaErrors?: string[] }
       if (json.mediaErrors?.length) {
@@ -26,12 +26,14 @@ export const LoadContentButton: React.FC = () => {
   }
   return (
     <div style={{ marginTop: 16, padding: '16px 20px', borderRadius: 12, border: '1px dashed var(--theme-elevation-250)' }}>
-      <strong>The site has no content yet.</strong>
+      <strong>{mode === 'media' ? 'Some portfolio videos or images are missing.' : 'The site has no content yet.'}</strong>
       <p style={{ margin: '6px 0 12px', opacity: 0.75 }}>
-        Load the Plen Dev pages, packages, portfolio and blog posts. This takes about a minute.
+        {mode === 'media'
+          ? 'Add the missing demo videos and cover images. Your pages and edits are not changed.'
+          : 'Load the Plen Dev pages, packages, portfolio and blog posts. This takes about a minute.'}
       </p>
       <button type="button" className="btn btn--style-primary btn--size-medium" onClick={run} disabled={state === 'loading' || state === 'done'}>
-        {state === 'loading' ? 'Loading content…' : state === 'done' ? 'Done, reloading…' : 'Load website content'}
+        {state === 'loading' ? 'Loading…' : state === 'done' ? 'Done, reloading…' : mode === 'media' ? 'Add missing media' : 'Load website content'}
       </button>
       {state === 'error' && <p style={{ color: 'var(--theme-error-500)' }}>{msg}</p>}
     </div>
