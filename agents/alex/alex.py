@@ -152,9 +152,10 @@ def process_one(p: dict) -> dict:
         return store.save(p)
     out = store.path(p["id"]).parent / "audit"
     log(f"auditing {site} ...")
-    report = audit.run_audit(site, {"name": "", "company": p["business_name"], "website_url": site}, out,
+    report = audit.run_audit(site, {"name": "", "company": p["business_name"], "website_url": site,
+                                    "industry": p.get("category") or "", "category": p.get("category") or ""}, out,
                              C.AUDIT_PAGES, C.PSI_KEY,
-                             brand=audit.BRAND | {"booking_url": C.BOOKING_URL or C.SITE}, report_url="")
+                             brand=audit.BRAND | {"booking_url": C.BOOKING_URL or C.SITE}, report_url="", visual=C.VISUAL)
     for f in ("email.html", "email.txt", "email.json"):  # inbound-audit email, not used for cold outreach
         (out / f).unlink(missing_ok=True)
     group, customers = compose.INDUSTRY.get(p.get("category", ""), ("", "customers"))
