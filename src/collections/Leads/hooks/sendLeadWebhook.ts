@@ -1,11 +1,14 @@
 import crypto from 'crypto'
+import { after } from 'next/server'
 import type { CollectionAfterChangeHook } from 'payload'
 
 /**
  * POSTs every new lead to the audit agent (contract:
  * /mnt/project-files/audit-agent/LEAD_CONTRACT.md). URL comes from Site Settings
  * (falls back to AUDIT_WEBHOOK_URL env); body is HMAC-SHA256 signed with
- * AUDIT_WEBHOOK_SECRET in the X-PlenDev-Signature header. Fire-and-forget.
+ * AUDIT_WEBHOOK_SECRET in the X-PlenDev-Signature header. Sent with Next's after(),
+ * so the visitor's response is not delayed and Vercel keeps the function alive until
+ * delivery finishes. Outside a request (scripts), it is awaited instead.
  */
 export const sendLeadWebhook: CollectionAfterChangeHook = async ({ doc, operation, req }) => {
   if (operation !== 'create') return doc
@@ -48,14 +51,14 @@ export const sendLeadWebhook: CollectionAfterChangeHook = async ({ doc, operatio
 
   const payload = req.payload
   const id = doc.id
-  // Don't block the visitor's form submit on the agent's response time.
-  void fetch(url, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-plendev-signature': signature },
-    body,
-    signal: AbortSignal.timeout(10000),
-  })
-    .then(async (res) => {
+  const deliver = async () => {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-plendev-signature': signature },
+        body,
+        signal: AbortSignal.timeout(10000),
+      })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       await payload.update({
         collection: 'leads',
@@ -64,8 +67,17 @@ export const sendLeadWebhook: CollectionAfterChangeHook = async ({ doc, operatio
         overrideAccess: true,
         context: { skipWebhook: true },
       })
-    })
-    .catch((err) => payload.logger.error(`Lead webhook failed for ${id}: ${String(err)}`))
+    } catch (err) {
+      payload.logger.error(`Lead webhook failed for ${id}: ${String(err)}`)
+    }
+  }
+
+  try {
+    after(deliver)
+  } catch {
+    // Not inside a Next.js request (for example a seed script): just wait for it.
+    await deliver()
+  }
 
   return doc
 }
