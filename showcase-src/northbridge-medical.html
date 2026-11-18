@@ -97,6 +97,7 @@ footer{background:var(--navy);color:#a9bddc;padding:70px 0 40px;font-size:15px}f
 .sticky{position:fixed;right:24px;bottom:24px;z-index:30;box-shadow:0 20px 40px -12px rgba(37,99,235,.6)}
 [data-r]{opacity:0;transform:translateY(30px);transition:1s cubic-bezier(.2,.7,.1,1)}[data-r].in{opacity:1;transform:none}
 @media(max-width:960px){.hero .wrap,.portal,.faq,.locs{grid-template-columns:1fr}.services,.docs,.reviews,.stats{grid-template-columns:1fr 1fr}.links{display:none}.art{height:500px}footer .wrap{grid-template-columns:1fr 1fr}.head{flex-direction:column;align-items:start}.search{grid-template-columns:1fr}.search label+label{border:0}}
+@media(max-width:560px){.nav-r .btn-ghost{display:none}.nav-r .nav-long{display:none}.nav-r .btn{padding-inline:16px}}
 </style>
 </head>
 <body>
@@ -104,7 +105,7 @@ footer{background:var(--navy);color:#a9bddc;padding:70px 0 40px;font-size:15px}f
 <nav class="main"><div class="wrap">
   <a class="brand" href="#"><span class="mark">{{i:heart-pulse:20}}</span><span>Northbridge<small>Medical Group</small></span></a>
   <div class="links"><a href="#care">Services</a><a href="#doctors">Doctors</a><a href="#portal">Patient portal</a><a href="#insurance">Insurance</a><a href="#locations">Locations</a></div>
-  <div class="nav-r"><a class="btn btn-ghost" href="#portal">Log in</a><a class="btn btn-primary" href="#book">Book appointment</a></div>
+  <div class="nav-r"><a class="btn btn-ghost" href="#portal">Log in</a><a class="btn btn-primary" href="#book">Book<span class="nav-long"> appointment</span></a></div>
 </div></nav>
 
 <header class="hero"><div class="wrap">
