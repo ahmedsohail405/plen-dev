@@ -87,6 +87,13 @@ Never set `ALLOW_PRIVATE_TARGETS` in production. Set `DISABLE_ALEX=true` to run 
 
 See `audit-agent/PIPELINE.md` and `alex/README.md` and each folder's `.env.example` for details on every setting.
 
+## Approving audits
+
+Open `https://<audit-domain>/admin?key=<ADMIN_TOKEN>` (bookmark it on your phone). Each new audit shows the
+score, a preview of the email and the full report, with **Approve & send** (optional subject change and personal
+line) and **Reject**. A WhatsApp alert with this link goes out for every new audit once Twilio is configured.
+While `MAIL_PROVIDER=dryrun`, approving only marks the audit "sent (test mode)": no email leaves and Alex is not started.
+
 ## Audit mailbox: sending as audit@plendev.com (Microsoft 365 via GoDaddy)
 
 `audit@plendev.com` is an alias of `info@plendev.com`. The audit server signs in as info@ with Microsoft OAuth
