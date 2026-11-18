@@ -66,7 +66,7 @@ MS_TENANT_ID=6209b41b-f4cb-4e81-ae2f-26a6e6c93eba
 MS_CLIENT_ID=9215b5a4-063b-4759-ae51-8760248d11d7
 ALEX_IMAP_HOST=outlook.office365.com
 ALEX_IMAP_USER=
-ALEX_READ_INBOXES=[{"user":"info@plendev.com","refresh_env":"AUDIT_MS_REFRESH_TOKEN"}]   # Alex reads audit replies in info@ (read-only)
+ALEX_READ_INBOXES=[{"user":"info@plendev.com"}]   # Alex reads audit replies in info@ (read-only)
 # WhatsApp (Twilio)
 WHATSAPP_PROVIDER=twilio
 WHATSAPP_TO=
